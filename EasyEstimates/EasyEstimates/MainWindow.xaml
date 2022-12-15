@@ -7,6 +7,41 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="100"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="10*"/>
+            </Grid.ColumnDefinitions>
 
+            <Label Content="EasyEstimates" FontSize="20" FontWeight="UltraBold" Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="0" HorizontalAlignment="Center"/>
+            <Label Content="Your friend when estimating prices." FontStyle="Italic" Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="1" HorizontalAlignment="Center"/>
+
+            <Button Content="Calculator" Grid.Row="2"/>
+            <Button Content="New Estimate" Grid.Row="2" Grid.Column="2"/>
+            <Button Content="Load Estimate" Grid.Row="2" Grid.Column="4"/>
+            
+            <ListBox Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="3" />
+
+        </Grid>
     </Grid>
 </Window>
