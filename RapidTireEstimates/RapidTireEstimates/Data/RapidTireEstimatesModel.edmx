@@ -1,0 +1,1123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="RapidTireEstimatesdbModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="RapidTireEstimatesdbModelStoreContainer">
+    <EntitySet Name="Customers" EntityType="RapidTireEstimatesdbModel.Store.Customers" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Comments" EntityType="RapidTireEstimatesdbModel.Store.Comments" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Services" EntityType="RapidTireEstimatesdbModel.Store.Services" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="VehicleTypes" EntityType="RapidTireEstimatesdbModel.Store.VehicleTypes" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Prices" EntityType="RapidTireEstimatesdbModel.Store.Prices" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Estimates" EntityType="RapidTireEstimatesdbModel.Store.Estimates" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ServiceEstimates" EntityType="RapidTireEstimatesdbModel.Store.ServiceEstimates" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Parts" EntityType="RapidTireEstimatesdbModel.Store.Parts" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Vehicles" EntityType="RapidTireEstimatesdbModel.Store.Vehicles" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Prices_ServicePrice" EntityType="RapidTireEstimatesdbModel.Store.Prices_ServicePrice" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Prices_EstimatePrice" EntityType="RapidTireEstimatesdbModel.Store.Prices_EstimatePrice" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Comments_CustomerComment" EntityType="RapidTireEstimatesdbModel.Store.Comments_CustomerComment" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Comments_EstimateComment" EntityType="RapidTireEstimatesdbModel.Store.Comments_EstimateComment" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Comments_ServiceEstimateComment" EntityType="RapidTireEstimatesdbModel.Store.Comments_ServiceEstimateComment" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Prices_PartPrice" EntityType="RapidTireEstimatesdbModel.Store.Prices_PartPrice" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Parts_ShopPart" EntityType="RapidTireEstimatesdbModel.Store.Parts_ShopPart" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Parts_VehiclePart" EntityType="RapidTireEstimatesdbModel.Store.Parts_VehiclePart" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="ServiceServicePrice" Association="RapidTireEstimatesdbModel.Store.ServiceServicePrice">
+      <End Role="Service" EntitySet="Services" />
+      <End Role="ServicePrice" EntitySet="Prices_ServicePrice" />
+    </AssociationSet>
+    <AssociationSet Name="ServiceEstimatePriceEstimate" Association="RapidTireEstimatesdbModel.Store.ServiceEstimatePriceEstimate">
+      <End Role="ServiceEstimate" EntitySet="ServiceEstimates" />
+      <End Role="PriceEstimate" EntitySet="Prices_EstimatePrice" />
+    </AssociationSet>
+    <AssociationSet Name="ServiceVehicleType" Association="RapidTireEstimatesdbModel.Store.ServiceVehicleType">
+      <End Role="Service" EntitySet="Services" />
+      <End Role="VehicleType" EntitySet="VehicleTypes" />
+    </AssociationSet>
+    <AssociationSet Name="ServiceServiceEstimate" Association="RapidTireEstimatesdbModel.Store.ServiceServiceEstimate">
+      <End Role="Service" EntitySet="Services" />
+      <End Role="ServiceEstimate" EntitySet="ServiceEstimates" />
+    </AssociationSet>
+    <AssociationSet Name="CustomerEstimate" Association="RapidTireEstimatesdbModel.Store.CustomerEstimate">
+      <End Role="Customer" EntitySet="Customers" />
+      <End Role="Estimate" EntitySet="Estimates" />
+    </AssociationSet>
+    <AssociationSet Name="CustomerCustomerComment" Association="RapidTireEstimatesdbModel.Store.CustomerCustomerComment">
+      <End Role="Customer" EntitySet="Customers" />
+      <End Role="CustomerComment" EntitySet="Comments_CustomerComment" />
+    </AssociationSet>
+    <AssociationSet Name="EstimateEstimateComment" Association="RapidTireEstimatesdbModel.Store.EstimateEstimateComment">
+      <End Role="Estimate" EntitySet="Estimates" />
+      <End Role="EstimateComment" EntitySet="Comments_EstimateComment" />
+    </AssociationSet>
+    <AssociationSet Name="ServiceEstimateServiceEstimateComment" Association="RapidTireEstimatesdbModel.Store.ServiceEstimateServiceEstimateComment">
+      <End Role="ServiceEstimate" EntitySet="ServiceEstimates" />
+      <End Role="ServiceEstimateComment" EntitySet="Comments_ServiceEstimateComment" />
+    </AssociationSet>
+    <AssociationSet Name="EstimateServiceEstimate" Association="RapidTireEstimatesdbModel.Store.EstimateServiceEstimate">
+      <End Role="Estimate" EntitySet="Estimates" />
+      <End Role="ServiceEstimate" EntitySet="ServiceEstimates" />
+    </AssociationSet>
+    <AssociationSet Name="PartPartPrice" Association="RapidTireEstimatesdbModel.Store.PartPartPrice">
+      <End Role="Part" EntitySet="Parts" />
+      <End Role="PartPrice" EntitySet="Prices_PartPrice" />
+    </AssociationSet>
+    <AssociationSet Name="EstimateShopPart" Association="RapidTireEstimatesdbModel.Store.EstimateShopPart">
+      <End Role="Estimate" EntitySet="Estimates" />
+      <End Role="ShopPart" EntitySet="Parts_ShopPart" />
+    </AssociationSet>
+    <AssociationSet Name="EstimateVehiclePart" Association="RapidTireEstimatesdbModel.Store.EstimateVehiclePart">
+      <End Role="Estimate" EntitySet="Estimates" />
+      <End Role="VehiclePart" EntitySet="Parts_VehiclePart" />
+    </AssociationSet>
+    <AssociationSet Name="VehicleVehicleType" Association="RapidTireEstimatesdbModel.Store.VehicleVehicleType">
+      <End Role="Vehicle" EntitySet="Vehicles" />
+      <End Role="VehicleType" EntitySet="VehicleTypes" />
+    </AssociationSet>
+    <AssociationSet Name="CustomerVehicle1" Association="RapidTireEstimatesdbModel.Store.CustomerVehicle1">
+      <End Role="Customer" EntitySet="Customers" />
+      <End Role="Vehicle" EntitySet="Vehicles" />
+    </AssociationSet>
+    <AssociationSet Name="VehicleEstimate1" Association="RapidTireEstimatesdbModel.Store.VehicleEstimate1">
+      <End Role="Vehicle" EntitySet="Vehicles" />
+      <End Role="Estimate" EntitySet="Estimates" />
+    </AssociationSet>
+    <AssociationSet Name="VehicleVehiclePart1" Association="RapidTireEstimatesdbModel.Store.VehicleVehiclePart1">
+      <End Role="Vehicle" EntitySet="Vehicles" />
+      <End Role="VehiclePart" EntitySet="Parts_VehiclePart" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ServicePrice_inherits_Price" Association="RapidTireEstimatesdbModel.Store.FK_ServicePrice_inherits_Price">
+      <End Role="Price" EntitySet="Prices" />
+      <End Role="ServicePrice" EntitySet="Prices_ServicePrice" />
+    </AssociationSet>
+    <AssociationSet Name="FK_EstimatePrice_inherits_Price" Association="RapidTireEstimatesdbModel.Store.FK_EstimatePrice_inherits_Price">
+      <End Role="Price" EntitySet="Prices" />
+      <End Role="EstimatePrice" EntitySet="Prices_EstimatePrice" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CustomerComment_inherits_Comment" Association="RapidTireEstimatesdbModel.Store.FK_CustomerComment_inherits_Comment">
+      <End Role="Comment" EntitySet="Comments" />
+      <End Role="CustomerComment" EntitySet="Comments_CustomerComment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_EstimateComment_inherits_Comment" Association="RapidTireEstimatesdbModel.Store.FK_EstimateComment_inherits_Comment">
+      <End Role="Comment" EntitySet="Comments" />
+      <End Role="EstimateComment" EntitySet="Comments_EstimateComment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ServiceEstimateComment_inherits_Comment" Association="RapidTireEstimatesdbModel.Store.FK_ServiceEstimateComment_inherits_Comment">
+      <End Role="Comment" EntitySet="Comments" />
+      <End Role="ServiceEstimateComment" EntitySet="Comments_ServiceEstimateComment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PartPrice_inherits_Price" Association="RapidTireEstimatesdbModel.Store.FK_PartPrice_inherits_Price">
+      <End Role="Price" EntitySet="Prices" />
+      <End Role="PartPrice" EntitySet="Prices_PartPrice" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ShopPart_inherits_Part" Association="RapidTireEstimatesdbModel.Store.FK_ShopPart_inherits_Part">
+      <End Role="Part" EntitySet="Parts" />
+      <End Role="ShopPart" EntitySet="Parts_ShopPart" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VehiclePart_inherits_Part" Association="RapidTireEstimatesdbModel.Store.FK_VehiclePart_inherits_Part">
+      <End Role="Part" EntitySet="Parts" />
+      <End Role="VehiclePart" EntitySet="Parts_VehiclePart" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Customers">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="PhoneNumber" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Comments">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Contents" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="DateCreated" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Services">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VehicleTypes">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ServiceId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Prices">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Value" Type="decimal" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Estimates">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CustomerId" Type="int" Nullable="false" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+    <Property Name="FinishDate" Type="datetime" Nullable="false" />
+    <Property Name="FinalPrice" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ServiceEstimates">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ServiceId" Type="int" Nullable="false" />
+    <Property Name="EstimateId" Type="int" Nullable="false" />
+    <Property Name="EstimatePrice_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Parts">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="PartPrice_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Vehicles">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Model" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Year" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="VehicleTypeId" Type="int" Nullable="false" />
+    <Property Name="CustomerId" Type="int" Nullable="false" />
+    <Property Name="Estimate_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Prices_ServicePrice">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Level" Type="smallint" Nullable="false" />
+    <Property Name="ServiceId" Type="int" Nullable="false" />
+    <Property Name="Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Prices_EstimatePrice">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Comments_CustomerComment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="CustomerId" Type="int" Nullable="false" />
+    <Property Name="Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Comments_EstimateComment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="EstimateId" Type="int" Nullable="false" />
+    <Property Name="Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Comments_ServiceEstimateComment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="ServiceEstimateId" Type="int" Nullable="false" />
+    <Property Name="Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Prices_PartPrice">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Parts_ShopPart">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="EstimateId" Type="int" Nullable="false" />
+    <Property Name="Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Parts_VehiclePart">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="EstimateId" Type="int" Nullable="false" />
+    <Property Name="VehicleId" Type="int" Nullable="false" />
+    <Property Name="Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="ServiceServicePrice">
+    <End Role="Service" Type="RapidTireEstimatesdbModel.Store.Services" Multiplicity="1" />
+    <End Role="ServicePrice" Type="RapidTireEstimatesdbModel.Store.Prices_ServicePrice" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Service">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ServicePrice">
+        <PropertyRef Name="ServiceId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ServiceEstimatePriceEstimate">
+    <End Role="ServiceEstimate" Type="RapidTireEstimatesdbModel.Store.ServiceEstimates" Multiplicity="*" />
+    <End Role="PriceEstimate" Type="RapidTireEstimatesdbModel.Store.Prices_EstimatePrice" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="PriceEstimate">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ServiceEstimate">
+        <PropertyRef Name="EstimatePrice_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ServiceVehicleType">
+    <End Role="Service" Type="RapidTireEstimatesdbModel.Store.Services" Multiplicity="1" />
+    <End Role="VehicleType" Type="RapidTireEstimatesdbModel.Store.VehicleTypes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Service">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VehicleType">
+        <PropertyRef Name="ServiceId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ServiceServiceEstimate">
+    <End Role="Service" Type="RapidTireEstimatesdbModel.Store.Services" Multiplicity="1" />
+    <End Role="ServiceEstimate" Type="RapidTireEstimatesdbModel.Store.ServiceEstimates" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Service">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ServiceEstimate">
+        <PropertyRef Name="ServiceId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CustomerEstimate">
+    <End Role="Customer" Type="RapidTireEstimatesdbModel.Store.Customers" Multiplicity="1" />
+    <End Role="Estimate" Type="RapidTireEstimatesdbModel.Store.Estimates" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Estimate">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CustomerCustomerComment">
+    <End Role="Customer" Type="RapidTireEstimatesdbModel.Store.Customers" Multiplicity="1" />
+    <End Role="CustomerComment" Type="RapidTireEstimatesdbModel.Store.Comments_CustomerComment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CustomerComment">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="EstimateEstimateComment">
+    <End Role="Estimate" Type="RapidTireEstimatesdbModel.Store.Estimates" Multiplicity="1" />
+    <End Role="EstimateComment" Type="RapidTireEstimatesdbModel.Store.Comments_EstimateComment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Estimate">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="EstimateComment">
+        <PropertyRef Name="EstimateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ServiceEstimateServiceEstimateComment">
+    <End Role="ServiceEstimate" Type="RapidTireEstimatesdbModel.Store.ServiceEstimates" Multiplicity="1" />
+    <End Role="ServiceEstimateComment" Type="RapidTireEstimatesdbModel.Store.Comments_ServiceEstimateComment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ServiceEstimate">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ServiceEstimateComment">
+        <PropertyRef Name="ServiceEstimateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="EstimateServiceEstimate">
+    <End Role="Estimate" Type="RapidTireEstimatesdbModel.Store.Estimates" Multiplicity="1" />
+    <End Role="ServiceEstimate" Type="RapidTireEstimatesdbModel.Store.ServiceEstimates" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Estimate">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ServiceEstimate">
+        <PropertyRef Name="EstimateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PartPartPrice">
+    <End Role="Part" Type="RapidTireEstimatesdbModel.Store.Parts" Multiplicity="*" />
+    <End Role="PartPrice" Type="RapidTireEstimatesdbModel.Store.Prices_PartPrice" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="PartPrice">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Part">
+        <PropertyRef Name="PartPrice_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="EstimateShopPart">
+    <End Role="Estimate" Type="RapidTireEstimatesdbModel.Store.Estimates" Multiplicity="1" />
+    <End Role="ShopPart" Type="RapidTireEstimatesdbModel.Store.Parts_ShopPart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Estimate">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ShopPart">
+        <PropertyRef Name="EstimateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="EstimateVehiclePart">
+    <End Role="Estimate" Type="RapidTireEstimatesdbModel.Store.Estimates" Multiplicity="1" />
+    <End Role="VehiclePart" Type="RapidTireEstimatesdbModel.Store.Parts_VehiclePart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Estimate">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VehiclePart">
+        <PropertyRef Name="EstimateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="VehicleVehicleType">
+    <End Role="Vehicle" Type="RapidTireEstimatesdbModel.Store.Vehicles" Multiplicity="*" />
+    <End Role="VehicleType" Type="RapidTireEstimatesdbModel.Store.VehicleTypes" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="VehicleType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Vehicle">
+        <PropertyRef Name="VehicleTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CustomerVehicle1">
+    <End Role="Customer" Type="RapidTireEstimatesdbModel.Store.Customers" Multiplicity="1" />
+    <End Role="Vehicle" Type="RapidTireEstimatesdbModel.Store.Vehicles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Vehicle">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="VehicleEstimate1">
+    <End Role="Vehicle" Type="RapidTireEstimatesdbModel.Store.Vehicles" Multiplicity="*" />
+    <End Role="Estimate" Type="RapidTireEstimatesdbModel.Store.Estimates" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Estimate">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Vehicle">
+        <PropertyRef Name="Estimate_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="VehicleVehiclePart1">
+    <End Role="Vehicle" Type="RapidTireEstimatesdbModel.Store.Vehicles" Multiplicity="1" />
+    <End Role="VehiclePart" Type="RapidTireEstimatesdbModel.Store.Parts_VehiclePart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Vehicle">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VehiclePart">
+        <PropertyRef Name="VehicleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ServicePrice_inherits_Price">
+    <End Role="Price" Type="RapidTireEstimatesdbModel.Store.Prices" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ServicePrice" Type="RapidTireEstimatesdbModel.Store.Prices_ServicePrice" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Price">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ServicePrice">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_EstimatePrice_inherits_Price">
+    <End Role="Price" Type="RapidTireEstimatesdbModel.Store.Prices" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="EstimatePrice" Type="RapidTireEstimatesdbModel.Store.Prices_EstimatePrice" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Price">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="EstimatePrice">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CustomerComment_inherits_Comment">
+    <End Role="Comment" Type="RapidTireEstimatesdbModel.Store.Comments" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="CustomerComment" Type="RapidTireEstimatesdbModel.Store.Comments_CustomerComment" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Comment">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CustomerComment">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_EstimateComment_inherits_Comment">
+    <End Role="Comment" Type="RapidTireEstimatesdbModel.Store.Comments" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="EstimateComment" Type="RapidTireEstimatesdbModel.Store.Comments_EstimateComment" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Comment">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="EstimateComment">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ServiceEstimateComment_inherits_Comment">
+    <End Role="Comment" Type="RapidTireEstimatesdbModel.Store.Comments" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ServiceEstimateComment" Type="RapidTireEstimatesdbModel.Store.Comments_ServiceEstimateComment" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Comment">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ServiceEstimateComment">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PartPrice_inherits_Price">
+    <End Role="Price" Type="RapidTireEstimatesdbModel.Store.Prices" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="PartPrice" Type="RapidTireEstimatesdbModel.Store.Prices_PartPrice" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Price">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PartPrice">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ShopPart_inherits_Part">
+    <End Role="Part" Type="RapidTireEstimatesdbModel.Store.Parts" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ShopPart" Type="RapidTireEstimatesdbModel.Store.Parts_ShopPart" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Part">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ShopPart">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VehiclePart_inherits_Part">
+    <End Role="Part" Type="RapidTireEstimatesdbModel.Store.Parts" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="VehiclePart" Type="RapidTireEstimatesdbModel.Store.Parts_VehiclePart" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Part">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="VehiclePart">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RapidTireEstimatesdbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="RapidTireEstimatesdbEntities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="Customers" EntityType="RapidTireEstimatesdbModel.Customer" />
+          <EntitySet Name="Comments" EntityType="RapidTireEstimatesdbModel.Comment" />
+          <EntitySet Name="Services" EntityType="RapidTireEstimatesdbModel.Service" />
+          <EntitySet Name="VehicleTypes" EntityType="RapidTireEstimatesdbModel.VehicleType" />
+          <EntitySet Name="Prices" EntityType="RapidTireEstimatesdbModel.Price" />
+          <EntitySet Name="Estimates" EntityType="RapidTireEstimatesdbModel.Estimate" />
+          <EntitySet Name="ServiceEstimates" EntityType="RapidTireEstimatesdbModel.ServiceEstimate" />
+          <AssociationSet Name="ServiceServicePrice" Association="RapidTireEstimatesdbModel.ServiceServicePrice">
+            <End Role="Service" EntitySet="Services" />
+            <End Role="ServicePrice" EntitySet="Prices" />
+          </AssociationSet>
+          <AssociationSet Name="ServiceEstimatePriceEstimate" Association="RapidTireEstimatesdbModel.ServiceEstimatePriceEstimate">
+            <End Role="ServiceEstimate" EntitySet="ServiceEstimates" />
+            <End Role="PriceEstimate" EntitySet="Prices" />
+          </AssociationSet>
+          <AssociationSet Name="ServiceVehicleType" Association="RapidTireEstimatesdbModel.ServiceVehicleType">
+            <End Role="Service" EntitySet="Services" />
+            <End Role="VehicleType" EntitySet="VehicleTypes" />
+          </AssociationSet>
+          <AssociationSet Name="ServiceServiceEstimate" Association="RapidTireEstimatesdbModel.ServiceServiceEstimate">
+            <End Role="Service" EntitySet="Services" />
+            <End Role="ServiceEstimate" EntitySet="ServiceEstimates" />
+          </AssociationSet>
+          <AssociationSet Name="CustomerEstimate" Association="RapidTireEstimatesdbModel.CustomerEstimate">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Estimate" EntitySet="Estimates" />
+          </AssociationSet>
+          <AssociationSet Name="CustomerCustomerComment" Association="RapidTireEstimatesdbModel.CustomerCustomerComment">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="CustomerComment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="EstimateEstimateComment" Association="RapidTireEstimatesdbModel.EstimateEstimateComment">
+            <End Role="Estimate" EntitySet="Estimates" />
+            <End Role="EstimateComment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="ServiceEstimateServiceEstimateComment" Association="RapidTireEstimatesdbModel.ServiceEstimateServiceEstimateComment">
+            <End Role="ServiceEstimate" EntitySet="ServiceEstimates" />
+            <End Role="ServiceEstimateComment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="EstimateServiceEstimate" Association="RapidTireEstimatesdbModel.EstimateServiceEstimate">
+            <End Role="Estimate" EntitySet="Estimates" />
+            <End Role="ServiceEstimate" EntitySet="ServiceEstimates" />
+          </AssociationSet>
+          <EntitySet Name="Parts" EntityType="RapidTireEstimatesdbModel.Part" />
+          <AssociationSet Name="PartPartPrice" Association="RapidTireEstimatesdbModel.PartPartPrice">
+            <End Role="Part" EntitySet="Parts" />
+            <End Role="PartPrice" EntitySet="Prices" />
+          </AssociationSet>
+          <AssociationSet Name="EstimateShopPart" Association="RapidTireEstimatesdbModel.EstimateShopPart">
+            <End Role="Estimate" EntitySet="Estimates" />
+            <End Role="ShopPart" EntitySet="Parts" />
+          </AssociationSet>
+          <AssociationSet Name="EstimateVehiclePart" Association="RapidTireEstimatesdbModel.EstimateVehiclePart">
+            <End Role="Estimate" EntitySet="Estimates" />
+            <End Role="VehiclePart" EntitySet="Parts" />
+          </AssociationSet>
+          <EntitySet Name="Vehicles" EntityType="RapidTireEstimatesdbModel.Vehicle" />
+          <AssociationSet Name="VehicleVehicleType" Association="RapidTireEstimatesdbModel.VehicleVehicleType">
+            <End Role="Vehicle" EntitySet="Vehicles" />
+            <End Role="VehicleType" EntitySet="VehicleTypes" />
+          </AssociationSet>
+          <AssociationSet Name="CustomerVehicle1" Association="RapidTireEstimatesdbModel.CustomerVehicle1">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Vehicle" EntitySet="Vehicles" />
+          </AssociationSet>
+          <AssociationSet Name="VehicleEstimate1" Association="RapidTireEstimatesdbModel.VehicleEstimate1">
+            <End Role="Vehicle" EntitySet="Vehicles" />
+            <End Role="Estimate" EntitySet="Estimates" />
+          </AssociationSet>
+          <AssociationSet Name="VehicleVehiclePart1" Association="RapidTireEstimatesdbModel.VehicleVehiclePart1">
+            <End Role="Vehicle" EntitySet="Vehicles" />
+            <End Role="VehiclePart" EntitySet="Parts" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" Nullable="false" />
+          <NavigationProperty Name="Estimates" Relationship="RapidTireEstimatesdbModel.CustomerEstimate" FromRole="Customer" ToRole="Estimate" />
+          <NavigationProperty Name="CustomerComments" Relationship="RapidTireEstimatesdbModel.CustomerCustomerComment" FromRole="Customer" ToRole="CustomerComment" />
+          <NavigationProperty Name="Vehicles" Relationship="RapidTireEstimatesdbModel.CustomerVehicle1" FromRole="Customer" ToRole="Vehicle" />
+        </EntityType>
+        <EntityType Name="Comment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Contents" Type="String" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CustomerComment" BaseType="RapidTireEstimatesdbModel.Comment" >
+          <NavigationProperty Name="Customer" Relationship="RapidTireEstimatesdbModel.CustomerCustomerComment" FromRole="CustomerComment" ToRole="Customer" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Service">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Prices" Relationship="RapidTireEstimatesdbModel.ServiceServicePrice" FromRole="Service" ToRole="ServicePrice" />
+          <NavigationProperty Name="VehicleTypes" Relationship="RapidTireEstimatesdbModel.ServiceVehicleType" FromRole="Service" ToRole="VehicleType" />
+          <NavigationProperty Name="ServiceEstimates" Relationship="RapidTireEstimatesdbModel.ServiceServiceEstimate" FromRole="Service" ToRole="ServiceEstimate" />
+        </EntityType>
+        <EntityType Name="VehicleType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Service" Relationship="RapidTireEstimatesdbModel.ServiceVehicleType" FromRole="VehicleType" ToRole="Service" />
+          <Property Name="ServiceId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Vehicles" Relationship="RapidTireEstimatesdbModel.VehicleVehicleType" FromRole="VehicleType" ToRole="Vehicle" />
+        </EntityType>
+        <EntityType Name="Price">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Value" Type="Decimal" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ServicePrice" BaseType="RapidTireEstimatesdbModel.Price" >
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="Level" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="Service" Relationship="RapidTireEstimatesdbModel.ServiceServicePrice" FromRole="ServicePrice" ToRole="Service" />
+          <Property Name="ServiceId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Estimate">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Customer" Relationship="RapidTireEstimatesdbModel.CustomerEstimate" FromRole="Estimate" ToRole="Customer" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="EstimateComments" Relationship="RapidTireEstimatesdbModel.EstimateEstimateComment" FromRole="Estimate" ToRole="EstimateComment" />
+          <NavigationProperty Name="ServiceEstimates" Relationship="RapidTireEstimatesdbModel.EstimateServiceEstimate" FromRole="Estimate" ToRole="ServiceEstimate" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" />
+          <Property Name="FinishDate" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="ShopParts" Relationship="RapidTireEstimatesdbModel.EstimateShopPart" FromRole="Estimate" ToRole="ShopPart" />
+          <NavigationProperty Name="VehicleParts" Relationship="RapidTireEstimatesdbModel.EstimateVehiclePart" FromRole="Estimate" ToRole="VehiclePart" />
+          <Property Name="FinalPrice" Type="String" Nullable="false" />
+          <NavigationProperty Name="Vehicle" Relationship="RapidTireEstimatesdbModel.VehicleEstimate1" FromRole="Estimate" ToRole="Vehicle" />
+        </EntityType>
+        <EntityType Name="ServiceEstimate">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="EstimatePrice" Relationship="RapidTireEstimatesdbModel.ServiceEstimatePriceEstimate" FromRole="ServiceEstimate" ToRole="PriceEstimate" />
+          <NavigationProperty Name="Service" Relationship="RapidTireEstimatesdbModel.ServiceServiceEstimate" FromRole="ServiceEstimate" ToRole="Service" />
+          <Property Name="ServiceId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ServiceEstimateComments" Relationship="RapidTireEstimatesdbModel.ServiceEstimateServiceEstimateComment" FromRole="ServiceEstimate" ToRole="ServiceEstimateComment" />
+          <NavigationProperty Name="Estimate" Relationship="RapidTireEstimatesdbModel.EstimateServiceEstimate" FromRole="ServiceEstimate" ToRole="Estimate" />
+          <Property Name="EstimateId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EstimatePrice" BaseType="RapidTireEstimatesdbModel.Price" >
+          <Property Name="Description" Type="String" Nullable="false" />
+          <NavigationProperty Name="ServiceEstimate" Relationship="RapidTireEstimatesdbModel.ServiceEstimatePriceEstimate" FromRole="PriceEstimate" ToRole="ServiceEstimate" />
+        </EntityType>
+        <EntityType Name="ServiceEstimateComment" BaseType="RapidTireEstimatesdbModel.Comment" >
+          <NavigationProperty Name="ServiceEstimate" Relationship="RapidTireEstimatesdbModel.ServiceEstimateServiceEstimateComment" FromRole="ServiceEstimateComment" ToRole="ServiceEstimate" />
+          <Property Name="ServiceEstimateId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EstimateComment" BaseType="RapidTireEstimatesdbModel.Comment" >
+          <NavigationProperty Name="Estimate" Relationship="RapidTireEstimatesdbModel.EstimateEstimateComment" FromRole="EstimateComment" ToRole="Estimate" />
+          <Property Name="EstimateId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="ServiceServicePrice">
+          <End Type="RapidTireEstimatesdbModel.Service" Role="Service" Multiplicity="1" />
+          <End Type="RapidTireEstimatesdbModel.ServicePrice" Role="ServicePrice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Service">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ServicePrice">
+              <PropertyRef Name="ServiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ServiceEstimatePriceEstimate">
+          <End Type="RapidTireEstimatesdbModel.ServiceEstimate" Role="ServiceEstimate" Multiplicity="1" />
+          <End Type="RapidTireEstimatesdbModel.EstimatePrice" Role="PriceEstimate" Multiplicity="1" />
+        </Association>
+        <Association Name="ServiceVehicleType">
+          <End Type="RapidTireEstimatesdbModel.Service" Role="Service" Multiplicity="1" />
+          <End Type="RapidTireEstimatesdbModel.VehicleType" Role="VehicleType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Service">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VehicleType">
+              <PropertyRef Name="ServiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ServiceServiceEstimate">
+          <End Type="RapidTireEstimatesdbModel.Service" Role="Service" Multiplicity="1" />
+          <End Type="RapidTireEstimatesdbModel.ServiceEstimate" Role="ServiceEstimate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Service">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ServiceEstimate">
+              <PropertyRef Name="ServiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CustomerEstimate">
+          <End Type="RapidTireEstimatesdbModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="RapidTireEstimatesdbModel.Estimate" Role="Estimate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Estimate">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CustomerCustomerComment">
+          <End Type="RapidTireEstimatesdbModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="RapidTireEstimatesdbModel.CustomerComment" Role="CustomerComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CustomerComment">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="EstimateEstimateComment">
+          <End Type="RapidTireEstimatesdbModel.Estimate" Role="Estimate" Multiplicity="1" />
+          <End Type="RapidTireEstimatesdbModel.EstimateComment" Role="EstimateComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estimate">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EstimateComment">
+              <PropertyRef Name="EstimateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ServiceEstimateServiceEstimateComment">
+          <End Type="RapidTireEstimatesdbModel.ServiceEstimate" Role="ServiceEstimate" Multiplicity="1" />
+          <End Type="RapidTireEstimatesdbModel.ServiceEstimateComment" Role="ServiceEstimateComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ServiceEstimate">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ServiceEstimateComment">
+              <PropertyRef Name="ServiceEstimateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="EstimateServiceEstimate">
+          <End Type="RapidTireEstimatesdbModel.Estimate" Role="Estimate" Multiplicity="1" />
+          <End Type="RapidTireEstimatesdbModel.ServiceEstimate" Role="ServiceEstimate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estimate">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ServiceEstimate">
+              <PropertyRef Name="EstimateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Part">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="PartPrice" Relationship="RapidTireEstimatesdbModel.PartPartPrice" FromRole="Part" ToRole="PartPrice" />
+          <Property Name="Description" Type="String" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PartPrice" BaseType="RapidTireEstimatesdbModel.Price" >
+          <NavigationProperty Name="Part" Relationship="RapidTireEstimatesdbModel.PartPartPrice" FromRole="PartPrice" ToRole="Part" />
+        </EntityType>
+        <Association Name="PartPartPrice">
+          <End Type="RapidTireEstimatesdbModel.Part" Role="Part" Multiplicity="1" />
+          <End Type="RapidTireEstimatesdbModel.PartPrice" Role="PartPrice" Multiplicity="1" />
+        </Association>
+        <EntityType Name="ShopPart" BaseType="RapidTireEstimatesdbModel.Part" >
+          <NavigationProperty Name="Estimate" Relationship="RapidTireEstimatesdbModel.EstimateShopPart" FromRole="ShopPart" ToRole="Estimate" />
+          <Property Name="EstimateId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="VehiclePart" BaseType="RapidTireEstimatesdbModel.Part" >
+          <NavigationProperty Name="Estimate" Relationship="RapidTireEstimatesdbModel.EstimateVehiclePart" FromRole="VehiclePart" ToRole="Estimate" />
+          <Property Name="EstimateId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Vehicle" Relationship="RapidTireEstimatesdbModel.VehicleVehiclePart1" FromRole="VehiclePart" ToRole="Vehicle" />
+          <Property Name="VehicleId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="EstimateShopPart">
+          <End Type="RapidTireEstimatesdbModel.Estimate" Role="Estimate" Multiplicity="1" />
+          <End Type="RapidTireEstimatesdbModel.ShopPart" Role="ShopPart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estimate">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ShopPart">
+              <PropertyRef Name="EstimateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="EstimateVehiclePart">
+          <End Type="RapidTireEstimatesdbModel.Estimate" Role="Estimate" Multiplicity="1" />
+          <End Type="RapidTireEstimatesdbModel.VehiclePart" Role="VehiclePart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estimate">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VehiclePart">
+              <PropertyRef Name="EstimateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Vehicle">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Model" Type="String" Nullable="false" />
+          <Property Name="Year" Type="String" Nullable="false" />
+          <NavigationProperty Name="VehicleType" Relationship="RapidTireEstimatesdbModel.VehicleVehicleType" FromRole="Vehicle" ToRole="VehicleType" />
+          <Property Name="VehicleTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Customer" Relationship="RapidTireEstimatesdbModel.CustomerVehicle1" FromRole="Vehicle" ToRole="Customer" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Estimate" Relationship="RapidTireEstimatesdbModel.VehicleEstimate1" FromRole="Vehicle" ToRole="Estimate" />
+          <NavigationProperty Name="VehicleParts" Relationship="RapidTireEstimatesdbModel.VehicleVehiclePart1" FromRole="Vehicle" ToRole="VehiclePart" />
+        </EntityType>
+        <Association Name="VehicleVehicleType">
+          <End Type="RapidTireEstimatesdbModel.Vehicle" Role="Vehicle" Multiplicity="*" />
+          <End Type="RapidTireEstimatesdbModel.VehicleType" Role="VehicleType" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="VehicleType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Vehicle">
+              <PropertyRef Name="VehicleTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CustomerVehicle1">
+          <End Type="RapidTireEstimatesdbModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="RapidTireEstimatesdbModel.Vehicle" Role="Vehicle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Vehicle">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="VehicleEstimate1">
+          <End Type="RapidTireEstimatesdbModel.Vehicle" Role="Vehicle" Multiplicity="1" />
+          <End Type="RapidTireEstimatesdbModel.Estimate" Role="Estimate" Multiplicity="1" />
+        </Association>
+        <Association Name="VehicleVehiclePart1">
+          <End Type="RapidTireEstimatesdbModel.Vehicle" Role="Vehicle" Multiplicity="1" />
+          <End Type="RapidTireEstimatesdbModel.VehiclePart" Role="VehiclePart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vehicle">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VehiclePart">
+              <PropertyRef Name="VehicleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="RapidTireEstimatesdbModelStoreContainer" CdmEntityContainer="RapidTireEstimatesdbEntities">
+    <EntitySetMapping Name="Customers">
+      <EntityTypeMapping TypeName="IsTypeOf(RapidTireEstimatesdbModel.Customer)">
+        <MappingFragment StoreEntitySet="Customers">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Comments">
+      <EntityTypeMapping TypeName="IsTypeOf(RapidTireEstimatesdbModel.Comment)">
+        <MappingFragment StoreEntitySet="Comments">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Contents" ColumnName="Contents" />
+          <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(RapidTireEstimatesdbModel.CustomerComment)">
+        <MappingFragment StoreEntitySet="Comments_CustomerComment">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(RapidTireEstimatesdbModel.EstimateComment)">
+        <MappingFragment StoreEntitySet="Comments_EstimateComment">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="EstimateId" ColumnName="EstimateId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(RapidTireEstimatesdbModel.ServiceEstimateComment)">
+        <MappingFragment StoreEntitySet="Comments_ServiceEstimateComment">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="ServiceEstimateId" ColumnName="ServiceEstimateId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Services">
+      <EntityTypeMapping TypeName="IsTypeOf(RapidTireEstimatesdbModel.Service)">
+        <MappingFragment StoreEntitySet="Services">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VehicleTypes">
+      <EntityTypeMapping TypeName="IsTypeOf(RapidTireEstimatesdbModel.VehicleType)">
+        <MappingFragment StoreEntitySet="VehicleTypes">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Prices">
+      <EntityTypeMapping TypeName="IsTypeOf(RapidTireEstimatesdbModel.Price)">
+        <MappingFragment StoreEntitySet="Prices">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(RapidTireEstimatesdbModel.ServicePrice)">
+        <MappingFragment StoreEntitySet="Prices_ServicePrice">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Level" ColumnName="Level" />
+          <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(RapidTireEstimatesdbModel.EstimatePrice)">
+        <MappingFragment StoreEntitySet="Prices_EstimatePrice">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(RapidTireEstimatesdbModel.PartPrice)">
+        <MappingFragment StoreEntitySet="Prices_PartPrice">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Estimates">
+      <EntityTypeMapping TypeName="IsTypeOf(RapidTireEstimatesdbModel.Estimate)">
+        <MappingFragment StoreEntitySet="Estimates">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="FinishDate" ColumnName="FinishDate" />
+          <ScalarProperty Name="FinalPrice" ColumnName="FinalPrice" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ServiceEstimates">
+      <EntityTypeMapping TypeName="IsTypeOf(RapidTireEstimatesdbModel.ServiceEstimate)">
+        <MappingFragment StoreEntitySet="ServiceEstimates">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+          <ScalarProperty Name="EstimateId" ColumnName="EstimateId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Parts">
+      <EntityTypeMapping TypeName="IsTypeOf(RapidTireEstimatesdbModel.Part)">
+        <MappingFragment StoreEntitySet="Parts">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(RapidTireEstimatesdbModel.ShopPart)">
+        <MappingFragment StoreEntitySet="Parts_ShopPart">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="EstimateId" ColumnName="EstimateId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(RapidTireEstimatesdbModel.VehiclePart)">
+        <MappingFragment StoreEntitySet="Parts_VehiclePart">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="EstimateId" ColumnName="EstimateId" />
+          <ScalarProperty Name="VehicleId" ColumnName="VehicleId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Vehicles">
+      <EntityTypeMapping TypeName="IsTypeOf(RapidTireEstimatesdbModel.Vehicle)">
+        <MappingFragment StoreEntitySet="Vehicles">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Model" ColumnName="Model" />
+          <ScalarProperty Name="Year" ColumnName="Year" />
+          <ScalarProperty Name="VehicleTypeId" ColumnName="VehicleTypeId" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="ServiceEstimatePriceEstimate" TypeName="RapidTireEstimatesdbModel.ServiceEstimatePriceEstimate" StoreEntitySet="ServiceEstimates">
+      <EndProperty Name="PriceEstimate">
+        <ScalarProperty Name="Id" ColumnName="EstimatePrice_Id" />
+      </EndProperty>
+      <EndProperty Name="ServiceEstimate">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="PartPartPrice" TypeName="RapidTireEstimatesdbModel.PartPartPrice" StoreEntitySet="Parts">
+      <EndProperty Name="PartPrice">
+        <ScalarProperty Name="Id" ColumnName="PartPrice_Id" />
+      </EndProperty>
+      <EndProperty Name="Part">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="VehicleEstimate1" TypeName="RapidTireEstimatesdbModel.VehicleEstimate1" StoreEntitySet="Vehicles">
+      <EndProperty Name="Estimate">
+        <ScalarProperty Name="Id" ColumnName="Estimate_Id" />
+      </EndProperty>
+      <EndProperty Name="Vehicle">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

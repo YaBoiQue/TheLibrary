@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="737e5b7b38e348de86483edc3b66bc76" Name="Diagram1" ZoomLevel="71" >
+        <EntityTypeShape EntityType="RapidTireEstimatesdbModel.Customer" Width="1.5" PointX="6.625" PointY="5.625" />
+        <EntityTypeShape EntityType="RapidTireEstimatesdbModel.Comment" Width="1.5" PointX="8.5" PointY="0.5" />
+        <EntityTypeShape EntityType="RapidTireEstimatesdbModel.CustomerComment" Width="1.5" PointX="6.625" PointY="2.5" />
+        <InheritanceConnector EntityType="RapidTireEstimatesdbModel.CustomerComment" ManuallyRouted="true" >
+          <ConnectorPoint PointX="9.25" PointY="2.0956835937499996" />
+          <ConnectorPoint PointX="9.25" PointY="2.4049529842465476" />
+          <ConnectorPoint PointX="7.375" PointY="2.4049529842465476" />
+          <ConnectorPoint PointX="7.375" PointY="2.5" />
+        </InheritanceConnector>
+        <EntityTypeShape EntityType="RapidTireEstimatesdbModel.Service" Width="1.5" PointX="13.875" PointY="5.625" />
+        <EntityTypeShape EntityType="RapidTireEstimatesdbModel.VehicleType" Width="1.5" PointX="2.375" PointY="5.625" />
+        <EntityTypeShape EntityType="RapidTireEstimatesdbModel.Price" Width="1.5" PointX="10.375" PointY="12.75" />
+        <EntityTypeShape EntityType="RapidTireEstimatesdbModel.ServicePrice" Width="1.5" PointX="12.25" PointY="10.625" />
+        <InheritanceConnector EntityType="RapidTireEstimatesdbModel.ServicePrice" />
+        <EntityTypeShape EntityType="RapidTireEstimatesdbModel.Estimate" Width="1.5" PointX="8.5" PointY="5.625" />
+        <EntityTypeShape EntityType="RapidTireEstimatesdbModel.ServiceEstimate" Width="1.5" PointX="10.375" PointY="5.625" />
+        <EntityTypeShape EntityType="RapidTireEstimatesdbModel.EstimatePrice" Width="1.5" PointX="10.375" PointY="10.625" />
+        <InheritanceConnector EntityType="RapidTireEstimatesdbModel.EstimatePrice" ManuallyRouted="false" >
+        </InheritanceConnector>
+        <EntityTypeShape EntityType="RapidTireEstimatesdbModel.ServiceEstimateComment" Width="1.5" PointX="10.375" PointY="2.5" />
+        <InheritanceConnector EntityType="RapidTireEstimatesdbModel.ServiceEstimateComment" ManuallyRouted="true" >
+          <ConnectorPoint PointX="9.25" PointY="2.0956835937499996" />
+          <ConnectorPoint PointX="9.25" PointY="2.4049529842465476" />
+          <ConnectorPoint PointX="11.125" PointY="2.4049529842465476" />
+          <ConnectorPoint PointX="11.125" PointY="2.5" />
+        </InheritanceConnector>
+        <EntityTypeShape EntityType="RapidTireEstimatesdbModel.EstimateComment" Width="1.5" PointX="8.5" PointY="2.5" />
+        <InheritanceConnector EntityType="RapidTireEstimatesdbModel.EstimateComment" />
+        <AssociationConnector Association="RapidTireEstimatesdbModel.ServiceServicePrice" />
+        <AssociationConnector Association="RapidTireEstimatesdbModel.ServiceEstimatePriceEstimate" />
+        <AssociationConnector Association="RapidTireEstimatesdbModel.ServiceVehicleType" />
+        <AssociationConnector Association="RapidTireEstimatesdbModel.ServiceServiceEstimate" />
+        <AssociationConnector Association="RapidTireEstimatesdbModel.CustomerEstimate" />
+        <AssociationConnector Association="RapidTireEstimatesdbModel.CustomerCustomerComment" />
+        <AssociationConnector Association="RapidTireEstimatesdbModel.EstimateEstimateComment" />
+        <AssociationConnector ManuallyRouted="false" Association="RapidTireEstimatesdbModel.ServiceEstimateServiceEstimateComment">
+          <ConnectorPoint PointX="4.75" PointY="8.17623124431977" />
+        </AssociationConnector>
+        <AssociationConnector Association="RapidTireEstimatesdbModel.EstimateServiceEstimate" />
+        <EntityTypeShape EntityType="RapidTireEstimatesdbModel.Part" Width="1.5" PointX="4.75" PointY="12.75" />
+        <EntityTypeShape EntityType="RapidTireEstimatesdbModel.PartPrice" Width="1.5" PointX="6.625" PointY="12.75" />
+        <InheritanceConnector EntityType="RapidTireEstimatesdbModel.PartPrice" />
+        <AssociationConnector Association="RapidTireEstimatesdbModel.PartPartPrice" />
+        <EntityTypeShape EntityType="RapidTireEstimatesdbModel.ShopPart" Width="1.5" PointX="4.75" PointY="10.625" />
+        <InheritanceConnector EntityType="RapidTireEstimatesdbModel.ShopPart" />
+        <EntityTypeShape EntityType="RapidTireEstimatesdbModel.VehiclePart" Width="1.5" PointX="6.625" PointY="10.625" />
+        <InheritanceConnector EntityType="RapidTireEstimatesdbModel.VehiclePart" />
+        <AssociationConnector Association="RapidTireEstimatesdbModel.EstimateShopPart" ManuallyRouted="true" >
+          <ConnectorPoint PointX="8.8427558126165913" PointY="8.951396484375" />
+          <ConnectorPoint PointX="8.8427558126165913" PointY="9.0208333333333339" />
+          <ConnectorPoint PointX="5.5283776692658959" PointY="9.0208333333333339" />
+          <ConnectorPoint PointX="5.5283776692658959" PointY="10.625" />
+        </AssociationConnector>
+        <AssociationConnector Association="RapidTireEstimatesdbModel.EstimateVehiclePart" ManuallyRouted="true" >
+          <ConnectorPoint PointX="9.4294414262464255" PointY="8.951396484375" />
+          <ConnectorPoint PointX="9.4294414262464255" PointY="9.2708333333333339" />
+          <ConnectorPoint PointX="7.3490632226714734" PointY="9.2708333333333339" />
+          <ConnectorPoint PointX="7.3490632226714734" PointY="10.624999999999998" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="RapidTireEstimatesdbModel.Vehicle" Width="1.5" PointX="0.5" PointY="5.625" />
+        <AssociationConnector Association="RapidTireEstimatesdbModel.VehicleVehicleType" />
+        <AssociationConnector Association="RapidTireEstimatesdbModel.CustomerVehicle1" />
+        <AssociationConnector Association="RapidTireEstimatesdbModel.VehicleEstimate1" />
+        <AssociationConnector Association="RapidTireEstimatesdbModel.VehicleVehiclePart1" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
