@@ -13,7 +13,7 @@ namespace RapidTireEstimates.Models
         public int VehicleId { get; set; }
 
         [Display(Name = "Creation Date")]
-        public DateTime DateCreated { set { DateCreated = DateTime.Now; } }
+        public DateTime DateCreated { set => DateCreated = DateTime.Now; }
         [Display(Name = "Completion Date")]
         public DateTime FinishDate { get; set; }
         [Display(Name = "Shop Tool Use")]
@@ -30,7 +30,7 @@ namespace RapidTireEstimates.Models
         public ICollection<ShopSupply>? ShopParts { get; set; }
         public ICollection<PurchasedPart>? PurchasedParts { get; set; }
 
-        public Estimate( )
+        public Estimate()
         {
             this.DateCreated = DateTime.Now;
         }

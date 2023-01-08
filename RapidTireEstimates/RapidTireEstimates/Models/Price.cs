@@ -7,7 +7,7 @@ namespace RapidTireEstimates.Models
     {
         [Key]
         public int Id { get; set; }
-        
+
         [Required]
         [DataType(DataType.Currency)]
         [Column(TypeName = "money")]

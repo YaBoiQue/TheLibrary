@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RapidTireEstimates.Data;
 using RapidTireEstimates.Models;
@@ -22,7 +17,7 @@ namespace RapidTireEstimates.Controllers
         // GET: VehicleTypes
         public async Task<IActionResult> Index()
         {
-              return View(await _context.VehicleType.ToListAsync());
+            return View(await _context.VehicleType.ToListAsync());
         }
 
         // GET: VehicleTypes/Details/5
@@ -33,14 +28,9 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var vehicleType = await _context.VehicleType
+            VehicleType? vehicleType = await _context.VehicleType
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (vehicleType == null)
-            {
-                return NotFound();
-            }
-
-            return View(vehicleType);
+            return vehicleType == null ? NotFound() : View(vehicleType);
         }
 
         // GET: VehicleTypes/Create
@@ -58,8 +48,8 @@ namespace RapidTireEstimates.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(vehicleType);
-                await _context.SaveChangesAsync();
+                _ = _context.Add(vehicleType);
+                _ = await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(vehicleType);
@@ -73,12 +63,8 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var vehicleType = await _context.VehicleType.FindAsync(id);
-            if (vehicleType == null)
-            {
-                return NotFound();
-            }
-            return View(vehicleType);
+            VehicleType? vehicleType = await _context.VehicleType.FindAsync(id);
+            return vehicleType == null ? NotFound() : View(vehicleType);
         }
 
         // POST: VehicleTypes/Edit/5
@@ -97,8 +83,8 @@ namespace RapidTireEstimates.Controllers
             {
                 try
                 {
-                    _context.Update(vehicleType);
-                    await _context.SaveChangesAsync();
+                    _ = _context.Update(vehicleType);
+                    _ = await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -124,14 +110,9 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var vehicleType = await _context.VehicleType
+            VehicleType? vehicleType = await _context.VehicleType
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (vehicleType == null)
-            {
-                return NotFound();
-            }
-
-            return View(vehicleType);
+            return vehicleType == null ? NotFound() : View(vehicleType);
         }
 
         // POST: VehicleTypes/Delete/5
@@ -143,19 +124,19 @@ namespace RapidTireEstimates.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.VehicleType'  is null.");
             }
-            var vehicleType = await _context.VehicleType.FindAsync(id);
+            VehicleType? vehicleType = await _context.VehicleType.FindAsync(id);
             if (vehicleType != null)
             {
-                _context.VehicleType.Remove(vehicleType);
+                _ = _context.VehicleType.Remove(vehicleType);
             }
-            
-            await _context.SaveChangesAsync();
+
+            _ = await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool VehicleTypeExists(int id)
         {
-          return _context.VehicleType.Any(e => e.Id == id);
+            return _context.VehicleType.Any(e => e.Id == id);
         }
     }
 }

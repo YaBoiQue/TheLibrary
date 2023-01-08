@@ -1,55 +1,66 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using RapidTireEstimates.Data;
+using RapidTireEstimates.Interfaces;
 using RapidTireEstimates.Models;
+using RapidTireEstimates.Specifications;
 using RapidTireEstimates.ViewModels;
+using static RapidTireEstimates.Helpers.Constants;
 
 namespace RapidTireEstimates.Controllers
 {
     public class ServicesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IServiceRepository _serviceRepository;
 
-        public ServicesController(ApplicationDbContext context)
+        public ServicesController(IServiceRepository serviceRepository)
         {
-            _context = context;
+            _serviceRepository = serviceRepository;
         }
 
         // GET: Services
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(ServiceViewModel serviceViewModel)
         {
-              return View(await _context.Service.ToListAsync());
+            serviceViewModel.SortByName = (serviceViewModel.SortBy == SortByParameter.NameASC) 
+                ? SortByParameter.NameDESC : Helpers.Constants.SortByParameter.NameASC;
+            serviceViewModel.SortByDescription = (serviceViewModel.SortBy == SortByParameter.DescrASC) 
+                ? SortByParameter.DescrDESC : SortByParameter.DescrASC;
+            serviceViewModel.ReturnController = "Services";
+            serviceViewModel.ReturnAction = "Index";
+            serviceViewModel.ReturnId = "";
+            serviceViewModel.Services = await _serviceRepository.GetServices(
+                new GetServicesFilteredBy(serviceViewModel.FilterBy),
+                new GetServicesOrderedBy(serviceViewModel.SortBy));
+
+            return View(serviceViewModel);
         }
 
         // GET: Services/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Service == null)
+
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var service = await _context.Service
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (service == null)
-            {
-                return NotFound();
-            }
-
-            return View(service);
+            var serviceViewModel = new ServiceViewModel(await _serviceRepository.GetServiceById(new GetServiceById((int)id)));
+            return serviceViewModel == null ? NotFound() : View(serviceViewModel);
         }
 
         // GET: Services/Create
         public async Task<IActionResult> Create()
         {
-            ServiceViewModel serviceViewModel = new ServiceViewModel();
+            ServiceViewModel serviceViewModel = new()
+            {
+                AllVehicleTypes = new List<VehicleType>()
+            };
+            serviceViewModel.AllVehicleTypes = await _serviceRepository.GetVehicleTypes();
 
-            serviceViewModel.VehicleTypeList = new MultiSelectList(await _context.VehicleType.ToListAsync(), "", "Name");
+            serviceViewModel.VehicleTypeSelectList = new List<SelectListItem>();
+            foreach (VehicleType item in serviceViewModel.AllVehicleTypes)
+            {
+                serviceViewModel.VehicleTypeSelectList.Add(new SelectListItem { Text = item.Name.Trim(), Value = item.Id.ToString() });
+            }
 
             return View(serviceViewModel);
         }
@@ -59,31 +70,40 @@ namespace RapidTireEstimates.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Hours,Rate,VehicleTypes")] Service service)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Hours,Rate,VehicleTypeSelectList")] ServiceViewModel serviceViewModel)
         {
+            if (serviceViewModel == null)
+            {
+                return NotFound();
+            }
+
             if (ModelState.IsValid)
             {
-                _context.Add(service);
-                await _context.SaveChangesAsync();
+                await _serviceRepository.InsertService(serviceViewModel);
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(service);
+            return View(serviceViewModel);
         }
 
         // GET: Services/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Service == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var service = await _context.Service.FindAsync(id);
+            Service? service = await _serviceRepository.GetServiceById(new GetServiceById((int)id));
+
             if (service == null)
             {
                 return NotFound();
             }
-            return View(service);
+
+            ServiceViewModel serviceViewModel = new(service);
+
+            return View(serviceViewModel);
         }
 
         // POST: Services/Edit/5
@@ -91,78 +111,46 @@ namespace RapidTireEstimates.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, 
-            [Bind("Id,Name,Description,Hours,Rate")] Service service,
-            [Bind("ServiceId,Description,Level")] ServicePrice price)
+        public async Task<IActionResult> Edit(int id,
+            [Bind("Id,Name,Description,Hours,Rate")] ServiceViewModel serviceViewModel)
         {
-            if (id != service.Id)
+            if (id != serviceViewModel.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(service);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ServiceExists(service.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _serviceRepository.UpdateService(new GetServiceById((int)id), serviceViewModel);
+
+                return View(serviceViewModel);
             }
-            return View(service);
+
+            return View(serviceViewModel);
         }
+
 
         // GET: Services/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Service == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var service = await _context.Service
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (service == null)
-            {
-                return NotFound();
-            }
-
-            return View(service);
+            Service? service = await _serviceRepository.GetServiceById(new GetServiceById((int)id));
+            return service == null ? NotFound() : View(service);
         }
+
 
         // POST: Services/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Service == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Service'  is null.");
-            }
-            var service = await _context.Service.FindAsync(id);
-            if (service != null)
-            {
-                _context.Service.Remove(service);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            await _serviceRepository.DeleteService(new GetServiceById((int)id));
 
-        private bool ServiceExists(int id)
-        {
-          return _context.Service.Any(e => e.Id == id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RapidTireEstimates.Data;
@@ -22,7 +18,7 @@ namespace RapidTireEstimates.Controllers
         // GET: Estimates
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Estimate.Include(e => e.Customer).Include(e => e.Vehicle);
+            Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<Estimate, Vehicle> applicationDbContext = _context.Estimate.Include(e => e.Customer).Include(e => e.Vehicle);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -34,16 +30,11 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var estimate = await _context.Estimate
+            Estimate? estimate = await _context.Estimate
                 .Include(e => e.Customer)
                 .Include(e => e.Vehicle)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (estimate == null)
-            {
-                return NotFound();
-            }
-
-            return View(estimate);
+            return estimate == null ? NotFound() : View(estimate);
         }
 
         // GET: Estimates/Create
@@ -63,8 +54,8 @@ namespace RapidTireEstimates.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(estimate);
-                await _context.SaveChangesAsync();
+                _ = _context.Add(estimate);
+                _ = await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CustomerId"] = new SelectList(_context.Customer, "Id", "Name", estimate.CustomerId);
@@ -80,7 +71,7 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var estimate = await _context.Estimate.FindAsync(id);
+            Estimate? estimate = await _context.Estimate.FindAsync(id);
             if (estimate == null)
             {
                 return NotFound();
@@ -106,8 +97,8 @@ namespace RapidTireEstimates.Controllers
             {
                 try
                 {
-                    _context.Update(estimate);
-                    await _context.SaveChangesAsync();
+                    _ = _context.Update(estimate);
+                    _ = await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -135,16 +126,11 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var estimate = await _context.Estimate
+            Estimate? estimate = await _context.Estimate
                 .Include(e => e.Customer)
                 .Include(e => e.Vehicle)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (estimate == null)
-            {
-                return NotFound();
-            }
-
-            return View(estimate);
+            return estimate == null ? NotFound() : View(estimate);
         }
 
         // POST: Estimates/Delete/5
@@ -156,19 +142,19 @@ namespace RapidTireEstimates.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.Estimate'  is null.");
             }
-            var estimate = await _context.Estimate.FindAsync(id);
+            Estimate? estimate = await _context.Estimate.FindAsync(id);
             if (estimate != null)
             {
-                _context.Estimate.Remove(estimate);
+                _ = _context.Estimate.Remove(estimate);
             }
-            
-            await _context.SaveChangesAsync();
+
+            _ = await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool EstimateExists(int id)
         {
-          return _context.Estimate.Any(e => e.Id == id);
+            return _context.Estimate.Any(e => e.Id == id);
         }
     }
 }

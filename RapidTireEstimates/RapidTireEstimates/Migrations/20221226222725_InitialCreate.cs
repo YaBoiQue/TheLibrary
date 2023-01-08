@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -9,7 +8,7 @@ namespace RapidTireEstimates.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -20,10 +19,10 @@ namespace RapidTireEstimates.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                    _ = table.PrimaryKey("PK_AspNetRoles", x => x.Id);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
@@ -45,10 +44,10 @@ namespace RapidTireEstimates.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    _ = table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "Customer",
                 columns: table => new
                 {
@@ -59,10 +58,10 @@ namespace RapidTireEstimates.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Customer", x => x.Id);
+                    _ = table.PrimaryKey("PK_Customer", x => x.Id);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "Service",
                 columns: table => new
                 {
@@ -75,10 +74,10 @@ namespace RapidTireEstimates.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Service", x => x.Id);
+                    _ = table.PrimaryKey("PK_Service", x => x.Id);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "ShopSupply",
                 columns: table => new
                 {
@@ -91,10 +90,10 @@ namespace RapidTireEstimates.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ShopSupply", x => x.Id);
+                    _ = table.PrimaryKey("PK_ShopSupply", x => x.Id);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "VehicleType",
                 columns: table => new
                 {
@@ -104,10 +103,10 @@ namespace RapidTireEstimates.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_VehicleType", x => x.Id);
+                    _ = table.PrimaryKey("PK_VehicleType", x => x.Id);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -119,8 +118,8 @@ namespace RapidTireEstimates.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
-                    table.ForeignKey(
+                    _ = table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
+                    _ = table.ForeignKey(
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
@@ -128,7 +127,7 @@ namespace RapidTireEstimates.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
@@ -140,8 +139,8 @@ namespace RapidTireEstimates.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
-                    table.ForeignKey(
+                    _ = table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
+                    _ = table.ForeignKey(
                         name: "FK_AspNetUserClaims_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
@@ -149,7 +148,7 @@ namespace RapidTireEstimates.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
@@ -160,8 +159,8 @@ namespace RapidTireEstimates.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
-                    table.ForeignKey(
+                    _ = table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    _ = table.ForeignKey(
                         name: "FK_AspNetUserLogins_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
@@ -169,7 +168,7 @@ namespace RapidTireEstimates.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
@@ -178,14 +177,14 @@ namespace RapidTireEstimates.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
-                    table.ForeignKey(
+                    _ = table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    _ = table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
+                    _ = table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
@@ -193,7 +192,7 @@ namespace RapidTireEstimates.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
@@ -204,8 +203,8 @@ namespace RapidTireEstimates.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
-                    table.ForeignKey(
+                    _ = table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    _ = table.ForeignKey(
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
@@ -213,7 +212,7 @@ namespace RapidTireEstimates.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "CustomerComment",
                 columns: table => new
                 {
@@ -225,8 +224,8 @@ namespace RapidTireEstimates.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CustomerComment", x => x.Id);
-                    table.ForeignKey(
+                    _ = table.PrimaryKey("PK_CustomerComment", x => x.Id);
+                    _ = table.ForeignKey(
                         name: "FK_CustomerComment_Customer_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customer",
@@ -234,7 +233,7 @@ namespace RapidTireEstimates.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "ServicePrice",
                 columns: table => new
                 {
@@ -247,8 +246,8 @@ namespace RapidTireEstimates.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ServicePrice", x => x.Id);
-                    table.ForeignKey(
+                    _ = table.PrimaryKey("PK_ServicePrice", x => x.Id);
+                    _ = table.ForeignKey(
                         name: "FK_ServicePrice_Service_ServiceId",
                         column: x => x.ServiceId,
                         principalTable: "Service",
@@ -256,23 +255,26 @@ namespace RapidTireEstimates.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "ServiceVehicleType",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ServicesId = table.Column<int>(type: "int", nullable: false),
-                    VehicleTypesId = table.Column<int>(type: "int", nullable: false)
+                    VehicleTypesId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ServiceVehicleType", x => new { x.ServicesId, x.VehicleTypesId });
-                    table.ForeignKey(
+                    _ = table.PrimaryKey("PK_ServiceVehicleType", x => x.Id);
+                    _ = table.ForeignKey(
                         name: "FK_ServiceVehicleType_Service_ServicesId",
                         column: x => x.ServicesId,
                         principalTable: "Service",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
+                    _ = table.ForeignKey(
                         name: "FK_ServiceVehicleType_VehicleType_VehicleTypesId",
                         column: x => x.VehicleTypesId,
                         principalTable: "VehicleType",
@@ -280,7 +282,7 @@ namespace RapidTireEstimates.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "Vehicle",
                 columns: table => new
                 {
@@ -294,14 +296,14 @@ namespace RapidTireEstimates.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Vehicle", x => x.Id);
-                    table.ForeignKey(
+                    _ = table.PrimaryKey("PK_Vehicle", x => x.Id);
+                    _ = table.ForeignKey(
                         name: "FK_Vehicle_Customer_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customer",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
+                    _ = table.ForeignKey(
                         name: "FK_Vehicle_VehicleType_VehicleTypeId",
                         column: x => x.VehicleTypeId,
                         principalTable: "VehicleType",
@@ -309,7 +311,7 @@ namespace RapidTireEstimates.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "Estimate",
                 columns: table => new
                 {
@@ -322,21 +324,21 @@ namespace RapidTireEstimates.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Estimate", x => x.VehicleId);
-                    table.ForeignKey(
+                    _ = table.PrimaryKey("PK_Estimate", x => x.VehicleId);
+                    _ = table.ForeignKey(
                         name: "FK_Estimate_Customer_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customer",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
+                    _ = table.ForeignKey(
                         name: "FK_Estimate_Vehicle_VehicleId",
                         column: x => x.VehicleId,
                         principalTable: "Vehicle",
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "EstimateComment",
                 columns: table => new
                 {
@@ -348,8 +350,8 @@ namespace RapidTireEstimates.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EstimateComment", x => x.Id);
-                    table.ForeignKey(
+                    _ = table.PrimaryKey("PK_EstimateComment", x => x.Id);
+                    _ = table.ForeignKey(
                         name: "FK_EstimateComment_Estimate_EstimateId",
                         column: x => x.EstimateId,
                         principalTable: "Estimate",
@@ -357,7 +359,7 @@ namespace RapidTireEstimates.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "EstimateShopSupply",
                 columns: table => new
                 {
@@ -366,14 +368,14 @@ namespace RapidTireEstimates.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EstimateShopSupply", x => new { x.EstimatesVehicleId, x.ShopPartsId });
-                    table.ForeignKey(
+                    _ = table.PrimaryKey("PK_EstimateShopSupply", x => new { x.EstimatesVehicleId, x.ShopPartsId });
+                    _ = table.ForeignKey(
                         name: "FK_EstimateShopSupply_Estimate_EstimatesVehicleId",
                         column: x => x.EstimatesVehicleId,
                         principalTable: "Estimate",
                         principalColumn: "VehicleId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
+                    _ = table.ForeignKey(
                         name: "FK_EstimateShopSupply_ShopSupply_ShopPartsId",
                         column: x => x.ShopPartsId,
                         principalTable: "ShopSupply",
@@ -381,7 +383,7 @@ namespace RapidTireEstimates.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "PurchasedPart",
                 columns: table => new
                 {
@@ -395,21 +397,21 @@ namespace RapidTireEstimates.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PurchasedPart", x => x.VehicleId);
-                    table.ForeignKey(
+                    _ = table.PrimaryKey("PK_PurchasedPart", x => x.VehicleId);
+                    _ = table.ForeignKey(
                         name: "FK_PurchasedPart_Estimate_EstimateId",
                         column: x => x.EstimateId,
                         principalTable: "Estimate",
                         principalColumn: "VehicleId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
+                    _ = table.ForeignKey(
                         name: "FK_PurchasedPart_Vehicle_VehicleId",
                         column: x => x.VehicleId,
                         principalTable: "Vehicle",
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "ServiceEstimate",
                 columns: table => new
                 {
@@ -421,14 +423,14 @@ namespace RapidTireEstimates.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ServiceEstimate", x => x.Id);
-                    table.ForeignKey(
+                    _ = table.PrimaryKey("PK_ServiceEstimate", x => x.Id);
+                    _ = table.ForeignKey(
                         name: "FK_ServiceEstimate_Estimate_EstimateId",
                         column: x => x.EstimateId,
                         principalTable: "Estimate",
                         principalColumn: "VehicleId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
+                    _ = table.ForeignKey(
                         name: "FK_ServiceEstimate_Service_ServiceId",
                         column: x => x.ServiceId,
                         principalTable: "Service",
@@ -436,7 +438,7 @@ namespace RapidTireEstimates.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "ServiceEstimateComment",
                 columns: table => new
                 {
@@ -448,8 +450,8 @@ namespace RapidTireEstimates.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ServiceEstimateComment", x => x.Id);
-                    table.ForeignKey(
+                    _ = table.PrimaryKey("PK_ServiceEstimateComment", x => x.Id);
+                    _ = table.ForeignKey(
                         name: "FK_ServiceEstimateComment_ServiceEstimate_ServiceEstimateId",
                         column: x => x.ServiceEstimateId,
                         principalTable: "ServiceEstimate",
@@ -457,7 +459,7 @@ namespace RapidTireEstimates.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "ServiceEstimatePrice",
                 columns: table => new
                 {
@@ -469,8 +471,8 @@ namespace RapidTireEstimates.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ServiceEstimatePrice", x => x.Id);
-                    table.ForeignKey(
+                    _ = table.PrimaryKey("PK_ServiceEstimatePrice", x => x.Id);
+                    _ = table.ForeignKey(
                         name: "FK_ServiceEstimatePrice_ServiceEstimate_ServiceEstimateId",
                         column: x => x.ServiceEstimateId,
                         principalTable: "ServiceEstimate",
@@ -478,107 +480,112 @@ namespace RapidTireEstimates.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
                 unique: true,
                 filter: "[NormalizedName] IS NOT NULL");
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
                 table: "AspNetUserClaims",
                 column: "UserId");
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserLogins_UserId",
                 table: "AspNetUserLogins",
                 column: "UserId");
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserRoles_RoleId",
                 table: "AspNetUserRoles",
                 column: "RoleId");
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_CustomerComment_CustomerId",
                 table: "CustomerComment",
                 column: "CustomerId");
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_Estimate_CustomerId",
                 table: "Estimate",
                 column: "CustomerId");
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_EstimateComment_EstimateId",
                 table: "EstimateComment",
                 column: "EstimateId");
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_EstimateShopSupply_ShopPartsId",
                 table: "EstimateShopSupply",
                 column: "ShopPartsId");
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_PurchasedPart_EstimateId",
                 table: "PurchasedPart",
                 column: "EstimateId");
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_ServiceEstimate_EstimateId",
                 table: "ServiceEstimate",
                 column: "EstimateId");
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_ServiceEstimate_ServiceId",
                 table: "ServiceEstimate",
                 column: "ServiceId");
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_ServiceEstimateComment_ServiceEstimateId",
                 table: "ServiceEstimateComment",
                 column: "ServiceEstimateId");
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_ServiceEstimatePrice_ServiceEstimateId",
                 table: "ServiceEstimatePrice",
                 column: "ServiceEstimateId",
                 unique: true);
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_ServicePrice_ServiceId",
                 table: "ServicePrice",
                 column: "ServiceId");
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
+                name: "IX_ServiceVehicleType_ServicesId",
+                table: "ServiceVehicleType",
+                column: "ServicesId");
+
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_ServiceVehicleType_VehicleTypesId",
                 table: "ServiceVehicleType",
                 column: "VehicleTypesId");
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_Vehicle_CustomerId",
                 table: "Vehicle",
                 column: "CustomerId");
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_Vehicle_VehicleTypeId",
                 table: "Vehicle",
                 column: "VehicleTypeId");
@@ -586,70 +593,70 @@ namespace RapidTireEstimates.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "AspNetUserClaims");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "AspNetUserLogins");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "AspNetUserRoles");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "CustomerComment");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "EstimateComment");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "EstimateShopSupply");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "PurchasedPart");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "ServiceEstimateComment");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "ServiceEstimatePrice");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "ServicePrice");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "ServiceVehicleType");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "ShopSupply");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "ServiceEstimate");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "Estimate");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "Service");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "Vehicle");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "Customer");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "VehicleType");
         }
     }

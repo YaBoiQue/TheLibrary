@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RapidTireEstimates.Data;
@@ -22,7 +18,7 @@ namespace RapidTireEstimates.Controllers
         // GET: Vehicles
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Vehicle.Include(v => v.Customer);
+            Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<Vehicle, Customer> applicationDbContext = _context.Vehicle.Include(v => v.Customer);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -34,15 +30,10 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var vehicle = await _context.Vehicle
+            Vehicle? vehicle = await _context.Vehicle
                 .Include(v => v.Customer)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (vehicle == null)
-            {
-                return NotFound();
-            }
-
-            return View(vehicle);
+            return vehicle == null ? NotFound() : View(vehicle);
         }
 
         // GET: Vehicles/Create
@@ -61,8 +52,8 @@ namespace RapidTireEstimates.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(vehicle);
-                await _context.SaveChangesAsync();
+                _ = _context.Add(vehicle);
+                _ = await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CustomerId"] = new SelectList(_context.Customer, "Id", "Name", vehicle.CustomerId);
@@ -77,7 +68,7 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var vehicle = await _context.Vehicle.FindAsync(id);
+            Vehicle? vehicle = await _context.Vehicle.FindAsync(id);
             if (vehicle == null)
             {
                 return NotFound();
@@ -102,8 +93,8 @@ namespace RapidTireEstimates.Controllers
             {
                 try
                 {
-                    _context.Update(vehicle);
-                    await _context.SaveChangesAsync();
+                    _ = _context.Update(vehicle);
+                    _ = await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -130,15 +121,10 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var vehicle = await _context.Vehicle
+            Vehicle? vehicle = await _context.Vehicle
                 .Include(v => v.Customer)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (vehicle == null)
-            {
-                return NotFound();
-            }
-
-            return View(vehicle);
+            return vehicle == null ? NotFound() : View(vehicle);
         }
 
         // POST: Vehicles/Delete/5
@@ -150,19 +136,19 @@ namespace RapidTireEstimates.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.Vehicle'  is null.");
             }
-            var vehicle = await _context.Vehicle.FindAsync(id);
+            Vehicle? vehicle = await _context.Vehicle.FindAsync(id);
             if (vehicle != null)
             {
-                _context.Vehicle.Remove(vehicle);
+                _ = _context.Vehicle.Remove(vehicle);
             }
-            
-            await _context.SaveChangesAsync();
+
+            _ = await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool VehicleExists(int id)
         {
-          return _context.Vehicle.Any(e => e.Id == id);
+            return _context.Vehicle.Any(e => e.Id == id);
         }
     }
 }

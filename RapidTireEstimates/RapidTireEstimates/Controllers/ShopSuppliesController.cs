@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RapidTireEstimates.Data;
 using RapidTireEstimates.Models;
@@ -22,7 +17,7 @@ namespace RapidTireEstimates.Controllers
         // GET: ShopSupplies
         public async Task<IActionResult> Index()
         {
-              return View(await _context.ShopSupply.ToListAsync());
+            return View(await _context.ShopSupply.ToListAsync());
         }
 
         // GET: ShopSupplies/Details/5
@@ -33,14 +28,9 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var shopSupply = await _context.ShopSupply
+            ShopSupply? shopSupply = await _context.ShopSupply
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (shopSupply == null)
-            {
-                return NotFound();
-            }
-
-            return View(shopSupply);
+            return shopSupply == null ? NotFound() : View(shopSupply);
         }
 
         // GET: ShopSupplies/Create
@@ -58,8 +48,8 @@ namespace RapidTireEstimates.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(shopSupply);
-                await _context.SaveChangesAsync();
+                _ = _context.Add(shopSupply);
+                _ = await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(shopSupply);
@@ -73,12 +63,8 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var shopSupply = await _context.ShopSupply.FindAsync(id);
-            if (shopSupply == null)
-            {
-                return NotFound();
-            }
-            return View(shopSupply);
+            ShopSupply? shopSupply = await _context.ShopSupply.FindAsync(id);
+            return shopSupply == null ? NotFound() : View(shopSupply);
         }
 
         // POST: ShopSupplies/Edit/5
@@ -97,8 +83,8 @@ namespace RapidTireEstimates.Controllers
             {
                 try
                 {
-                    _context.Update(shopSupply);
-                    await _context.SaveChangesAsync();
+                    _ = _context.Update(shopSupply);
+                    _ = await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -124,14 +110,9 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var shopSupply = await _context.ShopSupply
+            ShopSupply? shopSupply = await _context.ShopSupply
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (shopSupply == null)
-            {
-                return NotFound();
-            }
-
-            return View(shopSupply);
+            return shopSupply == null ? NotFound() : View(shopSupply);
         }
 
         // POST: ShopSupplies/Delete/5
@@ -143,19 +124,19 @@ namespace RapidTireEstimates.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.ShopSupply'  is null.");
             }
-            var shopSupply = await _context.ShopSupply.FindAsync(id);
+            ShopSupply? shopSupply = await _context.ShopSupply.FindAsync(id);
             if (shopSupply != null)
             {
-                _context.ShopSupply.Remove(shopSupply);
+                _ = _context.ShopSupply.Remove(shopSupply);
             }
-            
-            await _context.SaveChangesAsync();
+
+            _ = await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ShopSupplyExists(int id)
         {
-          return _context.ShopSupply.Any(e => e.Id == id);
+            return _context.ShopSupply.Any(e => e.Id == id);
         }
     }
 }

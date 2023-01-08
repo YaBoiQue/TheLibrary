@@ -15,13 +15,17 @@ namespace RapidTireEstimates.Models
         public string? Description { get; set; }
         [Display(Name = "Flat-Rate Time")]
         [Column(TypeName = "decimal(3,2)")]
-        public double Hours { get; set; }
+        public decimal Hours { get; set; }
         [Display(Name = "Hourly Rate")]
         [Column(TypeName = "decimal(18,2)")]
         public decimal Rate { get; set; }
 
+        public int ServiceNumber { get; set; }
+
         public ICollection<ServicePrice>? Prices { get; set; }
-        public ICollection<VehicleType> VehicleTypes { get; set; }
+        public ICollection<ServiceVehicleType>? VehicleTypes { get; set; }
         public ICollection<ServiceEstimate>? ServiceEstimates { get; set; }
+
+
     }
 }

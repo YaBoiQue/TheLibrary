@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RapidTireEstimates.Data;
@@ -22,7 +18,7 @@ namespace RapidTireEstimates.Controllers
         // GET: CustomerComments
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.CustomerComment.Include(c => c.Customer);
+            Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<CustomerComment, Customer> applicationDbContext = _context.CustomerComment.Include(c => c.Customer);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -34,15 +30,10 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var customerComment = await _context.CustomerComment
+            CustomerComment? customerComment = await _context.CustomerComment
                 .Include(c => c.Customer)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (customerComment == null)
-            {
-                return NotFound();
-            }
-
-            return View(customerComment);
+            return customerComment == null ? NotFound() : View(customerComment);
         }
 
         // GET: CustomerComments/Create
@@ -61,8 +52,8 @@ namespace RapidTireEstimates.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(customerComment);
-                await _context.SaveChangesAsync();
+                _ = _context.Add(customerComment);
+                _ = await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CustomerId"] = new SelectList(_context.Customer, "Id", "Name", customerComment.CustomerId);
@@ -77,7 +68,7 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var customerComment = await _context.CustomerComment.FindAsync(id);
+            CustomerComment? customerComment = await _context.CustomerComment.FindAsync(id);
             if (customerComment == null)
             {
                 return NotFound();
@@ -102,8 +93,8 @@ namespace RapidTireEstimates.Controllers
             {
                 try
                 {
-                    _context.Update(customerComment);
-                    await _context.SaveChangesAsync();
+                    _ = _context.Update(customerComment);
+                    _ = await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -130,15 +121,10 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var customerComment = await _context.CustomerComment
+            CustomerComment? customerComment = await _context.CustomerComment
                 .Include(c => c.Customer)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (customerComment == null)
-            {
-                return NotFound();
-            }
-
-            return View(customerComment);
+            return customerComment == null ? NotFound() : View(customerComment);
         }
 
         // POST: CustomerComments/Delete/5
@@ -150,19 +136,19 @@ namespace RapidTireEstimates.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.CustomerComment'  is null.");
             }
-            var customerComment = await _context.CustomerComment.FindAsync(id);
+            CustomerComment? customerComment = await _context.CustomerComment.FindAsync(id);
             if (customerComment != null)
             {
-                _context.CustomerComment.Remove(customerComment);
+                _ = _context.CustomerComment.Remove(customerComment);
             }
-            
-            await _context.SaveChangesAsync();
+
+            _ = await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CustomerCommentExists(int id)
         {
-          return _context.CustomerComment.Any(e => e.Id == id);
+            return _context.CustomerComment.Any(e => e.Id == id);
         }
     }
 }

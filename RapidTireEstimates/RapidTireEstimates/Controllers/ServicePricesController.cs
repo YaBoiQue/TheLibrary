@@ -1,55 +1,86 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using RapidTireEstimates.Data;
+using RapidTireEstimates.Interfaces;
 using RapidTireEstimates.Models;
+using RapidTireEstimates.Specifications;
+using RapidTireEstimates.ViewModels;
+using static RapidTireEstimates.Helpers.Constants;
 
 namespace RapidTireEstimates.Controllers
 {
     public class ServicePricesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IServicePriceRepository _servicePriceRepository;
+        private readonly IServiceRepository _serviceRepository;
 
-        public ServicePricesController(ApplicationDbContext context)
+        public ServicePricesController(IServicePriceRepository servicePriceRepository, IServiceRepository serviceRepository)
         {
-            _context = context;
+            _servicePriceRepository = servicePriceRepository;
+            _serviceRepository = serviceRepository;
         }
 
         // GET: ServicePrices
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(ServicePriceViewModel servicePriceViewModel)
         {
-            var applicationDbContext = _context.ServicePrice.Include(s => s.Service);
-            return View(await applicationDbContext.ToListAsync());
+            servicePriceViewModel.SortByLevel = (servicePriceViewModel.SortBy == SortByParameter.LevelASC) ? SortByParameter.LevelDESC : SortByParameter.LevelASC;
+
+            servicePriceViewModel.SortByValue = (servicePriceViewModel.SortBy == SortByParameter.ValueASC) ? SortByParameter.ValueDESC : SortByParameter.ValueASC;
+
+            servicePriceViewModel.ServicePrices = await _servicePriceRepository.GetServicePrices(
+                new GetServicePricesFilteredBy(servicePriceViewModel.FilterBy),
+                new GetServicePricesOrderedBy(servicePriceViewModel.SortBy));
+
+            return View(servicePriceViewModel);
         }
 
         // GET: ServicePrices/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, string returnController, string returnAction, string returnId)
         {
-            if (id == null || _context.ServicePrice == null)
+            ServicePriceViewModel servicePriceViewModel;
+
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var servicePrice = await _context.ServicePrice
-                .Include(s => s.Service)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (servicePrice == null)
+            servicePriceViewModel = new(await _servicePriceRepository.GetServicePriceById(new GetServicePriceById((int)id)))
             {
-                return NotFound();
-            }
+                ReturnController = returnController,
+                ReturnAction = returnAction,
+                ReturnId = returnId
+            };
 
-            return View(servicePrice);
+            return View(servicePriceViewModel);
         }
 
         // GET: ServicePrices/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create([Bind("Id,Name,ReturnController,ReturnAction,ReturnId")] ServiceViewModel serviceViewModel)
         {
-            ViewData["ServiceId"] = new SelectList(_context.Service, "Id", "Description");
-            return View();
+            ServicePriceViewModel servicePriceViewModel = new()
+            {
+                ServiceId = serviceViewModel.Id,
+                ReturnController = serviceViewModel.ReturnController,
+                ReturnAction = serviceViewModel.ReturnAction,
+                ReturnId = serviceViewModel.ReturnId,
+                Service = new Service()
+                {
+                    Name = serviceViewModel.Name,
+                    Id = serviceViewModel.Id
+                }
+            };
+
+            var services = await _serviceRepository.GetServices(
+                new GetServicesFilteredBy(serviceViewModel.FilterBy), 
+                new GetServicesOrderedBy(serviceViewModel.SortBy));
+
+            servicePriceViewModel.Services = new List<SelectListItem>();
+            foreach (var item in services)
+            {
+                servicePriceViewModel.Services.Add(new SelectListItem { Text = item.Name.Trim(), Value = item.Id.ToString() });
+            }
+
+            return View(servicePriceViewModel);
         }
 
         // POST: ServicePrices/Create
@@ -57,33 +88,44 @@ namespace RapidTireEstimates.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ServiceId,Description,Level,Id,Value")] ServicePrice servicePrice)
+        public async Task<IActionResult> Create([Bind("ServiceId,Description,Level,Id,Value,ReturnController,ReturnAction,ReturnId")] ServicePriceViewModel servicePriceViewModel)
         {
+            if (servicePriceViewModel == null)
+            {
+                return NotFound();
+            }
+
             if (ModelState.IsValid)
             {
-                _context.Add(servicePrice);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                _ = await _servicePriceRepository.InsertServicePrice(servicePriceViewModel);
+
+
+                return servicePriceViewModel.ReturnAction == null
+                    ? RedirectToAction(nameof(Index))
+                    : (IActionResult)RedirectToAction(servicePriceViewModel.ReturnAction, servicePriceViewModel.ReturnController, servicePriceViewModel.ReturnId);
             }
-            ViewData["ServiceId"] = new SelectList(_context.Service, "Id", "Description", servicePrice.ServiceId);
-            return View(servicePrice);
+
+            return View();
         }
 
         // GET: ServicePrices/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, string returnController, string returnAction, string returnId)
         {
-            if (id == null || _context.ServicePrice == null)
+            ServicePriceViewModel servicePriceViewModel;
+
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var servicePrice = await _context.ServicePrice.FindAsync(id);
-            if (servicePrice == null)
+            servicePriceViewModel = new(await _servicePriceRepository.GetServicePriceById(new GetServicePriceById((int)id)))
             {
-                return NotFound();
-            }
-            ViewData["ServiceId"] = new SelectList(_context.Service, "Id", "Description", servicePrice.ServiceId);
-            return View(servicePrice);
+                ReturnController = returnController,
+                ReturnAction = returnAction,
+                ReturnId = returnId
+            };
+
+            return servicePriceViewModel.Id == 0 ? NotFound() : View(servicePriceViewModel);
         }
 
         // POST: ServicePrices/Edit/5
@@ -91,78 +133,57 @@ namespace RapidTireEstimates.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ServiceId,Description,Level,Id,Value")] ServicePrice servicePrice)
+        public async Task<IActionResult> Edit(int id, [Bind("ServiceId,Description,Level,Id,Value,ReturnController,ReturnAction,ReturnId")] ServicePriceViewModel servicePriceViewModel)
         {
-            if (id != servicePrice.Id)
+            if (id != servicePriceViewModel.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
+                ServicePrice updatedStudent = await _servicePriceRepository.UpdateServicePrice(new GetServicePriceById(id), servicePriceViewModel);
+                if (updatedStudent == null)
                 {
-                    _context.Update(servicePrice);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ServicePriceExists(servicePrice.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+
+                return servicePriceViewModel.ReturnAction == null
+                    ? RedirectToAction(nameof(Index))
+                    : (IActionResult)RedirectToAction(servicePriceViewModel.ReturnAction, servicePriceViewModel.ReturnController, servicePriceViewModel.ReturnId);
             }
-            ViewData["ServiceId"] = new SelectList(_context.Service, "Id", "Description", servicePrice.ServiceId);
-            return View(servicePrice);
+            return View(servicePriceViewModel);
+
         }
 
         // GET: ServicePrices/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id, string returnController, string returnAction, string returnId)
         {
-            if (id == null || _context.ServicePrice == null)
+            ServicePriceViewModel servicePriceViewModel;
+
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var servicePrice = await _context.ServicePrice
-                .Include(s => s.Service)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (servicePrice == null)
+            servicePriceViewModel = new(await _servicePriceRepository.GetServicePriceById(new GetServicePriceById((int)id)))
             {
-                return NotFound();
-            }
+                ReturnController = returnController,
+                ReturnAction = returnAction,
+                ReturnId = returnId
+            };
 
-            return View(servicePrice);
+            return servicePriceViewModel.Id == 0 ? NotFound() : View(servicePriceViewModel);
         }
 
         // POST: ServicePrices/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, string returnController, string returnAction, string returnId)
         {
-            if (_context.ServicePrice == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.ServicePrice'  is null.");
-            }
-            var servicePrice = await _context.ServicePrice.FindAsync(id);
-            if (servicePrice != null)
-            {
-                _context.ServicePrice.Remove(servicePrice);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            await _servicePriceRepository.DeleteServicePrice(new GetServicePriceById(id));
 
-        private bool ServicePriceExists(int id)
-        {
-          return _context.ServicePrice.Any(e => e.Id == id);
+            return returnAction == null ? RedirectToAction(nameof(Index)) : (IActionResult)RedirectToAction(returnAction, returnController, returnId);
         }
     }
 }

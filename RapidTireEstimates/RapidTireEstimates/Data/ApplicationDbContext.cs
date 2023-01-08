@@ -20,27 +20,45 @@ namespace RapidTireEstimates.Data
         public DbSet<ServiceEstimateComment> ServiceEstimateComment { get; set; }
         public DbSet<ServiceEstimatePrice> ServiceEstimatePrice { get; set; }
         public DbSet<ServicePrice> ServicePrice { get; set; }
+        public DbSet<ServiceVehicleType> ServiceVehicleType { get; set; }
         public DbSet<ShopSupply> ShopSupply { get; set; }
         public DbSet<Vehicle> Vehicle { get; set; }
         public DbSet<VehicleType> VehicleType { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Estimate>()
+            _ = modelBuilder.Entity<Estimate>()
                 .HasKey(e => e.VehicleId);
-            modelBuilder.Entity<Estimate>()
+            _ = modelBuilder.Entity<Estimate>()
                 .HasOne(e => e.Vehicle)
                 .WithMany(v => v.Estimates)
                 .HasForeignKey(e => e.VehicleId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            modelBuilder.Entity<PurchasedPart>()
+            _ = modelBuilder.Entity<PurchasedPart>()
                 .HasKey(p => p.VehicleId);
-            modelBuilder.Entity<PurchasedPart>()
+            _ = modelBuilder.Entity<PurchasedPart>()
                 .HasOne(p => p.Vehicle)
                 .WithMany(v => v.ReplacedParts)
                 .HasForeignKey(p => p.VehicleId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Cascade);
+
+            _ = modelBuilder.Entity<Service>()
+                .HasMany(s => s.VehicleTypes)
+                .WithOne(v => v.Service);
+
+            _ = modelBuilder.Entity<VehicleType>()
+                .HasMany(v => v.Services)
+                .WithOne(s => s.VehicleType);
+
+            _ = modelBuilder.Entity<Service>()
+                .HasMany(s => s.Prices)
+                .WithOne(p => p.Service);
+            _ = modelBuilder.Entity<ServicePrice>()
+                .HasOne(p => p.Service)
+                .WithMany(s => s.Prices)
+                .HasForeignKey(p => p.ServiceId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
         }

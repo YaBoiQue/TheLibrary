@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RapidTireEstimates.Data;
@@ -22,7 +18,7 @@ namespace RapidTireEstimates.Controllers
         // GET: PurchasedParts
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.PurchasedPart.Include(p => p.Estimate).Include(p => p.Vehicle);
+            Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<PurchasedPart, Vehicle> applicationDbContext = _context.PurchasedPart.Include(p => p.Estimate).Include(p => p.Vehicle);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -34,16 +30,11 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var purchasedPart = await _context.PurchasedPart
+            PurchasedPart? purchasedPart = await _context.PurchasedPart
                 .Include(p => p.Estimate)
                 .Include(p => p.Vehicle)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (purchasedPart == null)
-            {
-                return NotFound();
-            }
-
-            return View(purchasedPart);
+            return purchasedPart == null ? NotFound() : View(purchasedPart);
         }
 
         // GET: PurchasedParts/Create
@@ -63,8 +54,8 @@ namespace RapidTireEstimates.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(purchasedPart);
-                await _context.SaveChangesAsync();
+                _ = _context.Add(purchasedPart);
+                _ = await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["EstimateId"] = new SelectList(_context.Estimate, "Id", "Id", purchasedPart.EstimateId);
@@ -80,7 +71,7 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var purchasedPart = await _context.PurchasedPart.FindAsync(id);
+            PurchasedPart? purchasedPart = await _context.PurchasedPart.FindAsync(id);
             if (purchasedPart == null)
             {
                 return NotFound();
@@ -106,8 +97,8 @@ namespace RapidTireEstimates.Controllers
             {
                 try
                 {
-                    _context.Update(purchasedPart);
-                    await _context.SaveChangesAsync();
+                    _ = _context.Update(purchasedPart);
+                    _ = await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -135,16 +126,11 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var purchasedPart = await _context.PurchasedPart
+            PurchasedPart? purchasedPart = await _context.PurchasedPart
                 .Include(p => p.Estimate)
                 .Include(p => p.Vehicle)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (purchasedPart == null)
-            {
-                return NotFound();
-            }
-
-            return View(purchasedPart);
+            return purchasedPart == null ? NotFound() : View(purchasedPart);
         }
 
         // POST: PurchasedParts/Delete/5
@@ -156,19 +142,19 @@ namespace RapidTireEstimates.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.PurchasedPart'  is null.");
             }
-            var purchasedPart = await _context.PurchasedPart.FindAsync(id);
+            PurchasedPart? purchasedPart = await _context.PurchasedPart.FindAsync(id);
             if (purchasedPart != null)
             {
-                _context.PurchasedPart.Remove(purchasedPart);
+                _ = _context.PurchasedPart.Remove(purchasedPart);
             }
-            
-            await _context.SaveChangesAsync();
+
+            _ = await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool PurchasedPartExists(int id)
         {
-          return _context.PurchasedPart.Any(e => e.Id == id);
+            return _context.PurchasedPart.Any(e => e.Id == id);
         }
     }
 }

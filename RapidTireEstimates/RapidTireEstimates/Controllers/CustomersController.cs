@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RapidTireEstimates.Data;
 using RapidTireEstimates.Models;
@@ -22,7 +17,7 @@ namespace RapidTireEstimates.Controllers
         // GET: Customers
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Customer.ToListAsync());
+            return View(await _context.Customer.ToListAsync());
         }
 
         // GET: Customers/Details/5
@@ -33,14 +28,9 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customer
+            Customer? customer = await _context.Customer
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-
-            return View(customer);
+            return customer == null ? NotFound() : View(customer);
         }
 
         // GET: Customers/Create
@@ -58,8 +48,8 @@ namespace RapidTireEstimates.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(customer);
-                await _context.SaveChangesAsync();
+                _ = _context.Add(customer);
+                _ = await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(customer);
@@ -73,12 +63,8 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customer.FindAsync(id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-            return View(customer);
+            Customer? customer = await _context.Customer.FindAsync(id);
+            return customer == null ? NotFound() : View(customer);
         }
 
         // POST: Customers/Edit/5
@@ -97,8 +83,8 @@ namespace RapidTireEstimates.Controllers
             {
                 try
                 {
-                    _context.Update(customer);
-                    await _context.SaveChangesAsync();
+                    _ = _context.Update(customer);
+                    _ = await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -124,14 +110,9 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customer
+            Customer? customer = await _context.Customer
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-
-            return View(customer);
+            return customer == null ? NotFound() : View(customer);
         }
 
         // POST: Customers/Delete/5
@@ -143,19 +124,19 @@ namespace RapidTireEstimates.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.Customer'  is null.");
             }
-            var customer = await _context.Customer.FindAsync(id);
+            Customer? customer = await _context.Customer.FindAsync(id);
             if (customer != null)
             {
-                _context.Customer.Remove(customer);
+                _ = _context.Customer.Remove(customer);
             }
-            
-            await _context.SaveChangesAsync();
+
+            _ = await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CustomerExists(int id)
         {
-          return _context.Customer.Any(e => e.Id == id);
+            return _context.Customer.Any(e => e.Id == id);
         }
     }
 }

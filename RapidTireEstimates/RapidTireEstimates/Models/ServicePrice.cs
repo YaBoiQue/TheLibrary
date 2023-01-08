@@ -11,7 +11,7 @@ namespace RapidTireEstimates.Models
         [Display(Name = "Pricing Description")]
         public string? Description { get; set; }
         [Display(Name = "Pricing Level")]
-        public Int16 Level { get; set; }
+        public short Level { get; set; }
 
         public virtual Service Service { get; set; }
     }

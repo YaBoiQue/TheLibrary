@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RapidTireEstimates.Data;
@@ -22,7 +18,7 @@ namespace RapidTireEstimates.Controllers
         // GET: ServiceEstimatePrices
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.ServiceEstimatePrice.Include(s => s.ServiceEstimate);
+            Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<ServiceEstimatePrice, ServiceEstimate> applicationDbContext = _context.ServiceEstimatePrice.Include(s => s.ServiceEstimate);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -34,15 +30,10 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var serviceEstimatePrice = await _context.ServiceEstimatePrice
+            ServiceEstimatePrice? serviceEstimatePrice = await _context.ServiceEstimatePrice
                 .Include(s => s.ServiceEstimate)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (serviceEstimatePrice == null)
-            {
-                return NotFound();
-            }
-
-            return View(serviceEstimatePrice);
+            return serviceEstimatePrice == null ? NotFound() : View(serviceEstimatePrice);
         }
 
         // GET: ServiceEstimatePrices/Create
@@ -61,8 +52,8 @@ namespace RapidTireEstimates.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(serviceEstimatePrice);
-                await _context.SaveChangesAsync();
+                _ = _context.Add(serviceEstimatePrice);
+                _ = await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ServiceEstimateId"] = new SelectList(_context.ServiceEstimate, "Id", "Id", serviceEstimatePrice.ServiceEstimateId);
@@ -77,7 +68,7 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var serviceEstimatePrice = await _context.ServiceEstimatePrice.FindAsync(id);
+            ServiceEstimatePrice? serviceEstimatePrice = await _context.ServiceEstimatePrice.FindAsync(id);
             if (serviceEstimatePrice == null)
             {
                 return NotFound();
@@ -102,8 +93,8 @@ namespace RapidTireEstimates.Controllers
             {
                 try
                 {
-                    _context.Update(serviceEstimatePrice);
-                    await _context.SaveChangesAsync();
+                    _ = _context.Update(serviceEstimatePrice);
+                    _ = await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -130,15 +121,10 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var serviceEstimatePrice = await _context.ServiceEstimatePrice
+            ServiceEstimatePrice? serviceEstimatePrice = await _context.ServiceEstimatePrice
                 .Include(s => s.ServiceEstimate)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (serviceEstimatePrice == null)
-            {
-                return NotFound();
-            }
-
-            return View(serviceEstimatePrice);
+            return serviceEstimatePrice == null ? NotFound() : View(serviceEstimatePrice);
         }
 
         // POST: ServiceEstimatePrices/Delete/5
@@ -150,19 +136,19 @@ namespace RapidTireEstimates.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.ServiceEstimatePrice'  is null.");
             }
-            var serviceEstimatePrice = await _context.ServiceEstimatePrice.FindAsync(id);
+            ServiceEstimatePrice? serviceEstimatePrice = await _context.ServiceEstimatePrice.FindAsync(id);
             if (serviceEstimatePrice != null)
             {
-                _context.ServiceEstimatePrice.Remove(serviceEstimatePrice);
+                _ = _context.ServiceEstimatePrice.Remove(serviceEstimatePrice);
             }
-            
-            await _context.SaveChangesAsync();
+
+            _ = await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ServiceEstimatePriceExists(int id)
         {
-          return _context.ServiceEstimatePrice.Any(e => e.Id == id);
+            return _context.ServiceEstimatePrice.Any(e => e.Id == id);
         }
     }
 }

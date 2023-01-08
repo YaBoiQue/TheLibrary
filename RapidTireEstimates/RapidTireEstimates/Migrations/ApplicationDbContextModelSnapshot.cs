@@ -388,6 +388,9 @@ namespace RapidTireEstimates.Migrations
                     b.Property<decimal>("Rate")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("ServiceNumber")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Service");
@@ -496,6 +499,33 @@ namespace RapidTireEstimates.Migrations
                     b.ToTable("ServicePrice");
                 });
 
+            modelBuilder.Entity("RapidTireEstimates.Models.ServiceVehicleType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ServicesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VehicleTypesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServicesId");
+
+                    b.HasIndex("VehicleTypesId");
+
+                    b.ToTable("ServiceVehicleType");
+                });
+
             modelBuilder.Entity("RapidTireEstimates.Models.ShopSupply", b =>
                 {
                     b.Property<int>("Id")
@@ -573,21 +603,6 @@ namespace RapidTireEstimates.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("VehicleType");
-                });
-
-            modelBuilder.Entity("ServiceVehicleType", b =>
-                {
-                    b.Property<int>("ServicesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VehicleTypesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ServicesId", "VehicleTypesId");
-
-                    b.HasIndex("VehicleTypesId");
-
-                    b.ToTable("ServiceVehicleType");
                 });
 
             modelBuilder.Entity("EstimateShopSupply", b =>
@@ -766,6 +781,25 @@ namespace RapidTireEstimates.Migrations
                     b.Navigation("Service");
                 });
 
+            modelBuilder.Entity("RapidTireEstimates.Models.ServiceVehicleType", b =>
+                {
+                    b.HasOne("RapidTireEstimates.Models.Service", "Service")
+                        .WithMany("VehicleTypes")
+                        .HasForeignKey("ServicesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RapidTireEstimates.Models.VehicleType", "VehicleType")
+                        .WithMany("Services")
+                        .HasForeignKey("VehicleTypesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Service");
+
+                    b.Navigation("VehicleType");
+                });
+
             modelBuilder.Entity("RapidTireEstimates.Models.Vehicle", b =>
                 {
                     b.HasOne("RapidTireEstimates.Models.Customer", "Customer")
@@ -783,21 +817,6 @@ namespace RapidTireEstimates.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("VehicleType");
-                });
-
-            modelBuilder.Entity("ServiceVehicleType", b =>
-                {
-                    b.HasOne("RapidTireEstimates.Models.Service", null)
-                        .WithMany()
-                        .HasForeignKey("ServicesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RapidTireEstimates.Models.VehicleType", null)
-                        .WithMany()
-                        .HasForeignKey("VehicleTypesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("RapidTireEstimates.Models.Customer", b =>
@@ -823,6 +842,8 @@ namespace RapidTireEstimates.Migrations
                     b.Navigation("Prices");
 
                     b.Navigation("ServiceEstimates");
+
+                    b.Navigation("VehicleTypes");
                 });
 
             modelBuilder.Entity("RapidTireEstimates.Models.ServiceEstimate", b =>
@@ -842,6 +863,8 @@ namespace RapidTireEstimates.Migrations
 
             modelBuilder.Entity("RapidTireEstimates.Models.VehicleType", b =>
                 {
+                    b.Navigation("Services");
+
                     b.Navigation("Vehicles");
                 });
 #pragma warning restore 612, 618

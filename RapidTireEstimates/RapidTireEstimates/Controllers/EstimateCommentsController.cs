@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RapidTireEstimates.Data;
@@ -22,7 +18,7 @@ namespace RapidTireEstimates.Controllers
         // GET: EstimateComments
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.EstimateComment.Include(e => e.Estimate);
+            Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<EstimateComment, Estimate> applicationDbContext = _context.EstimateComment.Include(e => e.Estimate);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -34,15 +30,10 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var estimateComment = await _context.EstimateComment
+            EstimateComment? estimateComment = await _context.EstimateComment
                 .Include(e => e.Estimate)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (estimateComment == null)
-            {
-                return NotFound();
-            }
-
-            return View(estimateComment);
+            return estimateComment == null ? NotFound() : View(estimateComment);
         }
 
         // GET: EstimateComments/Create
@@ -61,8 +52,8 @@ namespace RapidTireEstimates.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(estimateComment);
-                await _context.SaveChangesAsync();
+                _ = _context.Add(estimateComment);
+                _ = await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["EstimateId"] = new SelectList(_context.Estimate, "Id", "Id", estimateComment.EstimateId);
@@ -77,7 +68,7 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var estimateComment = await _context.EstimateComment.FindAsync(id);
+            EstimateComment? estimateComment = await _context.EstimateComment.FindAsync(id);
             if (estimateComment == null)
             {
                 return NotFound();
@@ -102,8 +93,8 @@ namespace RapidTireEstimates.Controllers
             {
                 try
                 {
-                    _context.Update(estimateComment);
-                    await _context.SaveChangesAsync();
+                    _ = _context.Update(estimateComment);
+                    _ = await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -130,15 +121,10 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var estimateComment = await _context.EstimateComment
+            EstimateComment? estimateComment = await _context.EstimateComment
                 .Include(e => e.Estimate)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (estimateComment == null)
-            {
-                return NotFound();
-            }
-
-            return View(estimateComment);
+            return estimateComment == null ? NotFound() : View(estimateComment);
         }
 
         // POST: EstimateComments/Delete/5
@@ -150,19 +136,19 @@ namespace RapidTireEstimates.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.EstimateComment'  is null.");
             }
-            var estimateComment = await _context.EstimateComment.FindAsync(id);
+            EstimateComment? estimateComment = await _context.EstimateComment.FindAsync(id);
             if (estimateComment != null)
             {
-                _context.EstimateComment.Remove(estimateComment);
+                _ = _context.EstimateComment.Remove(estimateComment);
             }
-            
-            await _context.SaveChangesAsync();
+
+            _ = await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool EstimateCommentExists(int id)
         {
-          return _context.EstimateComment.Any(e => e.Id == id);
+            return _context.EstimateComment.Any(e => e.Id == id);
         }
     }
 }

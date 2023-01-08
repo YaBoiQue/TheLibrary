@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RapidTireEstimates.Models.Service>
+﻿@model RapidTireEstimates.ViewModels.ServiceViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -10,7 +10,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table table-bordered table-responsive table-hover">
     <thead>
         <tr>
             <th>
@@ -20,35 +20,100 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.VehicleTypes)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Hours)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Rate)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prices)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Hours)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rate)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Services) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <table class="table">
+                        <tbody>
+                            @foreach(var type in item.VehicleTypes)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => type.Name) @*<hr noshade />*@
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Hours)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rate)
+                </td>
+                <td>
+                    <p>
+                        <a asp-controller="ServicePrices" asp-action="Create" 
+                        asp-route-id="@item.Id" asp-route-name="@item.Name"
+                        asp-route-returnController="@Model.ReturnController" asp-route-returnAction="@Model.ReturnAction"
+                        asp-route-returnId="@Model.ReturnId">Create New</a>
+                    </p>
+                    <table class="table table-bordered table-responsive table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(modelItem => Model.ServicePrice.Value)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(modelItem => Model.ServicePrice.Level)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(modelItem => Model.ServicePrice.Description)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var price in item.Prices)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => price.Value)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => price.Level)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => price.Description)
+                                    </td>
+                                    <td>
+                                        <a asp-controller="ServicePrices" asp-action="Edit" asp-route-id="@price.Id" asp-route-returnController="@Model.ReturnController" asp-route-returnAction="@Model.ReturnAction" asp-route-returnId="@Model.ReturnId">Edit</a> |
+                                        <a asp-controller="ServicePrices" asp-action="Details" asp-route-id="@price.Id" asp-route-returnController="@Model.ReturnController" asp-route-returnAction="@Model.ReturnAction" asp-route-returnId="@Model.ReturnId">Details</a> |
+                                        <a asp-controller="ServicePrices" asp-action="Delete" asp-route-id="@price.Id" asp-route-returnController="@Model.ReturnController" asp-route-returnAction="@Model.ReturnAction" asp-route-returnId="@Model.ReturnId">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
