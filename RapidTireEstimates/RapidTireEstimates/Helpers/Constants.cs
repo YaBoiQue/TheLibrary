@@ -13,7 +13,9 @@
             ValueASC,
             ValueDESC,
             DescrASC,
-            DescrDESC
+            DescrDESC,
+            PhoneNumberASC,
+            PhoneNumberDESC
         }
 
         public enum OrderByParameter

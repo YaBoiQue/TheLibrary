@@ -12,6 +12,7 @@ namespace RapidTireEstimates.ViewModels
         {
             Service = new Service();
             ServicePrices = new List<ServicePrice>();
+            FilterBy = "";
         }
 
         public ServicePriceViewModel(ServicePrice servicePrice)
@@ -27,6 +28,7 @@ namespace RapidTireEstimates.ViewModels
             }
             Service = new Service();
             ServicePrices = new List<ServicePrice>();
+            FilterBy = "";
         }
 
         public int Id { get; set; }
@@ -46,7 +48,7 @@ namespace RapidTireEstimates.ViewModels
         public List<SelectListItem> Services { get; set; }
         public IEnumerable<ServicePrice> ServicePrices { get; set; }
 
-        public string? FilterBy { get; internal set; }
+        public string FilterBy { get; set; }
         public Constants.SortByParameter SortBy { get; set; }
         public Constants.SortByParameter SortByLevel { get; set; }
         public Constants.SortByParameter SortByValue { get; set; }

@@ -1,42 +1,59 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using RapidTireEstimates.Data;
+using RapidTireEstimates.Interfaces;
 using RapidTireEstimates.Models;
+using RapidTireEstimates.Repositories;
+using RapidTireEstimates.Specifications;
+using RapidTireEstimates.ViewModels;
+using static RapidTireEstimates.Helpers.Constants;
 
 namespace RapidTireEstimates.Controllers
 {
     public class CustomersController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ICustomerRepository _customerRepository;
 
-        public CustomersController(ApplicationDbContext context)
+        public CustomersController(ICustomerRepository customerRepository)
         {
-            _context = context;
+            _customerRepository = customerRepository;
         }
 
         // GET: Customers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(CustomerViewModel customerViewModel)
         {
-            return View(await _context.Customer.ToListAsync());
+            customerViewModel.SortByName = (customerViewModel.SortBy == SortByParameter.NameASC) ? SortByParameter.NameDESC : SortByParameter.NameASC;
+
+            customerViewModel.SortByPhoneNumber = (customerViewModel.SortBy == SortByParameter.PhoneNumberASC) ? SortByParameter.PhoneNumberDESC : SortByParameter.PhoneNumberASC;
+
+            customerViewModel.Customers = await _customerRepository.GetCustomers(
+                new GetCustomersFilteredBy(customerViewModel.FilterBy),
+                new GetCustomersOrderedBy(customerViewModel.SortBy));
+
+            return View(customerViewModel);
         }
 
         // GET: Customers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Customer == null)
+
+            if (id == null)
             {
                 return NotFound();
             }
 
-            Customer? customer = await _context.Customer
-                .FirstOrDefaultAsync(m => m.Id == id);
-            return customer == null ? NotFound() : View(customer);
+            var customerViewModel = new CustomerViewModel(await _customerRepository.GetCustomerById(new GetCustomerById((int)id)));
+            return customerViewModel == null ? NotFound() : View(customerViewModel);
         }
 
         // GET: Customers/Create
         public IActionResult Create()
         {
-            return View();
+            CustomerViewModel customerViewModel = new();
+
+            return View(customerViewModel);
         }
 
         // POST: Customers/Create
@@ -44,27 +61,40 @@ namespace RapidTireEstimates.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,PhoneNumber")] Customer customer)
+        public async Task<IActionResult> Create([Bind("Id,Name,PhoneNumber")] CustomerViewModel customerViewModel)
         {
+            if (customerViewModel == null)
+            {
+                return NotFound();
+            }
+
             if (ModelState.IsValid)
             {
-                _ = _context.Add(customer);
-                _ = await _context.SaveChangesAsync();
+                await _customerRepository.InsertCustomer(customerViewModel);
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(customer);
+            return View(customerViewModel);
         }
 
         // GET: Customers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Customer == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            Customer? customer = await _context.Customer.FindAsync(id);
-            return customer == null ? NotFound() : View(customer);
+            Customer? customer = await _customerRepository.GetCustomerById(new GetCustomerById((int)id));
+
+            if (customer == null)
+            {
+                return NotFound();
+            }
+
+            CustomerViewModel customerViewModel = new(customer);
+
+            return View(customerViewModel);
         }
 
         // POST: Customers/Edit/5
@@ -72,46 +102,32 @@ namespace RapidTireEstimates.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,PhoneNumber")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,PhoneNumber")] CustomerViewModel customerViewModel)
         {
-            if (id != customer.Id)
+            if (id != customerViewModel.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _ = _context.Update(customer);
-                    _ = await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CustomerExists(customer.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _customerRepository.UpdateCustomer(new GetCustomerById((int)id), customerViewModel);
+
+                return View(customerViewModel);
             }
-            return View(customer);
+
+            return View(customerViewModel);
         }
 
         // GET: Customers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Customer == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            Customer? customer = await _context.Customer
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Customer? customer = await _customerRepository.GetCustomerById(new GetCustomerById((int)id));
             return customer == null ? NotFound() : View(customer);
         }
 
@@ -120,23 +136,9 @@ namespace RapidTireEstimates.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Customer == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Customer'  is null.");
-            }
-            Customer? customer = await _context.Customer.FindAsync(id);
-            if (customer != null)
-            {
-                _ = _context.Customer.Remove(customer);
-            }
+            await _customerRepository.DeleteCustomer(new GetCustomerById((int)id));
 
-            _ = await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool CustomerExists(int id)
-        {
-            return _context.Customer.Any(e => e.Id == id);
         }
     }
 }

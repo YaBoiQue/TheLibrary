@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RapidTireEstimates.Models.Customer>
+﻿@model RapidTireEstimates.ViewModels.CustomerViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -23,7 +23,7 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Customers) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)

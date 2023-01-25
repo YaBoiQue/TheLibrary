@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RapidTireEstimates.Models
+namespace RapidTireEstimates.Models.Linkers
 {
     public class ServiceVehicleType
     {

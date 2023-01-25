@@ -4,6 +4,32 @@ namespace RapidTireEstimates.Models
 {
     public class Customer
     {
+        public Customer()
+        {
+            Estimates = new List<Estimate>();
+            Comments = new List<CustomerComment>();
+            Vehicles = new List<Vehicle>();
+        }
+
+        public Customer(Customer customer)
+        {
+            if (customer != null)
+            {
+                Id = customer.Id;
+                Name = customer.Name;
+                PhoneNumber = customer.PhoneNumber;
+                Estimates = customer.Estimates;
+                Comments = customer.Comments;
+                Vehicles = customer.Vehicles;
+            }
+
+            Estimates ??= new List<Estimate>();
+
+            Comments ??= new List<CustomerComment>();
+
+            Vehicles ??= new List<Vehicle>();
+        }
+
         [Key]
         public int Id { get; set; }
 
@@ -14,8 +40,8 @@ namespace RapidTireEstimates.Models
         [Display(Name = "Phone Number")]
         public string? PhoneNumber { get; set; }
 
-        public ICollection<Estimate>? Estimates { get; set; }
-        public ICollection<CustomerComment>? Comments { get; set; }
-        public ICollection<Vehicle>? Vehicles { get; set; }
+        public IEnumerable<Estimate>? Estimates { get; set; }
+        public IEnumerable<CustomerComment>? Comments { get; set; }
+        public IEnumerable<Vehicle>? Vehicles { get; set; }
     }
 }
