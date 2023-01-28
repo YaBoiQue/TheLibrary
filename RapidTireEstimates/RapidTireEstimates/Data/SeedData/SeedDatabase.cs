@@ -33,13 +33,13 @@ namespace RapidTireEstimates.Data.SeedData
         {
             string fileName = @"Data/SeedData/VehicleTypes.json";
             string jsonlist = File.ReadAllText(fileName);
-            VehicleTypeList? data = JsonConvert.DeserializeObject<VehicleTypeList>(jsonlist);
+            var data = JsonConvert.DeserializeObject<VehicleTypeList>(jsonlist);
 
             if (data != null)
             {
                 foreach (string item in data.VehicleTypes)
                 {
-                    VehicleType vehicleType = new(item);
+                    VehicleType vehicleType = new VehicleType(item);
                     context.VehicleType.AddRange(vehicleType);
                     _ = await context.SaveChangesAsync();
                 }
@@ -48,6 +48,11 @@ namespace RapidTireEstimates.Data.SeedData
 
         private class VehicleTypeList
         {
+            public VehicleTypeList(VehicleTypeList vehicleTypeList)
+            {
+                VehicleTypes = vehicleTypeList.VehicleTypes;
+            }
+
             public string[] VehicleTypes { get; set; }
         }
     }

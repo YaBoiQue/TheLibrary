@@ -28,7 +28,7 @@ namespace RapidTireEstimates.Controllers
 
             customerViewModel.SortByPhoneNumber = (customerViewModel.SortBy == SortByParameter.PhoneNumberASC) ? SortByParameter.PhoneNumberDESC : SortByParameter.PhoneNumberASC;
 
-            customerViewModel.Customers = await _customerRepository.GetCustomers(
+            customerViewModel.Customers = await _customerRepository.GetAll(
                 new GetCustomersFilteredBy(customerViewModel.FilterBy),
                 new GetCustomersOrderedBy(customerViewModel.SortBy));
 
@@ -44,7 +44,7 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var customerViewModel = new CustomerViewModel(await _customerRepository.GetCustomerById(new GetCustomerById((int)id)));
+            var customerViewModel = new CustomerViewModel(await _customerRepository.GetById(new GetCustomerById((int)id)));
             return customerViewModel == null ? NotFound() : View(customerViewModel);
         }
 
@@ -70,7 +70,7 @@ namespace RapidTireEstimates.Controllers
 
             if (ModelState.IsValid)
             {
-                await _customerRepository.InsertCustomer(customerViewModel);
+                await _customerRepository.Insert(customerViewModel);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -85,7 +85,7 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            Customer? customer = await _customerRepository.GetCustomerById(new GetCustomerById((int)id));
+            Customer? customer = await _customerRepository.GetById(new GetCustomerById((int)id));
 
             if (customer == null)
             {
@@ -111,7 +111,7 @@ namespace RapidTireEstimates.Controllers
 
             if (ModelState.IsValid)
             {
-                await _customerRepository.UpdateCustomer(new GetCustomerById((int)id), customerViewModel);
+                await _customerRepository.Update(new GetCustomerById((int)id), customerViewModel);
 
                 return View(customerViewModel);
             }
@@ -127,7 +127,7 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            Customer? customer = await _customerRepository.GetCustomerById(new GetCustomerById((int)id));
+            Customer? customer = await _customerRepository.GetById(new GetCustomerById((int)id));
             return customer == null ? NotFound() : View(customer);
         }
 
@@ -136,7 +136,7 @@ namespace RapidTireEstimates.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _customerRepository.DeleteCustomer(new GetCustomerById((int)id));
+            await _customerRepository.Delete(new GetCustomerById((int)id));
 
             return RedirectToAction(nameof(Index));
         }

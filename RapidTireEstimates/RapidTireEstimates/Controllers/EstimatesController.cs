@@ -50,7 +50,7 @@ namespace RapidTireEstimates.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CustomerId,VehicleId,FinishDate,ShopTools,FinalPrice")] Estimate estimate)
+        public async Task<IActionResult> Create([Bind("Id,CustomerId,VehicleId,DateFinished,ShopToolAmount,FinalPrice")] Estimate estimate)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace RapidTireEstimates.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CustomerId,VehicleId,FinishDate,ShopTools,FinalPrice")] Estimate estimate)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CustomerId,VehicleId,DateFinished,ShopToolAmount,FinalPrice")] Estimate estimate)
         {
             if (id != estimate.Id)
             {

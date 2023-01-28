@@ -5,6 +5,30 @@ namespace RapidTireEstimates.Models
 {
     public class PurchasedPart : Part
     {
+        public PurchasedPart()
+        {
+            Estimate = new Estimate();
+            Vehicle = new Vehicle();
+        }
+
+        public PurchasedPart(PurchasedPart purchasedPart)
+        {
+            if (purchasedPart != null)
+            {
+                Id = purchasedPart.Id;
+                Name = purchasedPart.Name;
+                Value = purchasedPart.Value;
+                UpsalePercent = purchasedPart.UpsalePercent;
+                EstimateId = purchasedPart.EstimateId;
+                VehicleId = purchasedPart.VehicleId;
+                Estimate = purchasedPart.Estimate;
+                Vehicle = purchasedPart.Vehicle;
+            }
+
+            Estimate ??= new Estimate();
+            Vehicle ??= new Vehicle();
+        }
+
         [ForeignKey("Estimate")]
         public int EstimateId { get; set; }
         [ForeignKey("Vehicle")]

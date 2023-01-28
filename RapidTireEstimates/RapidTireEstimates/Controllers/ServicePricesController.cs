@@ -27,7 +27,7 @@ namespace RapidTireEstimates.Controllers
 
             servicePriceViewModel.SortByValue = (servicePriceViewModel.SortBy == SortByParameter.ValueASC) ? SortByParameter.ValueDESC : SortByParameter.ValueASC;
 
-            servicePriceViewModel.ServicePrices = await _servicePriceRepository.GetServicePrices(
+            servicePriceViewModel.ServicePrices = await _servicePriceRepository.GetAll(
                 new GetServicePricesFilteredBy(servicePriceViewModel.FilterBy),
                 new GetServicePricesOrderedBy(servicePriceViewModel.SortBy));
 
@@ -44,7 +44,7 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            servicePriceViewModel = new(await _servicePriceRepository.GetServicePriceById(new GetServicePriceById((int)id)))
+            servicePriceViewModel = new(await _servicePriceRepository.GetById(new GetServicePriceById((int)id)))
             {
                 ReturnController = returnController,
                 ReturnAction = returnAction,
@@ -70,7 +70,7 @@ namespace RapidTireEstimates.Controllers
                 }
             };
 
-            var services = await _serviceRepository.GetServices(
+            var services = await _serviceRepository.GetAll(
                 new GetServicesFilteredBy(serviceViewModel.FilterBy), 
                 new GetServicesOrderedBy(serviceViewModel.SortBy));
 
@@ -97,7 +97,7 @@ namespace RapidTireEstimates.Controllers
 
             if (ModelState.IsValid)
             {
-                _ = await _servicePriceRepository.InsertServicePrice(servicePriceViewModel);
+                _ = await _servicePriceRepository.Insert(servicePriceViewModel);
 
 
                 return servicePriceViewModel.ReturnAction == null
@@ -118,7 +118,7 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            servicePriceViewModel = new(await _servicePriceRepository.GetServicePriceById(new GetServicePriceById((int)id)))
+            servicePriceViewModel = new(await _servicePriceRepository.GetById(new GetServicePriceById((int)id)))
             {
                 ReturnController = returnController,
                 ReturnAction = returnAction,
@@ -142,7 +142,7 @@ namespace RapidTireEstimates.Controllers
 
             if (ModelState.IsValid)
             {
-                ServicePrice updatedStudent = await _servicePriceRepository.UpdateServicePrice(new GetServicePriceById(id), servicePriceViewModel);
+                ServicePrice updatedStudent = await _servicePriceRepository.Update(new GetServicePriceById(id), servicePriceViewModel);
                 if (updatedStudent == null)
                 {
                     return NotFound();
@@ -166,7 +166,7 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            servicePriceViewModel = new(await _servicePriceRepository.GetServicePriceById(new GetServicePriceById((int)id)))
+            servicePriceViewModel = new(await _servicePriceRepository.GetById(new GetServicePriceById((int)id)))
             {
                 ReturnController = returnController,
                 ReturnAction = returnAction,
@@ -181,7 +181,7 @@ namespace RapidTireEstimates.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id, string returnController, string returnAction, string returnId)
         {
-            await _servicePriceRepository.DeleteServicePrice(new GetServicePriceById(id));
+            await _servicePriceRepository.Delete(new GetServicePriceById(id));
 
             return returnAction == null ? RedirectToAction(nameof(Index)) : (IActionResult)RedirectToAction(returnAction, returnController, returnId);
         }

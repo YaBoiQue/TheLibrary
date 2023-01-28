@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using RapidTireEstimates.Data;
 using RapidTireEstimates.Interfaces;
 using RapidTireEstimates.Models;
+using RapidTireEstimates.Models.Linkers;
 using RapidTireEstimates.ViewModels;
 
 namespace RapidTireEstimates.Repositories
@@ -19,7 +20,7 @@ namespace RapidTireEstimates.Repositories
             _context = context;
         }
 
-        public async Task DeleteService(ISpecification<Service> byIdSpec)
+        public async Task Delete(ISpecification<Service> byIdSpec)
         {
             Service? service = await _context.Service.WithSpecification(byIdSpec).SingleOrDefaultAsync();
 
@@ -29,9 +30,9 @@ namespace RapidTireEstimates.Repositories
 
                 foreach (Service? item in services)
                 {
-                    if (item.ServiceNumber > service.ServiceNumber)
+                    if (item.Number > service.Number)
                     {
-                        item.ServiceNumber--;
+                        item.Number--;
                     }
 
                     try
@@ -62,7 +63,7 @@ namespace RapidTireEstimates.Repositories
             _ = await _context.SaveChangesAsync();
         }
 
-        public async Task<Service> GetServiceById(ISpecification<Service> byIdSpec)
+        public async Task<Service> GetById(ISpecification<Service> byIdSpec)
         {
             if (byIdSpec == null)
             {
@@ -77,12 +78,17 @@ namespace RapidTireEstimates.Repositories
             return service;
         }
 
-        public Task<Service> GetServiceByServiceEstimateId(ISpecification<Service> byIdServiceEstimateSpec)
+        public Task<Service> GetByServiceEstimateId(ISpecification<Service> byIdServiceEstimateSpec)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<Service>> GetServices(ISpecification<Service> filterBySpec, ISpecification<Service> orderBySpec)
+        public Task<Service> GetByPriceId(ISpecification<Service> byPriceIdSpec)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<Service>> GetAll(ISpecification<Service> filterBySpec, ISpecification<Service> orderBySpec)
         {
             var services = await _context.Service.WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
 
@@ -95,22 +101,12 @@ namespace RapidTireEstimates.Repositories
             return services;
         }
 
-        public async Task<List<Service>> GetServicesByName(ISpecification<Service> byNameSpec, ISpecification<Service> filterBySpec, ISpecification<Service> orderBySpec)
-        {
-            var services = await _context.Service.WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
-
-            if (services == null)
-                return new List<Service>();
-
-            return services;
-        }
-
-        public async Task<List<Service>> GetServicesByVehicleTypeId(ISpecification<Service> byServiceVehicleIdSpec, ISpecification<Service> filterBySpec, ISpecification<Service> orderBySpec )
+        public async Task<List<Service>> GetByVehicleTypeId(ISpecification<Service> byServiceVehicleIdSpec, ISpecification<Service> filterBySpec, ISpecification<Service> orderBySpec )
         {
             return await _context.Service.WithSpecification(byServiceVehicleIdSpec).WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
         }
 
-        public async Task<Service> InsertService(ServiceViewModel serviceViewModel)
+        public async Task<Service> Insert(ServiceViewModel serviceViewModel)
         {
             if (serviceViewModel == null)
                 return new Service();
@@ -119,7 +115,7 @@ namespace RapidTireEstimates.Repositories
 
             List<Service> services = await _context.Service.Where(s => s.Name == serviceViewModel.Name).ToListAsync();
 
-            service.ServiceNumber = services.Count;
+            service.Number = services.Count;
             
 
             _ = _context.Add(service);
@@ -130,7 +126,7 @@ namespace RapidTireEstimates.Repositories
                 return service;
             }
 
-            service = await _context.Service.Where(s => s.Name == serviceViewModel.Name && s.ServiceNumber == service.ServiceNumber).SingleOrDefaultAsync();
+            service = await _context.Service.Where(s => s.Name == serviceViewModel.Name && s.Number == service.Number).SingleOrDefaultAsync();
 
             if (service == null)
                 return new Service();
@@ -140,8 +136,12 @@ namespace RapidTireEstimates.Repositories
                 if (item.Selected == true)
                 {
                     VehicleType? vehicleType = await _context.VehicleType.Where(v => v.Id.ToString() == item.Value).SingleOrDefaultAsync();
-                    ServiceVehicleType serviceVehicleType = new(service.Id, vehicleType.Id) { Name = vehicleType.Name };
-                    _ = _context.Add(serviceVehicleType);
+
+                    if (vehicleType != null)
+                    {
+                        ServiceVehicleType serviceVehicleType = new(service.Id, vehicleType.Id, vehicleType.Name);
+                        _ = _context.Add(serviceVehicleType);
+                    }
                 }
             }
 
@@ -150,7 +150,7 @@ namespace RapidTireEstimates.Repositories
             return service;
         }
 
-        public async Task<Service> UpdateService(ISpecification<Service> byIdSpec, ServiceViewModel serviceViewModel)
+        public async Task<Service> Update(ISpecification<Service> byIdSpec, ServiceViewModel serviceViewModel)
         {
             Service? service;
 
@@ -158,10 +158,7 @@ namespace RapidTireEstimates.Repositories
             {
                 service = await _context.Service.WithSpecification(byIdSpec).SingleOrDefaultAsync();
 
-                if (service == null)
-                {
-                    return new Service();
-                }
+                service ??= new Service();
 
                 service.Name = serviceViewModel.Name;
                 service.Description = serviceViewModel.Description;
@@ -175,7 +172,7 @@ namespace RapidTireEstimates.Repositories
             {
                 if (!ServiceExists(serviceViewModel.Id))
                 {
-                    return null;
+                    return new Service();
                 }
                 else
                 {
@@ -218,11 +215,6 @@ namespace RapidTireEstimates.Repositories
         private bool ServiceExists(int id)
         {
             return _context.ServicePrice.Any(e => e.Id == id);
-        }
-
-        public async Task<List<VehicleType>> GetVehicleTypes()
-        {
-            return await _context.VehicleType.ToListAsync();
         }
     }
 }

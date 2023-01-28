@@ -14,10 +14,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FinishDate)
+                @Html.DisplayNameFor(model => model.DateFinished)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ShopTools)
+                @Html.DisplayNameFor(model => model.ShopToolAmount)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FinalPrice)
@@ -35,10 +35,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.FinishDate)
+                @Html.DisplayFor(modelItem => item.DateFinished)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ShopTools)
+                @Html.DisplayFor(modelItem => item.ShopToolAmount)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FinalPrice)

@@ -11,10 +11,12 @@ namespace RapidTireEstimates.Controllers
     public class ServicesController : Controller
     {
         private readonly IServiceRepository _serviceRepository;
+        private readonly IVehicleTypeRepository _vehicleTypeRepository;
 
-        public ServicesController(IServiceRepository serviceRepository)
+        public ServicesController(IServiceRepository serviceRepository, IVehicleTypeRepository vehicleTypeRepository)
         {
             _serviceRepository = serviceRepository;
+            _vehicleTypeRepository = vehicleTypeRepository;
         }
 
         // GET: Services
@@ -27,7 +29,7 @@ namespace RapidTireEstimates.Controllers
             serviceViewModel.ReturnController = "Services";
             serviceViewModel.ReturnAction = "Index";
             serviceViewModel.ReturnId = "";
-            serviceViewModel.Services = await _serviceRepository.GetServices(
+            serviceViewModel.Services = await _serviceRepository.GetAll(
                 new GetServicesFilteredBy(serviceViewModel.FilterBy),
                 new GetServicesOrderedBy(serviceViewModel.SortBy));
 
@@ -43,7 +45,7 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            var serviceViewModel = new ServiceViewModel(await _serviceRepository.GetServiceById(new GetServiceById((int)id)));
+            var serviceViewModel = new ServiceViewModel(await _serviceRepository.GetById(new GetServiceById((int)id)));
             return serviceViewModel == null ? NotFound() : View(serviceViewModel);
         }
 
@@ -54,7 +56,7 @@ namespace RapidTireEstimates.Controllers
             {
                 AllVehicleTypes = new List<VehicleType>()
             };
-            serviceViewModel.AllVehicleTypes = await _serviceRepository.GetVehicleTypes();
+            serviceViewModel.AllVehicleTypes = await _vehicleTypeRepository.GetAll(new GetVehicleTypesFilteredBy(), new GetVehicleTypesOrderedBy());
 
             serviceViewModel.VehicleTypeSelectList = new List<SelectListItem>();
             foreach (VehicleType item in serviceViewModel.AllVehicleTypes)
@@ -79,7 +81,7 @@ namespace RapidTireEstimates.Controllers
 
             if (ModelState.IsValid)
             {
-                await _serviceRepository.InsertService(serviceViewModel);
+                await _serviceRepository.Insert(serviceViewModel);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -94,7 +96,7 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            Service? service = await _serviceRepository.GetServiceById(new GetServiceById((int)id));
+            Service? service = await _serviceRepository.GetById(new GetServiceById((int)id));
 
             if (service == null)
             {
@@ -121,7 +123,7 @@ namespace RapidTireEstimates.Controllers
 
             if (ModelState.IsValid)
             {
-                await _serviceRepository.UpdateService(new GetServiceById((int)id), serviceViewModel);
+                await _serviceRepository.Update(new GetServiceById((int)id), serviceViewModel);
 
                 return View(serviceViewModel);
             }
@@ -138,7 +140,7 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            Service? service = await _serviceRepository.GetServiceById(new GetServiceById((int)id));
+            Service? service = await _serviceRepository.GetById(new GetServiceById((int)id));
             return service == null ? NotFound() : View(service);
         }
 
@@ -148,7 +150,7 @@ namespace RapidTireEstimates.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _serviceRepository.DeleteService(new GetServiceById((int)id));
+            await _serviceRepository.Delete(new GetServiceById((int)id));
 
             return RedirectToAction(nameof(Index));
         }

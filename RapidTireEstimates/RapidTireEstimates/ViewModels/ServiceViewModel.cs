@@ -2,19 +2,29 @@
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RapidTireEstimates.Helpers;
 using RapidTireEstimates.Models;
+using RapidTireEstimates.Models.Linkers;
+using RapidTireEstimates.Specifications;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static RapidTireEstimates.Helpers.Constants;
 
 namespace RapidTireEstimates.ViewModels
 {
-    public class ServiceViewModel
+    public class ServiceViewModel : Service
     {
         public ServiceViewModel()
         {
-            Prices = new List<ServicePrice>();
-            VehicleTypes = new List<VehicleType>();
-            ServiceEstimates = new List<ServiceEstimate>();
+            VehicleTypeIds = new List<int>();
+            AllVehicleTypes = new List<VehicleType>();
+            VehicleTypeSelectList = new List<SelectListItem>();
             Services = new List<Service>();
+            ServicePrice = new ServicePrice();
+
+            ReturnController = "Services";
+            ReturnAction = "Index";
+            ReturnId = "";
+
+            FilterBy = "";
         }
 
         public ServiceViewModel(Service service)
@@ -28,44 +38,38 @@ namespace RapidTireEstimates.ViewModels
                 Rate = service.Rate;
             }
 
-            Prices = new List<ServicePrice>();
-            VehicleTypes = new List<VehicleType>();
-            VehicleTypesId = new List<int>();
-            ServiceEstimates = new List<ServiceEstimate>();
+            VehicleTypeIds = new List<int>();
+            AllVehicleTypes = new List<VehicleType>();
+            VehicleTypeSelectList = new List<SelectListItem>();
             Services = new List<Service>();
+            ServicePrice = new ServicePrice();
+
+            ReturnController = "Services";
+            ReturnAction = "Index";
+            ReturnId = "";
+
+            FilterBy = "";
         }
 
-        public int Id { get; set; }
-
-        [Required]
-        public string? Name { get; set; }
-        [Required]
-        public string? Description { get; set; }
-        [Required]
-        [Column(TypeName = "decimal(3,2)")]
-        public decimal Hours { get; set; }
-        [Required]
-        [DataType(DataType.Currency)]
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal Rate { get; set; }
-
-        public ServicePrice? ServicePrice { get; set; }
-
-        public IEnumerable<ServicePrice>? Prices { get; set; }
-        public IEnumerable<VehicleType>? VehicleTypes { get; set; }
-        public IEnumerable<int>? VehicleTypesId { get; set; }
-        public IEnumerable<ServiceEstimate>? ServiceEstimates { get; set; }
-
+        //Storage Variables
+        public ServicePrice ServicePrice { get; set; }
+        
+        //Service List
         public IEnumerable<Service> Services { get; set; }
+
+        //Vehicle Type Values (for vehicle type selection feature)
         [Display(Name = "Vehicle Types")]
-        public List<VehicleType>? AllVehicleTypes { get; set; }
-        public List<SelectListItem>? VehicleTypeSelectList { get; set; }
+        public List<VehicleType> AllVehicleTypes { get; set; }
+        public IEnumerable<int> VehicleTypeIds { get; set; }
+        public List<SelectListItem> VehicleTypeSelectList { get; set; }
 
-        public string? ReturnController { get; set; }
-        public string? ReturnAction { get; set; }
-        public string? ReturnId { get; set; }
+        //Return Address Values (for dynamic return feature)
+        public string ReturnController { get; set; }
+        public string ReturnAction { get; set; }
+        public string ReturnId { get; set; }
 
-        public string? FilterBy { get; internal set; }
+        //Filter/Sort Values (for filter/sort feature)
+        public string FilterBy { get; internal set; }
         public Constants.SortByParameter SortBy { get; set; }
         public Constants.SortByParameter SortByName { get; set; }
         public Constants.SortByParameter SortByDescription { get; set; }

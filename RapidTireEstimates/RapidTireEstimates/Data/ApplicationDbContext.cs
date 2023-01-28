@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RapidTireEstimates.Models;
+using RapidTireEstimates.Models.Linkers;
 
 namespace RapidTireEstimates.Data
 {
@@ -9,21 +10,23 @@ namespace RapidTireEstimates.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+
         }
-        public DbSet<Customer> Customer { get; set; }
-        public DbSet<CustomerComment> CustomerComment { get; set; }
-        public DbSet<Estimate> Estimate { get; set; }
-        public DbSet<EstimateComment> EstimateComment { get; set; }
-        public DbSet<PurchasedPart> PurchasedPart { get; set; }
-        public DbSet<Service> Service { get; set; }
-        public DbSet<ServiceEstimate> ServiceEstimate { get; set; }
-        public DbSet<ServiceEstimateComment> ServiceEstimateComment { get; set; }
-        public DbSet<ServiceEstimatePrice> ServiceEstimatePrice { get; set; }
-        public DbSet<ServicePrice> ServicePrice { get; set; }
-        public DbSet<ServiceVehicleType> ServiceVehicleType { get; set; }
-        public DbSet<ShopSupply> ShopSupply { get; set; }
-        public DbSet<Vehicle> Vehicle { get; set; }
-        public DbSet<VehicleType> VehicleType { get; set; }
+        public DbSet<Customer> Customer => Set<Customer>();
+        public DbSet<CustomerComment> CustomerComment => Set<CustomerComment>();
+        public DbSet<Estimate> Estimate => Set<Estimate>();
+        public DbSet<EstimateShopSupply> EstimateShopSupply => Set<EstimateShopSupply>();
+        public DbSet<EstimateComment> EstimateComment => Set<EstimateComment>();
+        public DbSet<PurchasedPart> PurchasedPart => Set<PurchasedPart>();
+        public DbSet<Service> Service => Set<Service>();
+        public DbSet<ServiceEstimate> ServiceEstimate => Set<ServiceEstimate>();
+        public DbSet<ServiceEstimateComment> ServiceEstimateComment => Set<ServiceEstimateComment>();
+        public DbSet<ServiceEstimatePrice> ServiceEstimatePrice => Set<ServiceEstimatePrice>();
+        public DbSet<ServicePrice> ServicePrice => Set<ServicePrice>();
+        public DbSet<ServiceVehicleType> ServiceVehicleType => Set<ServiceVehicleType>();
+        public DbSet<ShopSupply> ShopSupply => Set<ShopSupply>();
+        public DbSet<Vehicle> Vehicle => Set<Vehicle>(); 
+        public DbSet<VehicleType> VehicleType => Set<VehicleType>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

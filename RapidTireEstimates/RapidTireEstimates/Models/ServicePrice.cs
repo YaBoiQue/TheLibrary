@@ -5,11 +5,17 @@ namespace RapidTireEstimates.Models
 {
     public class ServicePrice : Price
     {
+        public ServicePrice()
+        {
+            Description = "";
+            Service = new Service();
+        }
+
         [ForeignKey("Service")]
         public int ServiceId { get; set; }
 
         [Display(Name = "Pricing Description")]
-        public string? Description { get; set; }
+        public string Description { get; set; }
         [Display(Name = "Pricing Level")]
         public short Level { get; set; }
 

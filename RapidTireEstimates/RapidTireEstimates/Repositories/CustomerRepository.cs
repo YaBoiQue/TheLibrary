@@ -18,7 +18,7 @@ namespace RapidTireEstimates.Repositories
             _context = context;
         }
 
-        public async Task DeleteCustomer(ISpecification<Customer> byIdSpec)
+        public async Task Delete(ISpecification<Customer> byIdSpec)
         {
             Customer? customer = await _context.Customer.WithSpecification(byIdSpec).SingleOrDefaultAsync();
 
@@ -32,17 +32,17 @@ namespace RapidTireEstimates.Repositories
             _ = await _context.SaveChangesAsync();
         }
 
-        public async Task<Customer> GetCustomerByCommentId(ISpecification<Customer> commentIdSpec)
+        public async Task<Customer> GetByCommentId(ISpecification<Customer> commentIdSpec)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Customer> GetCustomerByEstimateId(ISpecification<Customer> estimateIdSpec)
+        public Task<Customer> GetByEstimateId(ISpecification<Customer> estimateIdSpec)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Customer> GetCustomerById(ISpecification<Customer> byIdSpec)
+        public async Task<Customer> GetById(ISpecification<Customer> byIdSpec)
         {
             if (byIdSpec == null)
             {
@@ -57,23 +57,22 @@ namespace RapidTireEstimates.Repositories
             return customer;
         }
 
-        public Task<Customer> GetCustomerByVehicleId(ISpecification<Customer> vehicleIdSpec)
+        public Task<Customer> GetByVehicleId(ISpecification<Customer> vehicleIdSpec)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<Customer>> GetCustomers(ISpecification<Customer> filterBySpec, ISpecification<Customer> orderBySpec)
+        public async Task<List<Customer>> GetAll(ISpecification<Customer> filterBySpec, ISpecification<Customer> orderBySpec)
         {
             return await _context.Customer.WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
         }
 
-        public async Task<Customer> InsertCustomer(CustomerViewModel customerViewModel)
+        public async Task<Customer> Insert(CustomerViewModel customerViewModel)
         {
-            Customer customer = new()
-            {
-                Name = customerViewModel.Name,
-                PhoneNumber = customerViewModel.PhoneNumber
-            };
+            Customer customer = new Customer();
+
+            customer.Name = customerViewModel.Name;
+            customer.PhoneNumber = customerViewModel.PhoneNumber;
 
             _ = _context.Add(customer);
             _ = await _context.SaveChangesAsync();
@@ -81,13 +80,17 @@ namespace RapidTireEstimates.Repositories
             return customer;
         }
 
-        public async Task<Customer> UpdateCustomer(ISpecification<Customer> byIdSpec, CustomerViewModel customerViewModel)
+        public async Task<Customer> Update(ISpecification<Customer> byIdSpec, CustomerViewModel customerViewModel)
         {
-            Customer? customer;
+            Customer? customer = new Customer();
+
 
             try
             {
                 customer = await _context.Customer.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+                if (customer == null)
+                    return new Customer();
 
                 customer.Name = customerViewModel.Name;
                 customer.PhoneNumber = customerViewModel.PhoneNumber;
@@ -99,7 +102,7 @@ namespace RapidTireEstimates.Repositories
             {
                 if (!CustomerExists(customerViewModel.Id))
                 {
-                    return null;
+                    return new Customer();
                 }
                 else
                 {

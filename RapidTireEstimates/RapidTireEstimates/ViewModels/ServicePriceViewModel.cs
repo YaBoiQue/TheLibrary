@@ -1,17 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using RapidTireEstimates.Helpers;
 using RapidTireEstimates.Models;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RapidTireEstimates.ViewModels
 {
-    public class ServicePriceViewModel
+    public class ServicePriceViewModel : ServicePrice
     {
         public ServicePriceViewModel()
         {
-            Service = new Service();
+            ServicePrice = new ServicePrice();
+
+            Services = new List<SelectListItem>();
             ServicePrices = new List<ServicePrice>();
+
+            ReturnController = "ServicePrices";
+            ReturnAction = "Index";
+            ReturnId = "";
+
             FilterBy = "";
         }
 
@@ -26,35 +31,34 @@ namespace RapidTireEstimates.ViewModels
                 Service = servicePrice.Service;
                 Value = servicePrice.Value;
             }
-            Service = new Service();
+            ServicePrice = new ServicePrice();
+
+            Services = new List<SelectListItem>();
             ServicePrices = new List<ServicePrice>();
+
+            ReturnController = "ServicePrices";
+            ReturnAction = "Index";
+            ReturnId = "";
+
             FilterBy = "";
         }
 
-        public int Id { get; set; }
-        [Required]
-        public int ServiceId { get; set; }
+        //Storage Variables
+        public ServicePrice ServicePrice { get; set; }
 
-        [DataType(DataType.Currency)]
-        [Column(TypeName = "money")]
-        [Display(Name = "Price")]
-        public decimal Value { get; set; }
-        [Display(Name = "Pricing Description")]
-        public string? Description { get; set; }
-        [Display(Name = "Pricing Level")]
-        public short Level { get; set; }
-
-        public virtual Service Service { get; set; }
+        //Lists
         public List<SelectListItem> Services { get; set; }
         public IEnumerable<ServicePrice> ServicePrices { get; set; }
 
+        //Return values(for address return feature)
+        public string ReturnController { get; set; }
+        public string ReturnAction { get; set; }
+        public string ReturnId { get; set; }
+
+        //Filter/Sort values(for filter/sort feature)
         public string FilterBy { get; set; }
         public Constants.SortByParameter SortBy { get; set; }
         public Constants.SortByParameter SortByLevel { get; set; }
         public Constants.SortByParameter SortByValue { get; set; }
-
-        public string? ReturnController { get; set; }
-        public string? ReturnAction { get; set; }
-        public string? ReturnId { get; set; }
     }
 }

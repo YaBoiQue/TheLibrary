@@ -1,15 +1,4 @@
 ToDo:
-RepositoryInterfaces:
--CustomerComment
--EstimateComment
--Estimate
--PurchasedPart
--ServiceEstimateComment
--ServiceEstimatePrice
--ServiceEstimate
--ShopSupply
--Vehicle
-
 Repositories:
 -CustomerComment
 -Customer(needs linked to other repositories)
@@ -23,19 +12,7 @@ Repositories:
 -Vehicle
 -VehicleType
 
-Specifications:
--CustomerComment
--EstimateComment
--Estimate
--PurchasedPart
--ServiceEstimateComment
--ServiceEstimatePrice
--ServiceEstimate
--ShopSupply
--Vehicle
--VehicleType
-
-ViewModels:
+Specifications: (All order specifications have basic switch statements)
 -CustomerComment
 -EstimateComment
 -Estimate

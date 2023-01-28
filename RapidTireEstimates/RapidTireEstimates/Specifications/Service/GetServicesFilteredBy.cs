@@ -5,6 +5,10 @@ namespace RapidTireEstimates.Specifications
 {
     public class GetServicesFilteredBy : Specification<Service>
     {
+        public GetServicesFilteredBy()
+        {
+            _ = Query;
+        }
         public GetServicesFilteredBy(string filterBy)
         {
             if (!string.IsNullOrEmpty(filterBy))

@@ -578,7 +578,7 @@ namespace RapidTireEstimates.Migrations
             _ = migrationBuilder.CreateIndex(
                 name: "IX_ServiceVehicleType_VehicleTypesId",
                 table: "ServiceVehicleType",
-                column: "VehicleTypesId");
+                column: "VehicleTypeIds");
 
             _ = migrationBuilder.CreateIndex(
                 name: "IX_Vehicle_CustomerId",

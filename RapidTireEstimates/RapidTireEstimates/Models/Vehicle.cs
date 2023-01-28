@@ -5,6 +5,14 @@ namespace RapidTireEstimates.Models
 {
     public class Vehicle
     {
+        public Vehicle()
+        {
+            VehicleType = new VehicleType();
+            Customer = new Customer();
+            Estimates = new List<Estimate>();
+            ReplacedParts = new List<PurchasedPart>();
+        }
+
         [Key]
         public int Id { get; set; }
         [ForeignKey("Customer")]
@@ -12,16 +20,19 @@ namespace RapidTireEstimates.Models
 
         [Required]
         [StringLength(50)]
+        [Display(Name = "Make")]
         public string? Make { get; set; }
         [Required]
         [StringLength(50)]
+        [Display(Name = "Model")]
         public string? Model { get; set; }
         [Required]
+        [Display(Name = "Year")]
         public int Year { get; set; }
 
         public virtual VehicleType VehicleType { get; set; }
         public virtual Customer Customer { get; set; }
-        public ICollection<Estimate>? Estimates { get; set; }
-        public ICollection<PurchasedPart>? ReplacedParts { get; set; }
+        public IEnumerable<Estimate> Estimates { get; set; }
+        public IEnumerable<PurchasedPart> ReplacedParts { get; set; }
     }
 }

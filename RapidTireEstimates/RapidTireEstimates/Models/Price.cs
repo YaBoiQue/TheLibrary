@@ -11,6 +11,7 @@ namespace RapidTireEstimates.Models
         [Required]
         [DataType(DataType.Currency)]
         [Column(TypeName = "money")]
+        [Display(Name = "Amount")]
         public decimal Value { get; set; }
     }
 }

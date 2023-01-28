@@ -4,6 +4,11 @@ namespace RapidTireEstimates.Models
 {
     public class ServiceEstimateComment : Comment
     {
+        public ServiceEstimateComment()
+        {
+            ServiceEstimate = new ServiceEstimate();
+        }
+
         [ForeignKey("ServiceEstimate")]
         public int ServiceEstimateId { get; set; }
 

@@ -296,13 +296,13 @@ namespace RapidTireEstimates.Migrations
                     b.Property<decimal>("FinalPrice")
                         .HasColumnType("money");
 
-                    b.Property<DateTime>("FinishDate")
+                    b.Property<DateTime>("DateFinished")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<int>("ShopTools")
+                    b.Property<int>("ShopToolAmount")
                         .HasColumnType("int");
 
                     b.HasKey("VehicleId");
@@ -388,7 +388,7 @@ namespace RapidTireEstimates.Migrations
                     b.Property<decimal>("Rate")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("ServiceNumber")
+                    b.Property<int>("Number")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -514,14 +514,14 @@ namespace RapidTireEstimates.Migrations
                     b.Property<int>("ServicesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("VehicleTypesId")
+                    b.Property<int>("VehicleTypeIds")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ServicesId");
 
-                    b.HasIndex("VehicleTypesId");
+                    b.HasIndex("VehicleTypeIds");
 
                     b.ToTable("ServiceVehicleType");
                 });
@@ -791,7 +791,7 @@ namespace RapidTireEstimates.Migrations
 
                     b.HasOne("RapidTireEstimates.Models.VehicleType", "VehicleType")
                         .WithMany("Services")
-                        .HasForeignKey("VehicleTypesId")
+                        .HasForeignKey("VehicleTypeIds")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

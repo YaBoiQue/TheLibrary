@@ -154,7 +154,7 @@ namespace RapidTireEstimates.Areas.Identity.Pages.Account.Manage
             AuthenticatorUri = GenerateQrCodeUri(email, unformattedKey);
         }
 
-        private string FormatKey(string unformattedKey)
+        private static string FormatKey(string unformattedKey)
         {
             StringBuilder result = new();
             int currentPosition = 0;

@@ -40,8 +40,8 @@ namespace RapidTireEstimates.Models
         [Display(Name = "Phone Number")]
         public string? PhoneNumber { get; set; }
 
-        public IEnumerable<Estimate>? Estimates { get; set; }
-        public IEnumerable<CustomerComment>? Comments { get; set; }
-        public IEnumerable<Vehicle>? Vehicles { get; set; }
+        public IEnumerable<Estimate> Estimates { get; set; }
+        public IEnumerable<CustomerComment> Comments { get; set; }
+        public IEnumerable<Vehicle> Vehicles { get; set; }
     }
 }

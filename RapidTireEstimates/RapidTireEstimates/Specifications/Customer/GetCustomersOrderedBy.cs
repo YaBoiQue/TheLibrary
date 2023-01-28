@@ -1,6 +1,5 @@
 ﻿using Ardalis.Specification;
 using RapidTireEstimates.Models;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static RapidTireEstimates.Helpers.Constants;
 
 namespace RapidTireEstimates.Specifications

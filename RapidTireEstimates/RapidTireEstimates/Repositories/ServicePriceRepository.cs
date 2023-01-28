@@ -18,7 +18,7 @@ namespace RapidTireEstimates.Repositories
             _context = context;
         }
 
-        public async Task DeleteServicePrice(ISpecification<ServicePrice> byIdSpec)
+        public async Task Delete(ISpecification<ServicePrice> byIdSpec)
         {
             ServicePrice? servicePrice = await _context.ServicePrice.WithSpecification(byIdSpec).SingleOrDefaultAsync();
 
@@ -33,7 +33,7 @@ namespace RapidTireEstimates.Repositories
 
         }
 
-        public async Task<ServicePrice> GetServicePriceById(ISpecification<ServicePrice> byIdSpec)
+        public async Task<ServicePrice> GetById(ISpecification<ServicePrice> byIdSpec)
         {
             if (byIdSpec == null)
             {
@@ -48,25 +48,25 @@ namespace RapidTireEstimates.Repositories
             return servicePrice;
         }
 
-        public async Task<List<ServicePrice>> GetServicePrices(ISpecification<ServicePrice> filterBySpec, ISpecification<ServicePrice> orderBySpec)
+        public async Task<List<ServicePrice>> GetAll(ISpecification<ServicePrice> filterBySpec, ISpecification<ServicePrice> orderBySpec)
         {
             return await _context.ServicePrice.WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
         }
 
-        public async Task<List<ServicePrice>> GetServicePricesByServiceId(ISpecification<ServicePrice> byServiceIdSpec)
+        public async Task<List<ServicePrice>> GetByServiceId(ISpecification<ServicePrice> byServiceIdSpec)
         {
             return await _context.ServicePrice.WithSpecification(byServiceIdSpec).ToListAsync();
         }
 
-        public async Task<ServicePrice> InsertServicePrice(ServicePriceViewModel servicePriceViewModel)
+        public async Task<ServicePrice> Insert(ServicePriceViewModel servicePriceViewModel)
         {
-            ServicePrice servicePrice = new()
-            {
-                Value = servicePriceViewModel.Value,
-                Description = servicePriceViewModel.Description.Trim(),
-                Level = servicePriceViewModel.Level,
-                ServiceId = servicePriceViewModel.ServiceId
-            };
+            ServicePrice servicePrice = new ServicePrice();
+
+            servicePrice.Description = servicePriceViewModel.Description;
+            servicePrice.Level = servicePriceViewModel.Level;
+            servicePrice.Value = servicePriceViewModel.Value;
+            servicePrice.ServiceId = servicePriceViewModel.ServiceId;
+            servicePrice.Service = servicePriceViewModel.Service;
 
             _ = _context.Add(servicePrice);
             _ = await _context.SaveChangesAsync();
@@ -74,13 +74,16 @@ namespace RapidTireEstimates.Repositories
             return servicePrice;
         }
 
-        public async Task<ServicePrice> UpdateServicePrice(ISpecification<ServicePrice> byIdSpec, ServicePriceViewModel servicePriceViewModel)
+        public async Task<ServicePrice> Update(ISpecification<ServicePrice> byIdSpec, ServicePriceViewModel servicePriceViewModel)
         {
             ServicePrice? servicePrice;
 
             try
             {
                 servicePrice = await _context.ServicePrice.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+                if (servicePrice == null) 
+                    return new ServicePrice();
 
                 servicePrice.Value = servicePriceViewModel.Value;
                 servicePrice.Level = servicePriceViewModel.Level;
@@ -97,7 +100,7 @@ namespace RapidTireEstimates.Repositories
             {
                 if (!ServicePriceExists(servicePriceViewModel.Id))
                 {
-                    return null;
+                    return new ServicePrice();
                 }
                 else
                 {
@@ -137,11 +140,15 @@ namespace RapidTireEstimates.Repositories
             GC.SuppressFinalize(this);
         }
 
+        public Task<List<ServicePrice>> GetByServiceId(ISpecification<ServicePrice> byServiceIdSpec, ISpecification<ServicePrice> filterBySpec, ISpecification<ServicePrice> orderBySpec)
+        {
+            throw new NotImplementedException();
+        }
+
 
         private bool ServicePriceExists(int id)
         {
             return _context.ServicePrice.Any(e => e.Id == id);
         }
-
     }
 }

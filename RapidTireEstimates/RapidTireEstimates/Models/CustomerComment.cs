@@ -4,6 +4,22 @@ namespace RapidTireEstimates.Models
 {
     public class CustomerComment : Comment
     {
+        public CustomerComment()
+        {
+            Customer = new Customer();
+        }
+
+        public CustomerComment(Customer customer)
+        {
+            if (customer != null)
+            {
+                CustomerId = customer.Id;
+                Customer = customer;
+            }
+
+            Customer ??= new Customer();
+        }
+
         [ForeignKey("Customer")]
         public int CustomerId { get; set; }
 

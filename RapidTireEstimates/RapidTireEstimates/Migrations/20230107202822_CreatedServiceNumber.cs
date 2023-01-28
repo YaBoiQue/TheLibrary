@@ -9,7 +9,7 @@ namespace RapidTireEstimates.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             _ = migrationBuilder.AddColumn<int>(
-                name: "ServiceNumber",
+                name: "Number",
                 table: "Service",
                 type: "int",
                 nullable: false,
@@ -19,7 +19,7 @@ namespace RapidTireEstimates.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             _ = migrationBuilder.DropColumn(
-                name: "ServiceNumber",
+                name: "Number",
                 table: "Service");
         }
     }

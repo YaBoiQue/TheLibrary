@@ -15,7 +15,19 @@
             DescrASC,
             DescrDESC,
             PhoneNumberASC,
-            PhoneNumberDESC
+            PhoneNumberDESC,
+            DateASC,
+            DateDESC,
+            ContentsASC,
+            ContentsDESC,
+            PriceASC,
+            PriceDESC,
+            MakeASC,
+            MakeDESC,
+            ModelASC,
+            ModelDESC,
+            YearASC,
+            YearDESC
         }
 
         public enum OrderByParameter

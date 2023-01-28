@@ -13,6 +13,12 @@ namespace RapidTireEstimates.ViewModels
             Estimates = new List<Estimate>();
             Comments = new List<CustomerComment>();
             Vehicles = new List<Vehicle>();
+
+            ReturnController = "Customers";
+            ReturnAction = "Index";
+            ReturnId = "";
+
+            FilterBy = "";
         }
 
         public CustomerViewModel(Customer customer)
@@ -30,25 +36,32 @@ namespace RapidTireEstimates.ViewModels
             }
 
             Customer ??= new Customer();
-            Customers = new List<Customer>();
-            Estimates ??= new List<Estimate>();
-            Comments ??= new List<CustomerComment>();
-            Vehicles ??= new List<Vehicle>();
+
+            Customers ??= new List<Customer>();
+
+            ReturnController = "Customers";
+            ReturnAction = "Index";
+            ReturnId = "";
+
+            FilterBy = "";
 
         }
 
+        //Storage Variables
+        public Customer Customer { get; set; }
 
-        public virtual Customer Customer { get; set; }
-        public IEnumerable<Customer> Customers { get; internal set; }
+        //Customer List
+        public IEnumerable<Customer> Customers { get; set; }
 
+        //Return Address Values (for dynamic return feature)
+        public string ReturnController { get; set; }
+        public string ReturnAction { get; set; }
+        public string ReturnId { get; set; }
 
-        public string? FilterBy { get; set; }
+        //Filter/Sort Values (for filter/sort feature)
+        public string FilterBy { get; internal set; }
         public SortByParameter SortBy { get; set; }
         public SortByParameter SortByName { get; set; }
         public SortByParameter SortByPhoneNumber { get; set; }
-
-        public string? ReturnController { get; set; }
-        public string? ReturnAction { get; set; }
-        public string? ReturnUrl { get; set;}
     }
 }

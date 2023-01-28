@@ -7,11 +7,27 @@ namespace RapidTireEstimates.Interfaces
     public interface IServicePriceRepository : IDisposable
     {
 
-        public Task<List<ServicePrice>> GetServicePrices(ISpecification<ServicePrice> filterBySpec, ISpecification<ServicePrice> orderBySpec);
-        public Task<ServicePrice> GetServicePriceById(ISpecification<ServicePrice> byIdSpec);
-        public Task<List<ServicePrice>> GetServicePricesByServiceId(ISpecification<ServicePrice> byServiceIdSpec);
-        public Task<ServicePrice> InsertServicePrice(ServicePriceViewModel servicePriceViewModel);
-        public Task<ServicePrice> UpdateServicePrice(ISpecification<ServicePrice> byIdSpec, ServicePriceViewModel servicePriceViewModel);
-        public Task DeleteServicePrice(ISpecification<ServicePrice> byIdSpec);
+        public Task<List<ServicePrice>> GetAll(
+            ISpecification<ServicePrice> filterBySpec, 
+            ISpecification<ServicePrice> orderBySpec
+            );
+        public Task<List<ServicePrice>> GetByServiceId(
+            ISpecification<ServicePrice> byServiceIdSpec,
+            ISpecification<ServicePrice> filterBySpec,
+            ISpecification<ServicePrice> orderBySpec
+            );
+        public Task<ServicePrice> GetById(
+            ISpecification<ServicePrice> byIdSpec
+            );
+        public Task<ServicePrice> Insert(
+            ServicePriceViewModel servicePriceViewModel
+            );
+        public Task<ServicePrice> Update(
+            ISpecification<ServicePrice> byIdSpec, 
+            ServicePriceViewModel servicePriceViewModel
+            );
+        public Task Delete(
+            ISpecification<ServicePrice> byIdSpec
+            );
     }
 }

@@ -11,7 +11,7 @@ namespace RapidTireEstimates.Specifications
             switch (sortBy)
             {
                 case SortByParameter.NameDESC:
-                    _ = Query.OrderByDescending(o => o.Name).ThenByDescending(o => o.ServiceNumber);
+                    _ = Query.OrderByDescending(o => o.Name).ThenByDescending(o => o.Number);
                     break;
                 case SortByParameter.DescrDESC:
                     _ = Query.OrderByDescending(o => o.Description).ThenByDescending(o => o.Name);
@@ -20,7 +20,7 @@ namespace RapidTireEstimates.Specifications
                     _ = Query.OrderBy(o => o.Description).ThenBy(o => o.Name);
                     break;
                 default:
-                    _ = Query.OrderBy(o => o.Name).ThenBy(o => o.ServiceNumber);
+                    _ = Query.OrderBy(o => o.Name).ThenBy(o => o.Number);
                     break;
             }
         }

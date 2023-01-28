@@ -5,19 +5,66 @@ namespace RapidTireEstimates.Models
 {
     public class Estimate
     {
+        public Estimate()
+        {
+            DateCreated = DateTime.Now;
+            Customer = new Customer();
+            Vehicle = new Vehicle();
+
+            Services = new List<ServiceEstimate>();
+            Comments = new List<EstimateComment>();
+            ShopSupplies = new List<EstimateShopSupply>();
+            PurchasedParts = new List<PurchasedPart>();
+        }
+
+        public Estimate(Estimate estimate)
+        {
+            DateCreated = null;
+
+            if (estimate != null)
+            {
+                Id = estimate.Id;
+                CustomerId = estimate.CustomerId;
+                VehicleId = estimate.VehicleId;
+                DateCreated = estimate.DateCreated;
+                DateFinished = estimate.DateFinished;
+                ShopToolAmount = estimate.ShopToolAmount;
+                FinalPrice = estimate.FinalPrice;
+                Customer = estimate.Customer;
+                Vehicle = estimate.Vehicle;
+                Services = estimate.Services;
+                Comments = estimate.Comments;
+                ShopSupplies = estimate.ShopSupplies;
+                PurchasedParts = estimate.PurchasedParts;
+            }
+
+            DateCreated ??= DateTime.Now;
+            Customer ??= new Customer();
+            Vehicle ??= new Vehicle();
+
+            Services ??= new List<ServiceEstimate>();
+            Comments ??= new List<EstimateComment>();
+            ShopSupplies ??= new List<EstimateShopSupply>();
+            PurchasedParts ??= new List<PurchasedPart>();
+        }
+
         [Key]
         public int Id { get; set; }
+        [Required]
         [ForeignKey("Customer")]
         public int CustomerId { get; set; }
+        [Required]
         [ForeignKey("Vehicle")]
         public int VehicleId { get; set; }
 
+        [Required]
         [Display(Name = "Creation Date")]
-        public DateTime DateCreated { set => DateCreated = DateTime.Now; }
+        public DateTime? DateCreated { get; set; }
         [Display(Name = "Completion Date")]
-        public DateTime FinishDate { get; set; }
+        public DateTime DateFinished { get; set; }
         [Display(Name = "Shop Tool Use")]
-        public int ShopTools { get; set; }
+        [Column(TypeName = "percentage")]
+        public decimal ShopToolAmount { get; set; }
         [DataType(DataType.Currency)]
         [Display(Name = "Final Price")]
         [Column(TypeName = "money")]
@@ -25,14 +72,9 @@ namespace RapidTireEstimates.Models
 
         public virtual Customer Customer { get; set; }
         public virtual Vehicle Vehicle { get; set; }
-        public ICollection<ServiceEstimate>? Services { get; set; }
-        public ICollection<EstimateComment>? Comments { get; set; }
-        public ICollection<ShopSupply>? ShopParts { get; set; }
-        public ICollection<PurchasedPart>? PurchasedParts { get; set; }
-
-        public Estimate()
-        {
-            this.DateCreated = DateTime.Now;
-        }
+        public IEnumerable<ServiceEstimate> Services { get; set; }
+        public IEnumerable<EstimateComment> Comments { get; set; }
+        public IEnumerable<EstimateShopSupply> ShopSupplies { get; set; }
+        public IEnumerable<PurchasedPart> PurchasedParts { get; set; }
     }
 }

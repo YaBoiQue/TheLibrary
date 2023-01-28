@@ -7,7 +7,7 @@ namespace RapidTireEstimates.Specifications
     {
         public GetServicesByVehicleTypeId(int vehicleTypeId)
         {
-            _ = Query.Where(v => v.VehicleTypes.Where(v => v.VehicleTypesId == vehicleTypeId).SingleOrDefault().VehicleTypesId == vehicleTypeId);
+            _ = Query.Where(v => v.VehicleTypes.SingleOrDefault(v => v.VehicleTypesId == vehicleTypeId).VehicleTypesId == vehicleTypeId);
         }
     }
 }
