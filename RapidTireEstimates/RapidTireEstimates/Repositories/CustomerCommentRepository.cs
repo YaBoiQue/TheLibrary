@@ -1,4 +1,8 @@
 ﻿using Ardalis.Specification;
+using Ardalis.Specification.EntityFrameworkCore;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
+using RapidTireEstimates.Data;
 using RapidTireEstimates.Interfaces;
 using RapidTireEstimates.Models;
 using RapidTireEstimates.ViewModels;
@@ -8,10 +12,23 @@ namespace RapidTireEstimates.Repositories
     public class CustomerCommentRepository : ICustomerCommentRepository
     {
         private bool disposedValue;
+        private readonly ApplicationDbContext _context;
 
-        public Task Delete(ISpecification<CustomerComment> byIdSpec)
+        public CustomerCommentRepository (ApplicationDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+
+        public async Task Delete(ISpecification<CustomerComment> byIdSpec)
+        {
+            CustomerComment? customerComment = await _context.CustomerComment.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+            if (customerComment != null)
+            {
+                _ = _context.CustomerComment.Remove(customerComment);
+            }
+
+            _ = await _context.SaveChangesAsync();
         }
 
         public Task<List<CustomerComment>> GetAll(ISpecification<CustomerComment> filterBySpec, ISpecification<CustomerComment> orderBySpec)
@@ -24,9 +41,16 @@ namespace RapidTireEstimates.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<CustomerComment> GetById(ISpecification<CustomerComment> byIdSpec)
+        public async Task<CustomerComment> GetById(ISpecification<CustomerComment> byIdSpec)
         {
-            throw new NotImplementedException();
+            if (byIdSpec == null)
+                return new CustomerComment();
+
+            var customerComment = await _context.CustomerComment.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+            customerComment ??= new CustomerComment();
+
+            return customerComment;
         }
 
         public Task<CustomerComment> Insert(CustomerCommentViewModel customerCommentViewModel)

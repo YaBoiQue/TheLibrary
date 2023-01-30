@@ -1,6 +1,13 @@
-﻿namespace RapidTireEstimates.Specifications
+﻿using Ardalis.Specification;
+using RapidTireEstimates.Models;
+
+namespace RapidTireEstimates.Specifications
 {
-    public class GetPurchasedPartsFilteredBy
+    public class GetPurchasedPartsFilteredBy : Specification<PurchasedPart>
     {
+        public GetPurchasedPartsFilteredBy(string filterBy)
+        {
+
+        }
     }
 }

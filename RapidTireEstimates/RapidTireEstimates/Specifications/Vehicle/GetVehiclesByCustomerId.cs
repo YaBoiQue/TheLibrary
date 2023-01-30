@@ -1,6 +1,13 @@
-﻿namespace RapidTireEstimates.Specifications
+﻿using Ardalis.Specification;
+using RapidTireEstimates.Models;
+
+namespace RapidTireEstimates.Specifications
 {
-    public class GetVehiclesByCustomerId
+    public class GetVehiclesByCustomerId : Specification<Vehicle>
     {
+        public GetVehiclesByCustomerId(int customerId)
+        {
+            _ = Query.Where(v => v.CustomerId == customerId);
+        }
     }
 }

@@ -17,6 +17,8 @@ namespace RapidTireEstimates.Models
         public int Id { get; set; }
         [ForeignKey("Customer")]
         public int CustomerId { get; set; }
+        [ForeignKey("VehicleType")]
+        public int VehicleTypeId { get; set; }
 
         [Required]
         [StringLength(50)]

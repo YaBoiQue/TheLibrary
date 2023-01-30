@@ -5,9 +5,9 @@ namespace RapidTireEstimates.Specifications
 {
     public class GetVehicleTypesFilteredBy : Specification<VehicleType>
     {
-        public GetVehicleTypesFilteredBy()
+        public GetVehicleTypesFilteredBy(string filterBy)
         {
-            _ = Query;
+            _ = Query.Where(v => v.Name == filterBy);
         }
     }
 }
