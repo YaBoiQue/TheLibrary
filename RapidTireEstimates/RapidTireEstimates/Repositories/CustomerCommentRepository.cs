@@ -31,14 +31,14 @@ namespace RapidTireEstimates.Repositories
             _ = await _context.SaveChangesAsync();
         }
 
-        public Task<List<CustomerComment>> GetAll(ISpecification<CustomerComment> filterBySpec, ISpecification<CustomerComment> orderBySpec)
+        public async Task<List<CustomerComment>> GetAll(ISpecification<CustomerComment> filterBySpec, ISpecification<CustomerComment> orderBySpec)
         {
-            throw new NotImplementedException();
+            return await _context.CustomerComment.WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
         }
 
-        public Task<List<CustomerComment>> GetByCustomerId(ISpecification<CustomerComment> byCustomerIdSpec, ISpecification<CustomerComment> filterBySpec, ISpecification<CustomerComment> orderBySpec)
+        public async Task<List<CustomerComment>> GetByCustomerId(ISpecification<CustomerComment> byCustomerIdSpec, ISpecification<CustomerComment> filterBySpec, ISpecification<CustomerComment> orderBySpec)
         {
-            throw new NotImplementedException();
+            return await _context.CustomerComment.WithSpecification(byCustomerIdSpec).WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
         }
 
         public async Task<CustomerComment> GetById(ISpecification<CustomerComment> byIdSpec)
@@ -53,14 +53,45 @@ namespace RapidTireEstimates.Repositories
             return customerComment;
         }
 
-        public Task<CustomerComment> Insert(CustomerCommentViewModel customerCommentViewModel)
+        public async Task<CustomerComment> Insert(CustomerCommentViewModel customerCommentViewModel)
         {
-            throw new NotImplementedException();
+            if (customerCommentViewModel == null)
+            {
+                return new CustomerComment();
+            }
+
+            var customerComment = new CustomerComment() { CustomerId = customerCommentViewModel.CustomerId, DateCreated = customerCommentViewModel.DateCreated, Contents = customerCommentViewModel.Contents };
+
+            var customer = _context.Customer.Where(c => c.Id == customerComment.CustomerId).FirstOrDefault();
+
+            if (customer == null)
+            {
+                return new CustomerComment();
+            }
+
+            customerComment.Customer = customer;
+
+            _ = _context.Add(customerComment);
+            _ = await _context.SaveChangesAsync();
+
+            return customerComment;
         }
 
-        public Task<CustomerComment> Update(ISpecification<CustomerComment> byIdSpec, CustomerCommentViewModel customerCommentViewModel)
+        public async Task<CustomerComment> Update(ISpecification<CustomerComment> byIdSpec, CustomerCommentViewModel customerCommentViewModel)
         {
-            throw new NotImplementedException();
+            CustomerComment? customerComment;
+
+            customerComment = await _context.CustomerComment.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+            if (customerComment == null)
+                return new CustomerComment();
+
+            customerComment.Contents = customerCommentViewModel.Contents;
+
+            _ = _context.Update(customerComment);
+            _ = await _context.SaveChangesAsync();
+
+            return customerComment;
         }
 
         protected virtual void Dispose(bool disposing)

@@ -158,7 +158,8 @@ namespace RapidTireEstimates.Repositories
             {
                 service = await _context.Service.WithSpecification(byIdSpec).SingleOrDefaultAsync();
 
-                service ??= new Service();
+                if (service == null)
+                    return new Service();
 
                 service.Name = serviceViewModel.Name;
                 service.Description = serviceViewModel.Description;

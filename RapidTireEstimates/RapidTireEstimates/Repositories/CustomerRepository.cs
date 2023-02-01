@@ -34,12 +34,21 @@ namespace RapidTireEstimates.Repositories
 
         public async Task<Customer> GetByCommentId(ISpecification<Customer> commentIdSpec)
         {
-            throw new NotImplementedException();
+
+            var customer = await _context.Customer.WithSpecification(commentIdSpec).SingleOrDefaultAsync();
+
+            customer ??= new Customer();
+
+            return customer;
         }
 
-        public Task<Customer> GetByEstimateId(ISpecification<Customer> estimateIdSpec)
+        public async Task<Customer> GetByEstimateId(ISpecification<Customer> estimateIdSpec)
         {
-            throw new NotImplementedException();
+            var customer = await _context.Customer.WithSpecification(estimateIdSpec).SingleOrDefaultAsync();
+
+            customer ??= new Customer();
+
+            return customer;
         }
 
         public async Task<Customer> GetById(ISpecification<Customer> byIdSpec)
@@ -50,16 +59,18 @@ namespace RapidTireEstimates.Repositories
             }
             var customer = await _context.Customer.WithSpecification(byIdSpec).SingleOrDefaultAsync();
 
-            if(customer == null)
-            {
-                return new Customer();
-            }
+            customer ??= new Customer();
+
             return customer;
         }
 
-        public Task<Customer> GetByVehicleId(ISpecification<Customer> vehicleIdSpec)
+        public async Task<Customer> GetByVehicleId(ISpecification<Customer> vehicleIdSpec)
         {
-            throw new NotImplementedException();
+            var customer = await _context.Customer.WithSpecification(vehicleIdSpec).SingleOrDefaultAsync();
+
+            customer ??= new Customer();
+
+            return customer;
         }
 
         public async Task<List<Customer>> GetAll(ISpecification<Customer> filterBySpec, ISpecification<Customer> orderBySpec)

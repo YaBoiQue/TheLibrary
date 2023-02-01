@@ -1,4 +1,7 @@
 ﻿using Ardalis.Specification;
+using Ardalis.Specification.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using RapidTireEstimates.Data;
 using RapidTireEstimates.Interfaces;
 using RapidTireEstimates.Models;
 using RapidTireEstimates.ViewModels;
@@ -8,15 +11,27 @@ namespace RapidTireEstimates.Repositories
     public class EstimateCommentRepository : IEstimateCommentRepository
     {
         private bool disposedValue;
+        private ApplicationDbContext _context;
 
-        public Task Delete(ISpecification<EstimateComment> byIdSpec)
+        public EstimateCommentRepository(ApplicationDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+
+        public async Task Delete(ISpecification<EstimateComment> byIdSpec)
+        {
+            var estimateComment = await _context.EstimateComment.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+            if (estimateComment == null)
+                return;
+
+            _ = _context.Remove(estimateComment);
+            _ = await _context.SaveChangesAsync();
         }
 
         public Task<List<EstimateComment>> GetAll(ISpecification<EstimateComment> filterBySpec, ISpecification<EstimateComment> orderBySpec)
         {
-            throw new NotImplementedException();
+
         }
 
         public Task<EstimateComment> GetByEstimateId(ISpecification<EstimateComment> byEstimateIdSpec, ISpecification<EstimateComment> filterBySpec, ISpecification<EstimateComment> orderBySpec)
