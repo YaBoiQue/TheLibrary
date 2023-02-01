@@ -13,7 +13,7 @@ namespace RapidTireEstimates.Interfaces
         public Task<EstimateComment> GetById(
             ISpecification<EstimateComment> byIdSpec
             );
-        public Task<EstimateComment> GetByEstimateId(
+        public Task<List<EstimateComment>> GetByEstimateId(
             ISpecification<EstimateComment> byEstimateIdSpec,
             ISpecification<EstimateComment> filterBySpec,
             ISpecification<EstimateComment> orderBySpec

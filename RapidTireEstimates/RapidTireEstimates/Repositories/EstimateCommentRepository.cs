@@ -29,29 +29,62 @@ namespace RapidTireEstimates.Repositories
             _ = await _context.SaveChangesAsync();
         }
 
-        public Task<List<EstimateComment>> GetAll(ISpecification<EstimateComment> filterBySpec, ISpecification<EstimateComment> orderBySpec)
+        public async Task<List<EstimateComment>> GetAll(ISpecification<EstimateComment> filterBySpec, ISpecification<EstimateComment> orderBySpec)
         {
-
+            return await _context.EstimateComment.WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
         }
 
-        public Task<EstimateComment> GetByEstimateId(ISpecification<EstimateComment> byEstimateIdSpec, ISpecification<EstimateComment> filterBySpec, ISpecification<EstimateComment> orderBySpec)
+        public async Task<List<EstimateComment>> GetByEstimateId(ISpecification<EstimateComment> byEstimateIdSpec, ISpecification<EstimateComment> filterBySpec, ISpecification<EstimateComment> orderBySpec)
         {
-            throw new NotImplementedException();
+            return await _context.EstimateComment.WithSpecification(byEstimateIdSpec).WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
         }
 
-        public Task<EstimateComment> GetById(ISpecification<EstimateComment> byIdSpec)
+        public async Task<EstimateComment> GetById(ISpecification<EstimateComment> byIdSpec)
         {
-            throw new NotImplementedException();
+            var estimateComment = await _context.EstimateComment.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+            estimateComment ??= new EstimateComment();
+
+            return estimateComment;
         }
 
-        public Task<EstimateComment> Insert(EstimateCommentViewModel estimateCommentViewModel)
+        public async Task<EstimateComment> Insert(EstimateCommentViewModel estimateCommentViewModel)
         {
-            throw new NotImplementedException();
+            if (estimateCommentViewModel == null)
+            {
+                return new EstimateComment();
+            }
+
+            var estimateComment = new EstimateComment() { EstimateId = estimateCommentViewModel.EstimateId, Contents = estimateCommentViewModel.Contents };
+
+            var estimate = await _context.Estimate.Where(e => e.Id == estimateComment.EstimateId).SingleOrDefaultAsync();
+            
+            if (estimate == null)
+            {
+                return new EstimateComment();
+            }
+
+            estimateComment.Estimate = estimate;
+
+            _ = _context.Add(estimate);
+            _ = await _context.SaveChangesAsync();
+
+            return estimateComment;
         }
 
-        public Task<EstimateComment> Update(ISpecification<EstimateComment> byIdSpec, EstimateCommentViewModel estimateCommentViewModel)
+        public async Task<EstimateComment> Update(ISpecification<EstimateComment> byIdSpec, EstimateCommentViewModel estimateCommentViewModel)
         {
-            throw new NotImplementedException();
+            var estimateComment = await _context.EstimateComment.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+            if (estimateComment == null)
+                return new EstimateComment();
+
+            estimateComment.Contents = estimateCommentViewModel.Contents;
+
+            _ = _context.Update(estimateComment);
+            _ = await _context.SaveChangesAsync();
+
+            return estimateComment;
         }
 
         protected virtual void Dispose(bool disposing)

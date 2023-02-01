@@ -11,7 +11,7 @@ namespace RapidTireEstimates.Repositories
 
         public Task Delete(ISpecification<Estimate> byIdSpec)
         {
-            throw new NotImplementedException();
+
         }
 
         public Task<List<Estimate>> GetAll(ISpecification<Estimate> filterBySpec, ISpecification<Estimate> orderBySpec)

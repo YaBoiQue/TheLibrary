@@ -30,14 +30,45 @@ namespace RapidTireEstimates.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //Set up keys
+            //CustomerComments
+            _ = modelBuilder.Entity<CustomerComment>()
+                .HasKey(c => c.CustomerId);
+            //Estimate
             _ = modelBuilder.Entity<Estimate>()
                 .HasKey(e => e.VehicleId);
+            _ = modelBuilder.Entity<Estimate>()
+                .HasKey(e => e.CustomerId);
+            //EstimateComment
+            _ = modelBuilder.Entity<EstimateComment>()
+                .HasKey(e => e.EstimateId);
+            //PurchasedPart
+            _ = modelBuilder.Entity<PurchasedPart>()
+                .HasKey(p => p.VehicleId);
+            _ = modelBuilder.Entity<PurchasedPart>()
+                .HasKey(p => p.EstimateId);
+            //ServiceEstimate
+            _ = modelBuilder.Entity<ServiceEstimate>()
+                .HasKey(s => s.ServiceId);
+            //ServiceEstimateComment
+            //ServiceEstimatePrice
+            //Vehicle
+
+
             _ = modelBuilder.Entity<Estimate>()
                 .HasOne(e => e.Vehicle)
                 .WithMany(v => v.Estimates)
                 .HasForeignKey(e => e.VehicleId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
+            //ServiceEstimate-Estimate Linking
+            _ = modelBuilder.Entity<ServiceEstimate>()
+                .HasKey(e => e.EstimateId);
+            _ = modelBuilder.Entity<Service>()
+                .HasRequired(s => s.Estimate)
+
+
+            //Purchased Part Vehicle Linking
             _ = modelBuilder.Entity<PurchasedPart>()
                 .HasKey(p => p.VehicleId);
             _ = modelBuilder.Entity<PurchasedPart>()
@@ -54,6 +85,7 @@ namespace RapidTireEstimates.Data
                 .HasMany(v => v.Services)
                 .WithOne(s => s.VehicleType);
 
+            //Service-Prices Linking
             _ = modelBuilder.Entity<Service>()
                 .HasMany(s => s.Prices)
                 .WithOne(p => p.Service);
