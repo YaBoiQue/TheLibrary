@@ -1,5 +1,6 @@
 ﻿using Ardalis.Specification;
 using Ardalis.Specification.EntityFrameworkCore;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.EntityFrameworkCore;
 using RapidTireEstimates.Data;
 using RapidTireEstimates.Interfaces;
@@ -78,12 +79,39 @@ namespace RapidTireEstimates.Repositories
 
         public async Task<Estimate> Insert(EstimateViewModel estimateViewModel)
         {
-            throw new NotImplementedException();
+            if (estimateViewModel == null) 
+                return new Estimate();
+
+            var estimate = new Estimate(estimateViewModel);
+
+            _context.Add(estimate);
+            await _context.SaveChangesAsync();
+
+            return estimate;
         }
 
-        public Task<Estimate> Update(EstimateViewModel estimateViewModel)
+        public async Task<Estimate> Update(ISpecification<Estimate> byIdSpec, EstimateViewModel estimateViewModel)
         {
-            throw new NotImplementedException();
+            var estimate = await _context.Estimate.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+            if (estimate == null)
+                return new Estimate();
+
+            if (estimateViewModel == null)
+                return new Estimate();
+
+            estimate.ShopToolAmount = estimateViewModel.ShopToolAmount;
+            estimate.FinalPrice = estimateViewModel.FinalPrice;
+            estimate.Vehicle = estimateViewModel.Vehicle;
+            estimate.VehicleId = estimateViewModel.VehicleId;
+            estimate.Customer = estimateViewModel.Customer;
+            estimate.CustomerId = estimateViewModel.CustomerId;
+            estimate.DateFinished = estimateViewModel.DateFinished;
+
+            _context.Update(estimate);
+            await _context.SaveChangesAsync();
+
+            return estimate;
         }
 
         protected virtual void Dispose(bool disposing)

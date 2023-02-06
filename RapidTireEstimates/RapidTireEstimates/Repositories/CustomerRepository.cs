@@ -80,10 +80,7 @@ namespace RapidTireEstimates.Repositories
 
         public async Task<Customer> Insert(CustomerViewModel customerViewModel)
         {
-            Customer customer = new Customer();
-
-            customer.Name = customerViewModel.Name;
-            customer.PhoneNumber = customerViewModel.PhoneNumber;
+            Customer customer = new Customer(customerViewModel);
 
             _ = _context.Add(customer);
             _ = await _context.SaveChangesAsync();

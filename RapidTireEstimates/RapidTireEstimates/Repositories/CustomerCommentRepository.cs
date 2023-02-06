@@ -60,7 +60,7 @@ namespace RapidTireEstimates.Repositories
                 return new CustomerComment();
             }
 
-            var customerComment = new CustomerComment() { CustomerId = customerCommentViewModel.CustomerId, Contents = customerCommentViewModel.Contents };
+            var customerComment = new CustomerComment(customerCommentViewModel);
 
             var customer = _context.Customer.Where(c => c.Id == customerComment.CustomerId).FirstOrDefault();
 

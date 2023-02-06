@@ -55,7 +55,7 @@ namespace RapidTireEstimates.Repositories
                 return new EstimateComment();
             }
 
-            var estimateComment = new EstimateComment() { EstimateId = estimateCommentViewModel.EstimateId, Contents = estimateCommentViewModel.Contents };
+            var estimateComment = new EstimateComment(estimateCommentViewModel);
 
             var estimate = await _context.Estimate.Where(e => e.Id == estimateComment.EstimateId).SingleOrDefaultAsync();
             

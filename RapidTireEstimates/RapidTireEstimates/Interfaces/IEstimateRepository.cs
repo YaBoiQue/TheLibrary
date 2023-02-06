@@ -38,6 +38,7 @@ namespace RapidTireEstimates.Interfaces
             EstimateViewModel estimateViewModel
             );
         public Task<Estimate> Update(
+            ISpecification<Estimate> byIdSpec,
             EstimateViewModel estimateViewModel
             );
         public Task Delete(
