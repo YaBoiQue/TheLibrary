@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using RapidTireEstimates.ViewModels;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RapidTireEstimates.Models
 {
@@ -15,6 +16,20 @@ namespace RapidTireEstimates.Models
             {
                 CustomerId = customer.Id;
                 Customer = customer;
+            }
+
+            Customer ??= new Customer();
+        }
+
+        public CustomerComment(CustomerCommentViewModel customerCommentViewModel)
+        {
+            if (customerCommentViewModel != null)
+            {
+                Id = customerCommentViewModel.Id;
+                CustomerId = customerCommentViewModel.CustomerId;
+                Customer = customerCommentViewModel.Customer;
+                Contents = customerCommentViewModel.Contents;
+                DateCreated = customerCommentViewModel.DateCreated;
             }
 
             Customer ??= new Customer();

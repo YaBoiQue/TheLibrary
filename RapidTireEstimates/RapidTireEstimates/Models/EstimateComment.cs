@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using RapidTireEstimates.ViewModels;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RapidTireEstimates.Models
 {
@@ -7,6 +8,20 @@ namespace RapidTireEstimates.Models
         public EstimateComment()
         {
             Estimate = new Estimate();
+        }
+
+        public EstimateComment(EstimateCommentViewModel estimateCommentViewModel)
+        {
+            if (estimateCommentViewModel != null)
+            {
+                Contents = estimateCommentViewModel.Contents;
+                Id = estimateCommentViewModel.Id;
+                EstimateId = estimateCommentViewModel.EstimateId;
+                DateCreated = estimateCommentViewModel.DateCreated;
+                Estimate = estimateCommentViewModel.Estimate;
+            }
+
+            Estimate ??= new Estimate();
         }
 
         [ForeignKey("Estimate")]

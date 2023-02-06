@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using RapidTireEstimates.Specifications;
+using RapidTireEstimates.ViewModels;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RapidTireEstimates.Models
@@ -9,6 +11,21 @@ namespace RapidTireEstimates.Models
         {
             Description = "";
             Service = new Service();
+        }
+
+        public ServicePrice(ServicePriceViewModel servicePriceViewModel)
+        {
+            if (servicePriceViewModel != null)
+            {
+                Id = servicePriceViewModel.Id;
+                Value = servicePriceViewModel.Value;
+                ServiceId = servicePriceViewModel.ServiceId;
+                Description = servicePriceViewModel.Description;
+                Level = servicePriceViewModel.Level;
+                Service = servicePriceViewModel.Service;
+            }
+            Description ??= "";
+            Service ??= new Service();
         }
 
         [ForeignKey("Service")]

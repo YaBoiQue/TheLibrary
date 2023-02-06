@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using RapidTireEstimates.ViewModels;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RapidTireEstimates.Models
@@ -7,10 +8,37 @@ namespace RapidTireEstimates.Models
     {
         public Vehicle()
         {
+            Make = "";
+            Model = "";
+
             VehicleType = new VehicleType();
             Customer = new Customer();
             Estimates = new List<Estimate>();
             ReplacedParts = new List<PurchasedPart>();
+        }
+
+        public Vehicle(VehicleViewModel vehicleViewModel)
+        {
+            if (vehicleViewModel != null)
+            {
+                Id = vehicleViewModel.Id;
+                CustomerId = vehicleViewModel.CustomerId;
+                VehicleTypeId = vehicleViewModel.VehicleTypeId;
+                Make = vehicleViewModel.Make;
+                Model = vehicleViewModel.Model;
+                Year = vehicleViewModel.Year;
+                VehicleType = vehicleViewModel.VehicleType;
+                Customer = vehicleViewModel.Customer;
+                Estimates = vehicleViewModel.Estimates;
+                ReplacedParts = vehicleViewModel.ReplacedParts;
+            }
+            Make ??= "";
+            Model ??= "";
+
+            VehicleType ??= new VehicleType();
+            Customer ??= new Customer();
+            Estimates ??= new List<Estimate>();
+            ReplacedParts ??= new List<PurchasedPart>();
         }
 
         [Key]
@@ -23,11 +51,11 @@ namespace RapidTireEstimates.Models
         [Required]
         [StringLength(50)]
         [Display(Name = "Make")]
-        public string? Make { get; set; }
+        public string Make { get; set; }
         [Required]
         [StringLength(50)]
         [Display(Name = "Model")]
-        public string? Model { get; set; }
+        public string Model { get; set; }
         [Required]
         [Display(Name = "Year")]
         public int Year { get; set; }

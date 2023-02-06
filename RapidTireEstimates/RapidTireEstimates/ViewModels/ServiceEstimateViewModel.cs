@@ -3,7 +3,7 @@ using RapidTireEstimates.Helpers;
 
 namespace RapidTireEstimates.ViewModels
 {
-    public class ServiceEstimateViewModel 
+    public class ServiceEstimateViewModel : ServiceEstimate
     {
         public ServiceEstimateViewModel()
         {

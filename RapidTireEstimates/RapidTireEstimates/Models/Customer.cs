@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using RapidTireEstimates.ViewModels;
+using System.ComponentModel.DataAnnotations;
 
 namespace RapidTireEstimates.Models
 {
@@ -21,6 +22,25 @@ namespace RapidTireEstimates.Models
                 Estimates = customer.Estimates;
                 Comments = customer.Comments;
                 Vehicles = customer.Vehicles;
+            }
+
+            Estimates ??= new List<Estimate>();
+
+            Comments ??= new List<CustomerComment>();
+
+            Vehicles ??= new List<Vehicle>();
+        }
+
+        public Customer(CustomerViewModel customerViewModel)
+        {
+            if (customerViewModel != null)
+            {
+                Id = customerViewModel.Id;
+                Name = customerViewModel.Name;
+                PhoneNumber = customerViewModel.PhoneNumber;
+                Estimates = customerViewModel.Estimates;
+                Comments = customerViewModel.Comments;
+                Vehicles = customerViewModel.Vehicles;
             }
 
             Estimates ??= new List<Estimate>();

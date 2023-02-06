@@ -1,4 +1,5 @@
 ﻿using RapidTireEstimates.Models.Linkers;
+using RapidTireEstimates.ViewModels;
 using System.ComponentModel.DataAnnotations;
 
 namespace RapidTireEstimates.Models
@@ -21,6 +22,20 @@ namespace RapidTireEstimates.Models
             }
 
             Name ??= "";
+            Vehicles ??= new List<Vehicle>();
+            Services ??= new List<ServiceVehicleType>();
+        }
+        public VehicleType(VehicleTypeViewModel vehicleTypeViewModel)
+        {
+            if (vehicleTypeViewModel != null)
+            {
+                Id = vehicleTypeViewModel.Id;
+                Name = vehicleTypeViewModel.Name;
+                Vehicles = vehicleTypeViewModel.Vehicles;
+                Services = vehicleTypeViewModel.Services;
+            }
+            Name ??= "";
+
             Vehicles ??= new List<Vehicle>();
             Services ??= new List<ServiceVehicleType>();
         }

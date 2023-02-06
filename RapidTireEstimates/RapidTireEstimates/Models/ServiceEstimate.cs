@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using RapidTireEstimates.ViewModels;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RapidTireEstimates.Models
@@ -28,6 +29,29 @@ namespace RapidTireEstimates.Models
                 Price = serviceEstimate.Price;
                 Comments = serviceEstimate.Comments;
                 DateCreated = serviceEstimate.DateCreated;
+            }
+
+            DateCreated ??= DateTime.Now;
+
+            Estimate ??= new Estimate();
+            Service ??= new Service();
+            Price ??= new ServiceEstimatePrice();
+            Comments ??= new List<ServiceEstimateComment>();
+        }
+
+        public ServiceEstimate(ServiceEstimateViewModel serviceEstimateViewModel)
+        {
+            if (serviceEstimateViewModel != null)
+            {
+                Id = serviceEstimateViewModel.Id;
+                ServiceId = serviceEstimateViewModel.ServiceId;
+                EstimateId = serviceEstimateViewModel.EstimateId;
+                AdjustedHours = serviceEstimateViewModel.AdjustedHours;
+                Estimate = serviceEstimateViewModel.Estimate;
+                Service = serviceEstimateViewModel.Service;
+                Price = serviceEstimateViewModel.Price;
+                Comments = serviceEstimateViewModel.Comments;
+                DateCreated = serviceEstimateViewModel.DateCreated;
             }
 
             DateCreated ??= DateTime.Now;

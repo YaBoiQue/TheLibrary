@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using RapidTireEstimates.ViewModels;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RapidTireEstimates.Models
@@ -36,6 +37,35 @@ namespace RapidTireEstimates.Models
                 Comments = estimate.Comments;
                 ShopSupplies = estimate.ShopSupplies;
                 PurchasedParts = estimate.PurchasedParts;
+            }
+
+            DateCreated ??= DateTime.Now;
+            Customer ??= new Customer();
+            Vehicle ??= new Vehicle();
+
+            Services ??= new List<ServiceEstimate>();
+            Comments ??= new List<EstimateComment>();
+            ShopSupplies ??= new List<EstimateShopSupply>();
+            PurchasedParts ??= new List<PurchasedPart>();
+        }
+
+        public Estimate(EstimateViewModel estimateViewModel)
+        {
+            if (estimateViewModel != null)
+            {
+                Id = estimateViewModel.Id;
+                CustomerId = estimateViewModel.CustomerId;
+                VehicleId = estimateViewModel.VehicleId;
+                DateCreated = estimateViewModel.DateCreated;
+                DateFinished = estimateViewModel.DateFinished;
+                ShopToolAmount = estimateViewModel.ShopToolAmount;
+                FinalPrice = estimateViewModel.FinalPrice;
+                Customer = estimateViewModel.Customer;
+                Vehicle = estimateViewModel.Vehicle;
+                Services = estimateViewModel.Services;
+                Comments = estimateViewModel.Comments;
+                ShopSupplies = estimateViewModel.ShopSupplies;
+                PurchasedParts = estimateViewModel.PurchasedParts;
             }
 
             DateCreated ??= DateTime.Now;

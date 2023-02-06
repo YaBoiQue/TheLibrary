@@ -1,4 +1,7 @@
 ﻿using Ardalis.Specification;
+using Ardalis.Specification.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using RapidTireEstimates.Data;
 using RapidTireEstimates.Interfaces;
 using RapidTireEstimates.Models;
 using RapidTireEstimates.ViewModels;
@@ -8,48 +11,72 @@ namespace RapidTireEstimates.Repositories
     public class EstimateRepository : IEstimateRepository
     {
         private bool disposedValue;
+        private readonly ApplicationDbContext _context;
 
-        public Task Delete(ISpecification<Estimate> byIdSpec)
+        public EstimateRepository(ApplicationDbContext context)
         {
-
+            _context = context;
         }
 
-        public Task<List<Estimate>> GetAll(ISpecification<Estimate> filterBySpec, ISpecification<Estimate> orderBySpec)
+        public async Task Delete(ISpecification<Estimate> byIdSpec)
         {
-            throw new NotImplementedException();
+            var estimate = await _context.Estimate.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+            if (estimate == null)
+                return;
+
+            _ = _context.Remove(estimate);
+            _ = await _context.SaveChangesAsync();
         }
 
-        public Task<List<Estimate>> GetByCustomerId(ISpecification<Estimate> byCustomerIdSpec, ISpecification<Estimate> filterBySpec, ISpecification<Estimate> orderBySpec)
+        public async Task<List<Estimate>> GetAll(ISpecification<Estimate> filterBySpec, ISpecification<Estimate> orderBySpec)
         {
-            throw new NotImplementedException();
+            return await _context.Estimate.WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
         }
 
-        public Task<Estimate> GetById(ISpecification<Estimate> byIdSpec)
+        public async Task<List<Estimate>> GetByCustomerId(ISpecification<Estimate> byCustomerIdSpec, ISpecification<Estimate> filterBySpec, ISpecification<Estimate> orderBySpec)
         {
-            throw new NotImplementedException();
+            return await _context.Estimate.WithSpecification(byCustomerIdSpec).WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
         }
 
-        public Task<Estimate> GetByPurchasedPartId(ISpecification<Estimate> byPurchasedPartIdSpec)
+        public async Task<Estimate> GetById(ISpecification<Estimate> byIdSpec)
         {
-            throw new NotImplementedException();
+            var estimate = await _context.Estimate.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+            estimate ??= new Estimate();
+
+            return estimate;
         }
 
-        public Task<Estimate> GetByServiceEstimateId(ISpecification<Estimate> byServiceEstimateIdSpec)
+        public async Task<Estimate> GetByPurchasedPartId(ISpecification<Estimate> byPurchasedPartIdSpec)
         {
-            throw new NotImplementedException();
+            var estimate = await _context.Estimate.WithSpecification(byPurchasedPartIdSpec).SingleOrDefaultAsync();
+
+            estimate ??= new Estimate();
+
+            return estimate;
         }
 
-        public Task<List<Estimate>> GetByShopSupplyId(ISpecification<Estimate> byShopSupplyIdSpec, ISpecification<Estimate> filterBySpec, ISpecification<Estimate> orderBySpec)
+        public async Task<Estimate> GetByServiceEstimateId(ISpecification<Estimate> byServiceEstimateIdSpec)
         {
-            throw new NotImplementedException();
+            var estimate = await _context.Estimate.WithSpecification(byServiceEstimateIdSpec).SingleOrDefaultAsync();
+
+            estimate ??= new Estimate();
+
+            return estimate;
         }
 
-        public Task<List<Estimate>> GetByVehicleId(ISpecification<Estimate> byVehicleIdSpec, ISpecification<Estimate> filterBySpec, ISpecification<Estimate> orderBySpec)
+        public async Task<List<Estimate>> GetByShopSupplyId(ISpecification<Estimate> byShopSupplyIdSpec, ISpecification<Estimate> filterBySpec, ISpecification<Estimate> orderBySpec)
         {
-            throw new NotImplementedException();
+            return await _context.Estimate.WithSpecification(byShopSupplyIdSpec).WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
         }
 
-        public Task<Estimate> Insert(EstimateViewModel estimateViewModel)
+        public async Task<List<Estimate>> GetByVehicleId(ISpecification<Estimate> byVehicleIdSpec, ISpecification<Estimate> filterBySpec, ISpecification<Estimate> orderBySpec)
+        {
+            return await _context.Estimate.WithSpecification(byVehicleIdSpec).WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
+        }
+
+        public async Task<Estimate> Insert(EstimateViewModel estimateViewModel)
         {
             throw new NotImplementedException();
         }

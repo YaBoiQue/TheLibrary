@@ -11,7 +11,7 @@ namespace RapidTireEstimates.Repositories
     public class CustomerRepository : ICustomerRepository
     {
         private bool disposedValue;
-        private ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
         public CustomerRepository(ApplicationDbContext context)
         {

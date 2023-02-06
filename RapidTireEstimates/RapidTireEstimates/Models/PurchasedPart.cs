@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using RapidTireEstimates.ViewModels;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RapidTireEstimates.Models
@@ -23,6 +24,25 @@ namespace RapidTireEstimates.Models
                 VehicleId = purchasedPart.VehicleId;
                 Estimate = purchasedPart.Estimate;
                 Vehicle = purchasedPart.Vehicle;
+            }
+
+            Estimate ??= new Estimate();
+            Vehicle ??= new Vehicle();
+        }
+
+        public PurchasedPart(PurchasedPartViewModel purchasedPartViewModel)
+        {
+            if (purchasedPartViewModel != null)
+            {
+                Id = purchasedPartViewModel.Id;
+                Name = purchasedPartViewModel.Name;
+                Value = purchasedPartViewModel.Value;
+                Description = purchasedPartViewModel.Description;
+                UpsalePercent = purchasedPartViewModel.UpsalePercent;
+                VehicleId = purchasedPartViewModel.VehicleId;
+                EstimateId = purchasedPartViewModel.EstimateId;
+                Vehicle = purchasedPartViewModel.Vehicle;
+                Estimate = purchasedPartViewModel.Estimate;
             }
 
             Estimate ??= new Estimate();

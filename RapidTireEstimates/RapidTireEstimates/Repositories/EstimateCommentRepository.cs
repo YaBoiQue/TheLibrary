@@ -11,7 +11,7 @@ namespace RapidTireEstimates.Repositories
     public class EstimateCommentRepository : IEstimateCommentRepository
     {
         private bool disposedValue;
-        private ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
         public EstimateCommentRepository(ApplicationDbContext context)
         {
