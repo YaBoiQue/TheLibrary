@@ -23,7 +23,7 @@ namespace RapidTireEstimates.Interfaces
             ISpecification<ServiceEstimatePrice> byIdSpec,
             ServiceEstimatePriceViewModel serviceEstimatePriceViewModel
             );
-        public Task<ServiceEstimatePrice> Delete(
+        public Task Delete(
             ISpecification<ServiceEstimatePrice> byIdSpec
             );
     }

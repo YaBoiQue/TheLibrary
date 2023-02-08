@@ -36,7 +36,7 @@ namespace RapidTireEstimates.Interfaces
             ISpecification<ServiceEstimate> byIdSpec,
             ServiceEstimateViewModel serviceEstimateViewModel
             );
-        public Task<ServiceEstimate> Delete(
+        public Task Delete(
             ISpecification<ServiceEstimate> byIdSpec
             );
     }

@@ -1,4 +1,7 @@
 ﻿using Ardalis.Specification;
+using Ardalis.Specification.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using RapidTireEstimates.Data;
 using RapidTireEstimates.Interfaces;
 using RapidTireEstimates.Models;
 using RapidTireEstimates.ViewModels;
@@ -8,20 +11,37 @@ namespace RapidTireEstimates.Repositories
     public class ServiceEstimateCommentRepository : IServiceEstimateCommentRepository
     {
         private bool disposedValue;
+        private readonly ApplicationDbContext _context;
 
-        public Task<PurchasedPart> Delete(ISpecification<ServiceEstimateComment> byIdSpec)
+        public ServiceEstimateCommentRepository(ApplicationDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<List<ServiceEstimateComment>> GetAll(ISpecification<ServiceEstimateComment> filterBySpec, ISpecification<ServiceEstimateComment> orderBySpec)
+        public async Task Delete(ISpecification<ServiceEstimateComment> byIdSpec)
         {
-            throw new NotImplementedException();
+            var comment = await _context.ServiceEstimateComment.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+            if (comment == null)
+                return;
+
+            _ = _context.Remove(comment);
+            _ = await _context.SaveChangesAsync();
         }
 
-        public Task<ServiceEstimateComment> GetById(ISpecification<ServiceEstimateComment> byIdSpec)
+        public async Task<List<ServiceEstimateComment>> GetAll(ISpecification<ServiceEstimateComment> filterBySpec, ISpecification<ServiceEstimateComment> orderBySpec)
         {
-            throw new NotImplementedException();
+            return await _context.ServiceEstimateComment.WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
+        }
+
+        public async Task<ServiceEstimateComment> GetById(ISpecification<ServiceEstimateComment> byIdSpec)
+        {
+            var comment = await _context.ServiceEstimateComment.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+            if (comment == null)
+                return new ServiceEstimateComment();
+
+            return comment;
         }
 
         public Task<List<ServiceEstimateComment>> GetByServiceEstimateId(ISpecification<ServiceEstimateComment> byServiceEstimateIdSpec, ISpecification<ServiceEstimateComment> filterBySpec, ISpecification<ServiceEstimateComment> orderBySpec)

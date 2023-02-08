@@ -31,7 +31,7 @@ namespace RapidTireEstimates.Interfaces
             ISpecification<PurchasedPart> byIdSpec,
             PurchasedPartViewModel purchasedPartViewModel
             );
-        public Task<PurchasedPart> Delete(
+        public Task Delete(
             ISpecification<PurchasedPart> byIdSpec
             );
     }

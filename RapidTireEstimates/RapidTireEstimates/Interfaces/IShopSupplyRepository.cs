@@ -25,7 +25,7 @@ namespace RapidTireEstimates.Interfaces
             ISpecification<ShopSupply> byIdSpec,
             ShopSupplyViewModel shopSupplyViewModel
             );
-        public Task<ShopSupply> Delete(
+        public Task Delete(
             ISpecification<ShopSupply> byIdSpec
             );
     }
