@@ -16,9 +16,19 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
-builder.Services.AddScoped<IServicePriceRepository, ServicePriceRepository>();
+builder.Services.AddScoped<ICustomerCommentRepository, CustomerCommentRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IEstimateCommentRepository, EstimateCommentRepository>();
+builder.Services.AddScoped<IEstimateRepository, EstimateRepository>();
+builder.Services.AddScoped<IPurchasedPartRepository, PurchasedPartRepository>();
+builder.Services.AddScoped<IServiceEstimateCommentRepository, ServiceEstimateCommentRepository>();
+builder.Services.AddScoped<IServiceEstimatePriceRepository, ServiceEstimatePriceRepository>();
+builder.Services.AddScoped<IServiceEstimateRepository, ServiceEstimateRepository>();
+builder.Services.AddScoped<IServicePriceRepository, ServicePriceRepository>();
+builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+builder.Services.AddScoped<IShopSupplyRepository, ShopSupplyRepository>();
+builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
+builder.Services.AddScoped<IVehicleTypeRepository, VehicleTypeRepository>();
 
 builder.Services.AddControllersWithViews();
 

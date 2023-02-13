@@ -48,15 +48,6 @@ namespace RapidTireEstimates.Repositories
 
                 }
 
-                var servicePrices = await _context.ServicePrice.Where(p => p.ServiceId == service.Id).ToListAsync();
-
-                /*
-                foreach(var item in servicePrices)
-                {
-                    _ = _context.ServicePrice.Remove(item);
-                }
-                */
-
                 _ = _context.Service.Remove(service);
             }
 
@@ -78,14 +69,22 @@ namespace RapidTireEstimates.Repositories
             return service;
         }
 
-        public Task<Service> GetByServiceEstimateId(ISpecification<Service> byIdServiceEstimateSpec)
+        public async Task<Service> GetByServiceEstimateId(ISpecification<Service> byIdServiceEstimateSpec)
         {
-            throw new NotImplementedException();
+            var service = await _context.Service.WithSpecification(byIdServiceEstimateSpec).SingleOrDefaultAsync();
+
+            service ??= new Service();
+
+            return service;
         }
 
-        public Task<Service> GetByPriceId(ISpecification<Service> byPriceIdSpec)
+        public async Task<Service> GetByPriceId(ISpecification<Service> byPriceIdSpec)
         {
-            throw new NotImplementedException();
+            var service = await _context.Service.WithSpecification(byPriceIdSpec).SingleOrDefaultAsync();
+
+            service ??= new Service();
+
+            return service;
         }
 
         public async Task<List<Service>> GetAll(ISpecification<Service> filterBySpec, ISpecification<Service> orderBySpec)

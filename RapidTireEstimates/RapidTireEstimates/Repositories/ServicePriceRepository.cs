@@ -60,13 +60,10 @@ namespace RapidTireEstimates.Repositories
 
         public async Task<ServicePrice> Insert(ServicePriceViewModel servicePriceViewModel)
         {
-            ServicePrice servicePrice = new ServicePrice();
+            if (servicePriceViewModel == null)
+                return new ServicePrice();
 
-            servicePrice.Description = servicePriceViewModel.Description;
-            servicePrice.Level = servicePriceViewModel.Level;
-            servicePrice.Value = servicePriceViewModel.Value;
-            servicePrice.ServiceId = servicePriceViewModel.ServiceId;
-            servicePrice.Service = servicePriceViewModel.Service;
+            ServicePrice servicePrice = new ServicePrice(servicePriceViewModel);
 
             _ = _context.Add(servicePrice);
             _ = await _context.SaveChangesAsync();
@@ -76,37 +73,19 @@ namespace RapidTireEstimates.Repositories
 
         public async Task<ServicePrice> Update(ISpecification<ServicePrice> byIdSpec, ServicePriceViewModel servicePriceViewModel)
         {
-            ServicePrice? servicePrice;
+            var servicePrice = await _context.ServicePrice.WithSpecification(byIdSpec).SingleOrDefaultAsync();
 
-            try
-            {
-                servicePrice = await _context.ServicePrice.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+            if (servicePrice == null || servicePriceViewModel == null)
+                return new ServicePrice();
 
-                if (servicePrice == null) 
-                    return new ServicePrice();
+            servicePrice.Value = servicePriceViewModel.Value;
+            servicePrice.Level = servicePriceViewModel.Level;
+            servicePrice.ServiceId = servicePriceViewModel.ServiceId;
+            servicePrice.Description = servicePriceViewModel.Description.Trim();
 
-                servicePrice.Value = servicePriceViewModel.Value;
-                servicePrice.Level = servicePriceViewModel.Level;
-                servicePrice.ServiceId = servicePriceViewModel.ServiceId;
-                if (servicePriceViewModel.Description != null)
-                {
-                    servicePrice.Description = servicePriceViewModel.Description.Trim();
-                }
+            _ = _context.Update(servicePrice);
+            _ = await _context.SaveChangesAsync();
 
-                _ = _context.Update(servicePrice);
-                _ = await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ServicePriceExists(servicePriceViewModel.Id))
-                {
-                    return new ServicePrice();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
             return servicePrice;
         }

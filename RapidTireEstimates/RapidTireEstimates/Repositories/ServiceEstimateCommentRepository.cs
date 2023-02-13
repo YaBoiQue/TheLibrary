@@ -44,19 +44,38 @@ namespace RapidTireEstimates.Repositories
             return comment;
         }
 
-        public Task<List<ServiceEstimateComment>> GetByServiceEstimateId(ISpecification<ServiceEstimateComment> byServiceEstimateIdSpec, ISpecification<ServiceEstimateComment> filterBySpec, ISpecification<ServiceEstimateComment> orderBySpec)
+        public async Task<List<ServiceEstimateComment>> GetByServiceEstimateId(ISpecification<ServiceEstimateComment> byServiceEstimateIdSpec, ISpecification<ServiceEstimateComment> filterBySpec, ISpecification<ServiceEstimateComment> orderBySpec)
         {
-            throw new NotImplementedException();
+            return await _context.ServiceEstimateComment.WithSpecification(byServiceEstimateIdSpec).WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
         }
 
-        public Task<ServiceEstimateComment> Insert(ServiceEstimateCommentViewModel serviceEstimateCommentViewModel)
+        public async Task<ServiceEstimateComment> Insert(ServiceEstimateCommentViewModel serviceEstimateCommentViewModel)
         {
-            throw new NotImplementedException();
+            if (serviceEstimateCommentViewModel == null)
+                return new ServiceEstimateComment();
+
+            var serviceEstimateComment = new ServiceEstimateComment(serviceEstimateCommentViewModel);
+
+            _ = _context.Add(serviceEstimateComment);
+            _ = await _context.SaveChangesAsync();
+
+            return serviceEstimateComment;
         }
 
-        public Task<ServiceEstimateComment> Update(ISpecification<ServiceEstimateComment> byIdSpec, ServiceEstimateCommentViewModel serviceEstimateCommentViewModel)
+        public async Task<ServiceEstimateComment> Update(ISpecification<ServiceEstimateComment> byIdSpec, ServiceEstimateCommentViewModel serviceEstimateCommentViewModel)
         {
-            throw new NotImplementedException();
+            var serviceEstimateComment = await _context.ServiceEstimateComment.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+            if (serviceEstimateComment == null || serviceEstimateCommentViewModel == null)
+                return new ServiceEstimateComment();
+
+            serviceEstimateComment.Contents = serviceEstimateCommentViewModel.Contents;
+            serviceEstimateComment.DateCreated = DateTime.Now;
+
+            _ = _context.Update(serviceEstimateComment);
+            _ = await _context.SaveChangesAsync();
+
+            return serviceEstimateComment;
         }
 
         protected virtual void Dispose(bool disposing)
