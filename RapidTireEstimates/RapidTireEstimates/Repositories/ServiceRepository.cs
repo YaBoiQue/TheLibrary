@@ -13,7 +13,7 @@ namespace RapidTireEstimates.Repositories
     public class ServiceRepository : IServiceRepository
     {
         private bool disposedValue;
-        private ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
         public ServiceRepository(ApplicationDbContext context)
         {

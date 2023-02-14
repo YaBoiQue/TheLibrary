@@ -1,4 +1,7 @@
 ﻿using Ardalis.Specification;
+using Ardalis.Specification.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using RapidTireEstimates.Data;
 using RapidTireEstimates.Interfaces;
 using RapidTireEstimates.Models;
 using RapidTireEstimates.ViewModels;
@@ -8,40 +11,78 @@ namespace RapidTireEstimates.Repositories
     public class VehicleTypeRepository : IVehicleTypeRepository
     {
         private bool disposedValue;
+        private readonly ApplicationDbContext _context;
 
-        public Task Delete(ISpecification<VehicleType> byIdSpec)
+        public VehicleTypeRepository(ApplicationDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<List<VehicleType>> GetAll(ISpecification<VehicleType> filterBySpec, ISpecification<VehicleType> orderBySpec)
+        public async Task Delete(ISpecification<VehicleType> byIdSpec)
         {
-            throw new NotImplementedException();
+            var type = await _context.VehicleType.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+            if (type == null)
+                return;
+
+            _ = _context.Remove(type);
+            _ = await _context.SaveChangesAsync();
         }
 
-        public Task<VehicleType> GetById(ISpecification<VehicleType> byIdSpec)
+        public async Task<List<VehicleType>> GetAll(ISpecification<VehicleType> filterBySpec, ISpecification<VehicleType> orderBySpec)
         {
-            throw new NotImplementedException();
+            return await _context.VehicleType.WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
         }
 
-        public Task<List<VehicleType>> GetByServiceId(ISpecification<VehicleType> byServiceIdSpec, ISpecification<VehicleType> filterBySpec, ISpecification<VehicleType> orderBySpec)
+        public async Task<VehicleType> GetById(ISpecification<VehicleType> byIdSpec)
         {
-            throw new NotImplementedException();
+            var type = await _context.VehicleType.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+            type ??= new VehicleType();
+
+            return type;
         }
 
-        public Task<VehicleType> GetByVehicleId(ISpecification<VehicleType> byVehicleIdSpec)
+        public async Task<List<VehicleType>> GetByServiceId(ISpecification<VehicleType> byServiceIdSpec, ISpecification<VehicleType> filterBySpec, ISpecification<VehicleType> orderBySpec)
         {
-            throw new NotImplementedException();
+            return await _context.VehicleType.WithSpecification(byServiceIdSpec).WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
         }
 
-        public Task<VehicleType> Insert(VehicleTypeViewModel vehicleTypeViewModel)
+        public async Task<VehicleType> GetByVehicleId(ISpecification<VehicleType> byVehicleIdSpec)
         {
-            throw new NotImplementedException();
+            var type = await _context.VehicleType.WithSpecification(byVehicleIdSpec).SingleOrDefaultAsync();
+
+            type ??= new VehicleType();
+
+            return type;
         }
 
-        public Task<VehicleType> Update(ISpecification<VehicleType> byIdSpec, VehicleTypeViewModel vehicleTypeViewModel)
+        public async Task<VehicleType> Insert(VehicleTypeViewModel vehicleTypeViewModel)
         {
-            throw new NotImplementedException();
+            if (vehicleTypeViewModel == null)
+                return new VehicleType();
+
+            var type = new VehicleType(vehicleTypeViewModel);
+
+            _ = _context.Add(type);
+            _ = await _context.SaveChangesAsync();
+
+            return type;
+        }
+
+        public async Task<VehicleType> Update(ISpecification<VehicleType> byIdSpec, VehicleTypeViewModel vehicleTypeViewModel)
+        {
+            var type = await _context.VehicleType.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+            if (type == null || vehicleTypeViewModel == null)
+                return new VehicleType();
+
+            type.Name = vehicleTypeViewModel.Name;
+
+            _ = _context.Update(type);
+            _ = await _context.SaveChangesAsync();
+
+            return type;
         }
 
         protected virtual void Dispose(bool disposing)

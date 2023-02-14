@@ -1,4 +1,7 @@
 ﻿using Ardalis.Specification;
+using Ardalis.Specification.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using RapidTireEstimates.Data;
 using RapidTireEstimates.Interfaces;
 using RapidTireEstimates.Models;
 using RapidTireEstimates.ViewModels;
@@ -8,30 +11,50 @@ namespace RapidTireEstimates.Repositories
     public class VehicleRepository : IVehicleRepository
     {
         private bool disposedValue;
+        private readonly ApplicationDbContext _context;
 
-        public Task Delete(ISpecification<Vehicle> byIdSpec)
+        public VehicleRepository (ApplicationDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<List<Vehicle>> GetAll(ISpecification<Vehicle> filterBySpec, ISpecification<Vehicle> orderBySpec)
+        public async Task Delete(ISpecification<Vehicle> byIdSpec)
         {
-            throw new NotImplementedException();
+            var vehicle = await _context.Vehicle.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+            if (vehicle == null)
+                return;
+
+            _ = _context.Remove(vehicle);
+            _ = await _context.SaveChangesAsync();
         }
 
-        public Task<List<Vehicle>> GetByCustomerId(ISpecification<Vehicle> byCustomerIdSpec, ISpecification<Vehicle> filterBySpec, ISpecification<Vehicle> orderBySpec)
+        public async Task<List<Vehicle>> GetAll(ISpecification<Vehicle> filterBySpec, ISpecification<Vehicle> orderBySpec)
         {
-            throw new NotImplementedException();
+            return await _context.Vehicle.WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
         }
 
-        public Task<Vehicle> GetByEstimateId(ISpecification<Vehicle> byEstimateIdSpec)
+        public async Task<List<Vehicle>> GetByCustomerId(ISpecification<Vehicle> byCustomerIdSpec, ISpecification<Vehicle> filterBySpec, ISpecification<Vehicle> orderBySpec)
         {
-            throw new NotImplementedException();
+            return await _context.Vehicle.WithSpecification(byCustomerIdSpec).WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
         }
 
-        public Task<Vehicle> GetById(ISpecification<Vehicle> byIdSpec)
+        public async Task<Vehicle> GetByEstimateId(ISpecification<Vehicle> byEstimateIdSpec)
         {
-            throw new NotImplementedException();
+            var vehicle = await _context.Vehicle.WithSpecification(byEstimateIdSpec).SingleOrDefaultAsync();
+
+            vehicle ??= new Vehicle();
+
+            return vehicle;
+        }
+
+        public async Task<Vehicle> GetById(ISpecification<Vehicle> byIdSpec)
+        {
+            var vehicle = await _context.Vehicle.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+            vehicle ??= new Vehicle();
+
+            return vehicle;
         }
 
         public Task<Vehicle> GetByPurchasedPartId(ISpecification<Vehicle> byPurchasedPartIdSpec)
@@ -39,19 +62,41 @@ namespace RapidTireEstimates.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<List<Vehicle>> GetByVehicleTypeId(ISpecification<Vehicle> byVehicleIdSpec, ISpecification<Vehicle> filterBySpec, ISpecification<Vehicle> orderBySpec)
+        public async Task<List<Vehicle>> GetByVehicleTypeId(ISpecification<Vehicle> byVehicleIdSpec, ISpecification<Vehicle> filterBySpec, ISpecification<Vehicle> orderBySpec)
         {
-            throw new NotImplementedException();
+            return await _context.Vehicle.WithSpecification(byVehicleIdSpec).WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
         }
 
-        public Task<Vehicle> Insert(VehicleViewModel vehicleViewModel)
+        public async Task<Vehicle> Insert(VehicleViewModel vehicleViewModel)
         {
-            throw new NotImplementedException();
+            if (vehicleViewModel == null)
+                return new Vehicle();
+
+            var vehicle = new Vehicle(vehicleViewModel);
+
+            _ = _context.Add(vehicle);
+            _ = await _context.SaveChangesAsync();
+
+            return vehicle;
         }
 
-        public Task<Vehicle> Update(ISpecification<Vehicle> byIdSpec, VehicleViewModel vehicleViewModel)
+        public async Task<Vehicle> Update(ISpecification<Vehicle> byIdSpec, VehicleViewModel vehicleViewModel)
         {
-            throw new NotImplementedException();
+            var vehicle = await _context.Vehicle.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+            if (vehicle == null || vehicleViewModel == null)
+                return new Vehicle();
+
+            vehicle.Year = vehicleViewModel.Year;
+            vehicle.Make = vehicleViewModel.Make;
+            vehicle.Model = vehicleViewModel.Model;
+            vehicle.CustomerId = vehicleViewModel.CustomerId;
+            vehicle.VehicleTypeId = vehicleViewModel.VehicleTypeId;
+
+            _ = _context.Update(vehicle);
+            _ = await _context.SaveChangesAsync();
+
+            return vehicle;
         }
 
         protected virtual void Dispose(bool disposing)

@@ -6,7 +6,7 @@ namespace RapidTireEstimates.Specifications
 {
     public class GetCustomerCommentsOrderedBy : Specification<CustomerComment>
     {
-        GetCustomerCommentsOrderedBy(SortByParameter sortBy)
+        public GetCustomerCommentsOrderedBy(SortByParameter sortBy)
         {
 
             switch (sortBy)

@@ -2,24 +2,39 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RapidTireEstimates.Data;
+using RapidTireEstimates.Interfaces;
 using RapidTireEstimates.Models;
+using RapidTireEstimates.Repositories;
+using RapidTireEstimates.ViewModels;
+using RapidTireEstimates.Specifications;
+using static RapidTireEstimates.Helpers.Constants;
 
 namespace RapidTireEstimates.Controllers
 {
     public class CustomerCommentsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ICustomerCommentRepository _customerCommentRepository;
+        private readonly ICustomerRepository _customerRepository;
 
-        public CustomerCommentsController(ApplicationDbContext context)
+        public CustomerCommentsController(ICustomerCommentRepository customerCommentRepository, ICustomerRepository customerRepository)
         {
-            _context = context;
+            _customerCommentRepository = customerCommentRepository;
+            _customerRepository = customerRepository;
         }
 
         // GET: CustomerComments
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(CustomerCommentViewModel customerCommentViewModel)
         {
-            Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<CustomerComment, Customer> applicationDbContext = _context.CustomerComment.Include(c => c.Customer);
-            return View(await applicationDbContext.ToListAsync());
+            string filterBy = "";
+            SortByParameter orderBy = SortByParameter.NameASC;
+            if (customerCommentViewModel != null)
+            {
+                filterBy = customerCommentViewModel.FilterBy;
+                orderBy = customerCommentViewModel.SortBy;
+            }
+
+            customerCommentViewModel.CustomerComments = await _customerCommentRepository.GetAll(new GetCustomerCommentsFilteredBy(filterBy), new GetCustomerCommentsOrderedBy(orderBy));
+            return View(customerCommentViewModel);
         }
 
         // GET: CustomerComments/Details/5

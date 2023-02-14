@@ -1,4 +1,7 @@
 ﻿using Ardalis.Specification;
+using Ardalis.Specification.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using RapidTireEstimates.Data;
 using RapidTireEstimates.Interfaces;
 using RapidTireEstimates.Models;
 using RapidTireEstimates.ViewModels;
@@ -8,35 +11,69 @@ namespace RapidTireEstimates.Repositories
     public class ShopSupplyRepository : IShopSupplyRepository
     {
         private bool disposedValue;
+        private readonly ApplicationDbContext _context;
 
-        public Task<ShopSupply> Delete(ISpecification<ShopSupply> byIdSpec)
+        public ShopSupplyRepository(ApplicationDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<List<ShopSupply>> GetAll(ISpecification<ShopSupply> filterBySpec, ISpecification<ShopSupply> orderBySpec)
+        public async Task Delete(ISpecification<ShopSupply> byIdSpec)
         {
-            throw new NotImplementedException();
+            var supply = await _context.ShopSupply.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+            supply ??= new ShopSupply();
+
+            _ = _context.Remove(supply);
+            _ = await _context.SaveChangesAsync();
         }
 
-        public Task<List<ShopSupply>> GetByEstimateId(ISpecification<ShopSupply> byEstimateIdSpec, ISpecification<ShopSupply> filterBySpec, ISpecification<ShopSupply> orderBySpec)
+        public async Task<List<ShopSupply>> GetAll(ISpecification<ShopSupply> filterBySpec, ISpecification<ShopSupply> orderBySpec)
         {
-            throw new NotImplementedException();
+            return await _context.ShopSupply.WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
         }
 
-        public Task<ShopSupply> GetById(ISpecification<ShopSupply> byIdSpec)
+        public async Task<List<ShopSupply>> GetByEstimateId(ISpecification<ShopSupply> byEstimateIdSpec, ISpecification<ShopSupply> filterBySpec, ISpecification<ShopSupply> orderBySpec)
         {
-            throw new NotImplementedException();
+            return await _context.ShopSupply.WithSpecification(byEstimateIdSpec).WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
         }
 
-        public Task<ShopSupply> Insert(ShopSupplyViewModel shopSupplyViewModel)
+        public async Task<ShopSupply> GetById(ISpecification<ShopSupply> byIdSpec)
         {
-            throw new NotImplementedException();
+            var supply = await _context.ShopSupply.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+            supply ??= new ShopSupply();
+            return supply;
         }
 
-        public Task<ShopSupply> Update(ISpecification<ShopSupply> byIdSpec, ShopSupplyViewModel shopSupplyViewModel)
+        public async Task<ShopSupply> Insert(ShopSupplyViewModel shopSupplyViewModel)
         {
-            throw new NotImplementedException();
+            if (shopSupplyViewModel == null)
+                return new ShopSupply();
+
+            var supply = new ShopSupply(shopSupplyViewModel);
+
+            _ = _context.Add(supply);
+            _ = await _context.SaveChangesAsync();
+
+            return supply;
+        }
+
+        public async Task<ShopSupply> Update(ISpecification<ShopSupply> byIdSpec, ShopSupplyViewModel shopSupplyViewModel)
+        {
+            var supply = await _context.ShopSupply.WithSpecification(byIdSpec).SingleOrDefaultAsync();
+
+            if (supply == null || shopSupplyViewModel == null)
+                return new ShopSupply();
+
+            supply.Name = shopSupplyViewModel.Name;
+            supply.Description = shopSupplyViewModel.Description;
+            supply.Value = shopSupplyViewModel.Value;
+
+            _ = _context.Update(supply);
+            _ = await _context.SaveChangesAsync();
+
+            return supply;
         }
 
         protected virtual void Dispose(bool disposing)
