@@ -119,9 +119,9 @@ namespace RapidTireEstimates.Repositories
             GC.SuppressFinalize(this);
         }
 
-        public Task<List<ServicePrice>> GetByServiceId(ISpecification<ServicePrice> byServiceIdSpec, ISpecification<ServicePrice> filterBySpec, ISpecification<ServicePrice> orderBySpec)
+        public async Task<List<ServicePrice>> GetByServiceId(ISpecification<ServicePrice> byServiceIdSpec, ISpecification<ServicePrice> filterBySpec, ISpecification<ServicePrice> orderBySpec)
         {
-            throw new NotImplementedException();
+            return await _context.ServicePrice.WithSpecification(byServiceIdSpec).WithSpecification(filterBySpec).WithSpecification(orderBySpec).ToListAsync();
         }
 
 

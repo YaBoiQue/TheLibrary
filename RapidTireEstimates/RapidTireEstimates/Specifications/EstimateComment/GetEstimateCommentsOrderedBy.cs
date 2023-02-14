@@ -6,7 +6,7 @@ namespace RapidTireEstimates.Specifications
 {
     public class GetEstimateCommentsOrderedBy : Specification<EstimateComment>
     {
-        GetEstimateCommentsOrderedBy(SortByParameter sortBy)
+        public GetEstimateCommentsOrderedBy(SortByParameter sortBy)
         {
 
             switch (sortBy)

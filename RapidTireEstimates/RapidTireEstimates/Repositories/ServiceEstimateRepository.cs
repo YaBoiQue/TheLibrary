@@ -81,6 +81,8 @@ namespace RapidTireEstimates.Repositories
 
             _ = _context.Add(serviceEstimate);
             _ = await _context.SaveChangesAsync();
+
+            return serviceEstimate;
         }
 
         public async Task<ServiceEstimate> Update(ISpecification<ServiceEstimate> byIdSpec, ServiceEstimateViewModel serviceEstimateViewModel)
@@ -98,6 +100,8 @@ namespace RapidTireEstimates.Repositories
 
             _ = _context.Update(serviceEstimate);
             _ = await _context.SaveChangesAsync();
+
+            return serviceEstimate;
         }
 
         protected virtual void Dispose(bool disposing)

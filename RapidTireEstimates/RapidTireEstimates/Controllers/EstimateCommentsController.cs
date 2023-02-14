@@ -2,38 +2,53 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RapidTireEstimates.Data;
+using RapidTireEstimates.Interfaces;
 using RapidTireEstimates.Models;
+using RapidTireEstimates.Repositories;
+using RapidTireEstimates.Specifications;
+using RapidTireEstimates.ViewModels;
+using static RapidTireEstimates.Helpers.Constants;
 
 namespace RapidTireEstimates.Controllers
 {
     public class EstimateCommentsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IEstimateCommentRepository _estimateCommentRepository;
 
-        public EstimateCommentsController(ApplicationDbContext context)
+        public EstimateCommentsController(IEstimateCommentRepository estimateCommentRepository)
         {
-            _context = context;
+            _estimateCommentRepository = estimateCommentRepository;
         }
 
         // GET: EstimateComments
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(EstimateCommentViewModel estimateCommentViewModel)
         {
-            Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<EstimateComment, Estimate> applicationDbContext = _context.EstimateComment.Include(e => e.Estimate);
-            return View(await applicationDbContext.ToListAsync());
+            string filterBy = "";
+            SortByParameter orderBy = SortByParameter.NameASC;
+            if (estimateCommentViewModel != null)
+            {
+                filterBy = estimateCommentViewModel.FilterBy;
+                orderBy = estimateCommentViewModel.SortBy;
+            }
+            estimateCommentViewModel ??= new EstimateCommentViewModel();
+
+            estimateCommentViewModel.EstimateComments = await _estimateCommentRepository.GetAll(new GetEstimateCommentsFilteredBy(filterBy), new GetEstimateCommentsOrderedBy(orderBy));
+            return View(estimateCommentViewModel);
         }
 
         // GET: EstimateComments/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(EstimateCommentViewModel estimateCommentViewModel)
         {
-            if (id == null || _context.EstimateComment == null)
-            {
-                return NotFound();
-            }
+            estimateCommentViewModel ??= new EstimateCommentViewModel();
 
-            EstimateComment? estimateComment = await _context.EstimateComment
-                .Include(e => e.Estimate)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            return estimateComment == null ? NotFound() : View(estimateComment);
+            var estimateComment = await _estimateCommentRepository.GetById(new GetEstimateCommentById(estimateCommentViewModel.Id));
+
+            estimateCommentViewModel.Id = estimateComment.Id;
+            estimateCommentViewModel.Contents = estimateComment.Contents;
+            estimateCommentViewModel.DateCreated = estimateComment.DateCreated;
+            estimateCommentViewModel.EstimateId = estimateComment.Estimate.Id;
+
+            return estimateComment == new EstimateComment() ? NotFound() : View(estimateCommentViewModel);
         }
 
         // GET: EstimateComments/Create

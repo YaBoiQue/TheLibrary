@@ -25,6 +25,7 @@ namespace RapidTireEstimates.Controllers
         // GET: CustomerComments
         public async Task<IActionResult> Index(CustomerCommentViewModel customerCommentViewModel)
         {
+
             string filterBy = "";
             SortByParameter orderBy = SortByParameter.NameASC;
             if (customerCommentViewModel != null)
@@ -32,29 +33,32 @@ namespace RapidTireEstimates.Controllers
                 filterBy = customerCommentViewModel.FilterBy;
                 orderBy = customerCommentViewModel.SortBy;
             }
+            customerCommentViewModel ??= new CustomerCommentViewModel();
 
             customerCommentViewModel.CustomerComments = await _customerCommentRepository.GetAll(new GetCustomerCommentsFilteredBy(filterBy), new GetCustomerCommentsOrderedBy(orderBy));
             return View(customerCommentViewModel);
         }
 
         // GET: CustomerComments/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(CustomerCommentViewModel customerCommentViewModel)
         {
-            if (id == null || _context.CustomerComment == null)
-            {
-                return NotFound();
-            }
+            customerCommentViewModel ??= new CustomerCommentViewModel();
 
-            CustomerComment? customerComment = await _context.CustomerComment
-                .Include(c => c.Customer)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            return customerComment == null ? NotFound() : View(customerComment);
+            var customerComment = await _customerCommentRepository.GetById(new GetCustomerCommentById(customerCommentViewModel.Id));
+
+            customerCommentViewModel.Id = customerComment.Id;
+            customerCommentViewModel.Contents = customerComment.Contents;
+            customerCommentViewModel.DateCreated = customerComment.DateCreated;
+            customerCommentViewModel.CustomerId = customerComment.CustomerId;
+
+            return customerComment == new CustomerComment() ? NotFound() : View(customerCommentViewModel);
         }
 
         // GET: CustomerComments/Create
-        public IActionResult Create()
+        public IActionResult Create(CustomerCommentViewModel customerCommentViewModel, int dif = 0)
         {
-            ViewData["CustomerId"] = new SelectList(_context.Customer, "Id", "Name");
+            customerCommentViewModel ??= new CustomerCommentViewModel();
+
             return View();
         }
 
@@ -63,33 +67,36 @@ namespace RapidTireEstimates.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerId,Id,Contents,DateCreated")] CustomerComment customerComment)
+        public async Task<IActionResult> Create([Bind("CustomerId,Id,Contents,DateCreated")] CustomerCommentViewModel customerCommentViewModel)
         {
             if (ModelState.IsValid)
             {
-                _ = _context.Add(customerComment);
-                _ = await _context.SaveChangesAsync();
+                _ = await _customerCommentRepository.Insert(customerCommentViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customer, "Id", "Name", customerComment.CustomerId);
-            return View(customerComment);
+
+            customerCommentViewModel ??= new CustomerCommentViewModel();
+
+            return View(customerCommentViewModel);
         }
 
         // GET: CustomerComments/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(CustomerCommentViewModel customerCommentViewModel)
         {
-            if (id == null || _context.CustomerComment == null)
-            {
-                return NotFound();
-            }
+            customerCommentViewModel ??= new CustomerCommentViewModel();
 
-            CustomerComment? customerComment = await _context.CustomerComment.FindAsync(id);
+            CustomerComment? customerComment = await _customerCommentRepository.GetById(new GetCustomerCommentById(customerCommentViewModel.Id));
             if (customerComment == null)
             {
                 return NotFound();
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customer, "Id", "Name", customerComment.CustomerId);
-            return View(customerComment);
+
+            customerCommentViewModel.Id = customerComment.Id;
+            customerCommentViewModel.Contents = customerComment.Contents;
+            customerCommentViewModel.DateCreated = customerComment.DateCreated;
+            customerCommentViewModel.CustomerId = customerComment.CustomerId;
+
+            return View(customerCommentViewModel);
         }
 
         // POST: CustomerComments/Edit/5
@@ -97,9 +104,9 @@ namespace RapidTireEstimates.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,Id,Contents,DateCreated")] CustomerComment customerComment)
+        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,Id,Contents,DateCreated")] CustomerCommentViewModel customerCommentViewModel)
         {
-            if (id != customerComment.Id)
+            if (id != customerCommentViewModel.Id)
             {
                 return NotFound();
             }
@@ -108,12 +115,11 @@ namespace RapidTireEstimates.Controllers
             {
                 try
                 {
-                    _ = _context.Update(customerComment);
-                    _ = await _context.SaveChangesAsync();
+                    _ = await _customerCommentRepository.Update(new GetCustomerCommentById(customerCommentViewModel.Id), customerCommentViewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CustomerCommentExists(customerComment.Id))
+                    if (!(await CustomerCommentExists(customerCommentViewModel)))
                     {
                         return NotFound();
                     }
@@ -124,46 +130,48 @@ namespace RapidTireEstimates.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customer, "Id", "Name", customerComment.CustomerId);
-            return View(customerComment);
+
+            customerCommentViewModel ??= new CustomerCommentViewModel();
+
+            return View(customerCommentViewModel);
         }
 
         // GET: CustomerComments/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(CustomerCommentViewModel customerCommentViewModel)
         {
-            if (id == null || _context.CustomerComment == null)
-            {
-                return NotFound();
-            }
+            customerCommentViewModel ??= new CustomerCommentViewModel();
 
-            CustomerComment? customerComment = await _context.CustomerComment
-                .Include(c => c.Customer)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            return customerComment == null ? NotFound() : View(customerComment);
+            CustomerComment? customerComment = await _customerCommentRepository.GetById(new GetCustomerCommentById(customerCommentViewModel.Id));
+
+            customerCommentViewModel.Id = customerComment.Id;
+            customerCommentViewModel.Contents = customerComment.Contents;
+            customerCommentViewModel.DateCreated = customerComment.DateCreated;
+            customerCommentViewModel.CustomerId = customerComment.CustomerId;
+
+            return customerComment == new CustomerComment() ? NotFound() : View(customerCommentViewModel);
         }
 
         // POST: CustomerComments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(CustomerCommentViewModel customerCommentViewModel)
         {
-            if (_context.CustomerComment == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.CustomerComment'  is null.");
-            }
-            CustomerComment? customerComment = await _context.CustomerComment.FindAsync(id);
+
+            CustomerComment? customerComment = await _customerCommentRepository.GetById(new GetCustomerCommentById(customerCommentViewModel.Id));
             if (customerComment != null)
             {
-                _ = _context.CustomerComment.Remove(customerComment);
+                _ = _customerCommentRepository.Delete(new GetCustomerCommentById(customerComment.Id));
             }
 
-            _ = await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CustomerCommentExists(int id)
+        private async Task<bool> CustomerCommentExists(CustomerCommentViewModel customerCommentViewModel)
         {
-            return _context.CustomerComment.Any(e => e.Id == id);
+            if (await _customerCommentRepository.GetById(new GetCustomerCommentById(customerCommentViewModel.Id)) != new CustomerComment())
+                return true;
+
+            return false;
         }
     }
 }
