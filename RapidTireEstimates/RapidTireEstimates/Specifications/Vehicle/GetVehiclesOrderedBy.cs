@@ -6,7 +6,7 @@ namespace RapidTireEstimates.Specifications
 {
     public class GetVehiclesOrderedBy : Specification<Vehicle>
     {
-        GetVehiclesOrderedBy(SortByParameter sortBy)
+        public GetVehiclesOrderedBy(SortByParameter sortBy)
         {
 
             switch (sortBy)

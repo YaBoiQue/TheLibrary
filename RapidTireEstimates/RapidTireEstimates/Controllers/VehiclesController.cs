@@ -2,24 +2,27 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RapidTireEstimates.Data;
+using RapidTireEstimates.Interfaces;
 using RapidTireEstimates.Models;
+using RapidTireEstimates.Specifications;
+using RapidTireEstimates.ViewModels;
 
 namespace RapidTireEstimates.Controllers
 {
     public class VehiclesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IVehicleRepository _repository;
 
-        public VehiclesController(ApplicationDbContext context)
+        public VehiclesController(IVehicleRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         // GET: Vehicles
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(VehicleViewModel viewModel)
         {
-            Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<Vehicle, Customer> applicationDbContext = _context.Vehicle.Include(v => v.Customer);
-            return View(await applicationDbContext.ToListAsync());
+            viewModel.Vehicles = await _repository.GetAll(new GetVehiclesFilteredBy(viewModel.FilterBy), new GetVehiclesOrderedBy(viewModel.SortBy));
+            return View(viewModel);
         }
 
         // GET: Vehicles/Details/5

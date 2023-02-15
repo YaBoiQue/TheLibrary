@@ -1,42 +1,50 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Core.Types;
 using RapidTireEstimates.Data;
+using RapidTireEstimates.Interfaces;
 using RapidTireEstimates.Models;
+using RapidTireEstimates.Specifications;
+using RapidTireEstimates.ViewModels;
+using System.Security.Cryptography.Xml;
 
 namespace RapidTireEstimates.Controllers
 {
     public class VehicleTypesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IVehicleTypeRepository _repository;
 
-        public VehicleTypesController(ApplicationDbContext context)
+        public VehicleTypesController(IVehicleTypeRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         // GET: VehicleTypes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(VehicleTypeViewModel viewModel)
         {
-            return View(await _context.VehicleType.ToListAsync());
+            viewModel ??= new VehicleTypeViewModel();
+
+            viewModel.VehicleTypes = await _repository.GetAll(new GetVehicleTypesFilteredBy(viewModel.FilterBy), new GetVehicleTypesOrderedBy(viewModel.SortBy));
+
+            return View(viewModel);
         }
 
         // GET: VehicleTypes/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(VehicleTypeViewModel viewModel)
         {
-            if (id == null || _context.VehicleType == null)
-            {
-                return NotFound();
-            }
+            viewModel ??= new VehicleTypeViewModel();
 
-            VehicleType? vehicleType = await _context.VehicleType
-                .FirstOrDefaultAsync(m => m.Id == id);
-            return vehicleType == null ? NotFound() : View(vehicleType);
+            var vehicleType = await _repository.GetById(new GetVehicleTypeById(viewModel.Id));
+
+            viewModel.Name = vehicleType.Name;
+
+            return vehicleType == new VehicleType() ? NotFound() : View(viewModel);
         }
 
         // GET: VehicleTypes/Create
-        public IActionResult Create()
+        public IActionResult Create(VehicleTypeViewModel viewModel, int dif = 0)
         {
-            return View();
+            return View(viewModel);
         }
 
         // POST: VehicleTypes/Create
@@ -44,27 +52,29 @@ namespace RapidTireEstimates.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] VehicleType vehicleType)
+        public async Task<IActionResult> Create([Bind("Id,Name")] VehicleTypeViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                _ = _context.Add(vehicleType);
-                _ = await _context.SaveChangesAsync();
+                _ = await _repository.Insert(viewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(vehicleType);
+            return View(viewModel);
         }
 
         // GET: VehicleTypes/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(VehicleTypeViewModel viewModel)
         {
-            if (id == null || _context.VehicleType == null)
+            if (viewModel == null)
             {
                 return NotFound();
             }
 
-            VehicleType? vehicleType = await _context.VehicleType.FindAsync(id);
-            return vehicleType == null ? NotFound() : View(vehicleType);
+            VehicleType vehicleType = await _repository.GetById(new GetVehicleTypeById(viewModel.Id));
+
+            viewModel.Name = vehicleType.Name;
+
+            return vehicleType == new VehicleType() ? NotFound() : View(viewModel);
         }
 
         // POST: VehicleTypes/Edit/5
@@ -72,9 +82,9 @@ namespace RapidTireEstimates.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] VehicleType vehicleType)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] VehicleTypeViewModel viewModel)
         {
-            if (id != vehicleType.Id)
+            if (id != viewModel.Id)
             {
                 return NotFound();
             }
@@ -83,12 +93,11 @@ namespace RapidTireEstimates.Controllers
             {
                 try
                 {
-                    _ = _context.Update(vehicleType);
-                    _ = await _context.SaveChangesAsync();
+                    _ = await _repository.Update(new GetVehicleTypeById(id), viewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!VehicleTypeExists(vehicleType.Id))
+                    if (!(await VehicleTypeExists(viewModel.Id)))
                     {
                         return NotFound();
                     }
@@ -99,44 +108,47 @@ namespace RapidTireEstimates.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(vehicleType);
+            return View(viewModel);
         }
 
         // GET: VehicleTypes/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(VehicleTypeViewModel viewModel)
         {
-            if (id == null || _context.VehicleType == null)
+            if (viewModel == null)
             {
                 return NotFound();
             }
 
-            VehicleType? vehicleType = await _context.VehicleType
-                .FirstOrDefaultAsync(m => m.Id == id);
-            return vehicleType == null ? NotFound() : View(vehicleType);
+            VehicleType? vehicleType = await _repository.GetById(new GetVehicleTypeById(viewModel.Id));
+
+            return vehicleType == new VehicleType() ? NotFound() : View(viewModel);
         }
 
         // POST: VehicleTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(VehicleTypeViewModel viewModel)
         {
-            if (_context.VehicleType == null)
+            if (_repository == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.VehicleType'  is null.");
             }
-            VehicleType? vehicleType = await _context.VehicleType.FindAsync(id);
-            if (vehicleType != null)
+
+            viewModel ??= new VehicleTypeViewModel();
+
+            VehicleType? vehicleType = await _repository.GetById(new GetVehicleTypeById(viewModel.Id));
+
+            if (vehicleType != new VehicleType())
             {
-                _ = _context.VehicleType.Remove(vehicleType);
+                await _repository.Delete(new GetVehicleTypeById(viewModel.Id));
             }
 
-            _ = await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool VehicleTypeExists(int id)
+        private async Task<bool> VehicleTypeExists(int id)
         {
-            return _context.VehicleType.Any(e => e.Id == id);
+            return (await _repository.GetById(new GetVehicleTypeById(id)) == new VehicleType());
         }
     }
 }
