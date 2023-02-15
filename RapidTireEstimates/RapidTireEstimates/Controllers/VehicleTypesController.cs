@@ -148,7 +148,7 @@ namespace RapidTireEstimates.Controllers
 
         private async Task<bool> VehicleTypeExists(int id)
         {
-            return (await _repository.GetById(new GetVehicleTypeById(id)) == new VehicleType());
+            return (await _repository.GetById(new GetVehicleTypeById(id)) != new VehicleType());
         }
     }
 }

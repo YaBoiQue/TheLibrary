@@ -34,6 +34,10 @@ namespace RapidTireEstimates.Models
             }
             Name ??= "";
             Description ??= "";
+
+            Prices = new List<ServicePrice>();
+            VehicleTypes = new List<ServiceVehicleType>();
+            ServiceEstimates = new List<ServiceEstimate>();
         }
 
         public Service(ServiceViewModel serviceViewModel)

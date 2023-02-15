@@ -1,70 +1,71 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RapidTireEstimates.Data;
+using RapidTireEstimates.Interfaces;
 using RapidTireEstimates.Models;
+using RapidTireEstimates.Specifications;
+using RapidTireEstimates.ViewModels;
 
 namespace RapidTireEstimates.Controllers
 {
     public class ShopSuppliesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IShopSupplyRepository _repo;
 
-        public ShopSuppliesController(ApplicationDbContext context)
+        public ShopSuppliesController(IShopSupplyRepository repo)
         {
-            _context = context;
+            _repo = repo;
         }
 
         // GET: ShopSupplies
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(ShopSupplyViewModel viewModel)
         {
-            return View(await _context.ShopSupply.ToListAsync());
+            viewModel.ShopSupplies = await _repo.GetAll(new GetShopSuppliesFilteredBy(viewModel.FilterBy), new GetShopSuppliesOrderedBy(viewModel.SortBy));
+            return View(viewModel);
         }
 
         // GET: ShopSupplies/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(ShopSupplyViewModel viewModel)
         {
-            if (id == null || _context.ShopSupply == null)
-            {
-                return NotFound();
-            }
+            viewModel ??= new ShopSupplyViewModel();
 
-            ShopSupply? shopSupply = await _context.ShopSupply
-                .FirstOrDefaultAsync(m => m.Id == id);
-            return shopSupply == null ? NotFound() : View(shopSupply);
+            ShopSupply? shopSupply = await _repo.GetById(new GetShopSupplyById(viewModel.Id));
+
+            viewModel.Name = shopSupply.Name;
+            viewModel.Description = shopSupply.Description;
+            viewModel.Value = shopSupply.Value;
+
+            return shopSupply == new ShopSupply() ? NotFound() : View(viewModel);
         }
 
         // GET: ShopSupplies/Create
-        public IActionResult Create()
+        public IActionResult Create(ShopSupplyViewModel viewModel)
         {
-            return View();
+            return View(viewModel);
         }
 
         // POST: ShopSupplies/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost, ActionName("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EstimateId,Name,Description,Id,Value")] ShopSupply shopSupply)
+        public async Task<IActionResult> CreateConfirmed([Bind("EstimateId,Name,Description,Id,Value")] ShopSupplyViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                _ = _context.Add(shopSupply);
-                _ = await _context.SaveChangesAsync();
+                _ = await _repo.Insert(viewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(shopSupply);
+            return View(viewModel);
         }
 
         // GET: ShopSupplies/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(ShopSupplyViewModel viewModel)
         {
-            if (id == null || _context.ShopSupply == null)
-            {
-                return NotFound();
-            }
+            viewModel ??= new ShopSupplyViewModel();
 
-            ShopSupply? shopSupply = await _context.ShopSupply.FindAsync(id);
-            return shopSupply == null ? NotFound() : View(shopSupply);
+            ShopSupply? shopSupply = await _repo.GetById(new GetShopSupplyById(viewModel.Id));
+            return shopSupply == new ShopSupply() ? NotFound() : View(viewModel);
         }
 
         // POST: ShopSupplies/Edit/5
@@ -72,9 +73,9 @@ namespace RapidTireEstimates.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EstimateId,Name,Description,Id,Value")] ShopSupply shopSupply)
+        public async Task<IActionResult> Edit(int id, [Bind("EstimateId,Name,Description,Id,Value")] ShopSupplyViewModel viewModel)
         {
-            if (id != shopSupply.Id)
+            if (id != viewModel.Id)
             {
                 return NotFound();
             }
@@ -83,12 +84,11 @@ namespace RapidTireEstimates.Controllers
             {
                 try
                 {
-                    _ = _context.Update(shopSupply);
-                    _ = await _context.SaveChangesAsync();
+                    _ = await _repo.Update(new GetShopSupplyById(viewModel.Id), viewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ShopSupplyExists(shopSupply.Id))
+                    if (!(await ShopSupplyExists(viewModel.Id)))
                     {
                         return NotFound();
                     }
@@ -99,44 +99,35 @@ namespace RapidTireEstimates.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(shopSupply);
+            return View(viewModel);
         }
 
         // GET: ShopSupplies/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(ShopSupplyViewModel viewModel)
         {
-            if (id == null || _context.ShopSupply == null)
-            {
-                return NotFound();
-            }
+            viewModel ??= new ShopSupplyViewModel();
 
-            ShopSupply? shopSupply = await _context.ShopSupply
-                .FirstOrDefaultAsync(m => m.Id == id);
-            return shopSupply == null ? NotFound() : View(shopSupply);
+            ShopSupply? shopSupply = await _repo.GetById(new GetShopSupplyById(viewModel.Id));
+            return shopSupply == new ShopSupply() ? NotFound() : View(viewModel);
         }
 
         // POST: ShopSupplies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(ShopSupplyViewModel viewModel)
         {
-            if (_context.ShopSupply == null)
+            ShopSupply? shopSupply = await _repo.GetById(new GetShopSupplyById(viewModel.Id));
+            if (shopSupply != new ShopSupply())
             {
-                return Problem("Entity set 'ApplicationDbContext.ShopSupply'  is null.");
-            }
-            ShopSupply? shopSupply = await _context.ShopSupply.FindAsync(id);
-            if (shopSupply != null)
-            {
-                _ = _context.ShopSupply.Remove(shopSupply);
+                await _repo.Delete(new GetShopSupplyById(viewModel.Id));
             }
 
-            _ = await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ShopSupplyExists(int id)
+        private async Task<bool> ShopSupplyExists(int id)
         {
-            return _context.ShopSupply.Any(e => e.Id == id);
+            return await _repo.GetById(new GetShopSupplyById(id)) != new ShopSupply();
         }
     }
 }

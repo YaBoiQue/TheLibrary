@@ -6,7 +6,7 @@ namespace RapidTireEstimates.Specifications
 {
     public class GetShopSuppliesOrderedBy : Specification<ShopSupply>
     {
-        GetShopSuppliesOrderedBy(SortByParameter sortBy)
+        public GetShopSuppliesOrderedBy(SortByParameter sortBy)
         {
 
             switch (sortBy)

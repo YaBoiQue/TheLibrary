@@ -37,42 +37,43 @@ namespace RapidTireEstimates.Controllers
         }
 
         // GET: Services/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(ServiceViewModel viewModel)
         {
+            viewModel ??= new ServiceViewModel();
 
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var service = await _serviceRepository.GetById(new GetServiceById(viewModel.Id));
 
-            var serviceViewModel = new ServiceViewModel(await _serviceRepository.GetById(new GetServiceById((int)id)));
-            return serviceViewModel == null ? NotFound() : View(serviceViewModel);
+            viewModel.Name = service.Name;
+            viewModel.Description = service.Description;
+            viewModel.Number = service.Number;
+            viewModel.Hours = service.Hours;
+            viewModel.Rate = service.Rate;
+
+            return service == new Service() ? NotFound() : View(viewModel);
         }
 
         // GET: Services/Create
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(ServiceViewModel viewModel)
         {
-            ServiceViewModel serviceViewModel = new()
-            {
-                AllVehicleTypes = new List<VehicleType>()
-            };
-            serviceViewModel.AllVehicleTypes = await _vehicleTypeRepository.GetAll(new GetVehicleTypesFilteredBy(), new GetVehicleTypesOrderedBy());
+            viewModel ??= new ServiceViewModel();
 
-            serviceViewModel.VehicleTypeSelectList = new List<SelectListItem>();
-            foreach (VehicleType item in serviceViewModel.AllVehicleTypes)
+            viewModel.AllVehicleTypes = await _vehicleTypeRepository.GetAll(new GetVehicleTypesFilteredBy(""), new GetVehicleTypesOrderedBy(new SortByParameter()));
+
+            viewModel.VehicleTypeSelectList = new List<SelectListItem>();
+            foreach (VehicleType item in viewModel.AllVehicleTypes)
             {
-                serviceViewModel.VehicleTypeSelectList.Add(new SelectListItem { Text = item.Name.Trim(), Value = item.Id.ToString() });
+                viewModel.VehicleTypeSelectList.Add(new SelectListItem { Text = item.Name.Trim(), Value = item.Id.ToString() });
             }
 
-            return View(serviceViewModel);
+            return View(viewModel);
         }
 
         // POST: Services/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost, ActionName("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Hours,Rate,VehicleTypeSelectList")] ServiceViewModel serviceViewModel)
+        public async Task<IActionResult> CreateConfirmed([Bind("Id,Name,Description,Hours,Rate,VehicleTypeSelectList")] ServiceViewModel serviceViewModel)
         {
             if (serviceViewModel == null)
             {
@@ -89,23 +90,22 @@ namespace RapidTireEstimates.Controllers
         }
 
         // GET: Services/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(ServiceViewModel viewModel)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            Service? service = await _serviceRepository.GetById(new GetServiceById((int)id));
+            Service? service = await _serviceRepository.GetById(new GetServiceById(viewModel.Id));
 
             if (service == null)
             {
                 return NotFound();
             }
 
-            ServiceViewModel serviceViewModel = new(service);
+            viewModel.Name = service.Name;
+            viewModel.Description = service.Description;
+            viewModel.Number = service.Number;
+            viewModel.Hours = service.Hours;
+            viewModel.Rate = service.Rate;
 
-            return View(serviceViewModel);
+            return View(viewModel);
         }
 
         // POST: Services/Edit/5
@@ -123,7 +123,7 @@ namespace RapidTireEstimates.Controllers
 
             if (ModelState.IsValid)
             {
-                await _serviceRepository.Update(new GetServiceById((int)id), serviceViewModel);
+                await _serviceRepository.Update(new GetServiceById(id), serviceViewModel);
 
                 return View(serviceViewModel);
             }
@@ -133,24 +133,19 @@ namespace RapidTireEstimates.Controllers
 
 
         // GET: Services/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(ServiceViewModel viewModel)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            Service? service = await _serviceRepository.GetById(new GetServiceById((int)id));
-            return service == null ? NotFound() : View(service);
+            Service? service = await _serviceRepository.GetById(new GetServiceById(viewModel.Id));
+            return service == new Service() ? NotFound() : View(viewModel);
         }
 
 
         // POST: Services/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(ServiceViewModel viewModel)
         {
-            await _serviceRepository.Delete(new GetServiceById((int)id));
+            await _serviceRepository.Delete(new GetServiceById(viewModel.Id));
 
             return RedirectToAction(nameof(Index));
         }
