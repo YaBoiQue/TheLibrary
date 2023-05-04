@@ -7,6 +7,7 @@ namespace RapidTireEstimates.ViewModels
     {
         public ShopSupplyViewModel()
         {
+            ShopSupply = new ShopSupply();
             ShopSupplies = new List<ShopSupply>();
 
             ReturnController = "ShopSupplies";
@@ -17,8 +18,7 @@ namespace RapidTireEstimates.ViewModels
         }
 
         //Storage Variables
-
-        //ShopSupply List
+        public ShopSupply ShopSupply { get; set; }
         public IEnumerable<ShopSupply> ShopSupplies { get; set; }
 
         //Return values(for address return feature)

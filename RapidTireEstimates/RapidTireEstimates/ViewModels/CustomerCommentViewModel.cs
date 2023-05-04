@@ -7,6 +7,7 @@ namespace RapidTireEstimates.ViewModels
     {
         public CustomerCommentViewModel()
         {
+            CustomerComment = new CustomerComment();
             CustomerComments = new List<CustomerComment>();
 
             ReturnController = "CustomerComments";
@@ -24,6 +25,7 @@ namespace RapidTireEstimates.ViewModels
                 Contents = customerCommentViewModel.Contents;
                 CustomerId = customerCommentViewModel.CustomerId;
                 Customer = customerCommentViewModel.Customer;
+                CustomerComment = customerCommentViewModel.CustomerComment;
                 CustomerComments = customerCommentViewModel.CustomerComments;
                 ReturnController = customerCommentViewModel.ReturnController;
                 ReturnAction = customerCommentViewModel.ReturnAction;
@@ -34,6 +36,7 @@ namespace RapidTireEstimates.ViewModels
                 SortByValue = customerCommentViewModel.SortByValue;
             }
 
+            CustomerComment ??= new CustomerComment();
             CustomerComments ??= new List<CustomerComment>();
 
             ReturnController ??= "CustomerComments";
@@ -43,8 +46,7 @@ namespace RapidTireEstimates.ViewModels
         }
 
         //Storage Variables
-
-        //CustomerComment List
+        public CustomerComment CustomerComment { get; set; }
         public IEnumerable<CustomerComment> CustomerComments { get; set; }
 
         //Return values(for address return feature)

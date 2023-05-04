@@ -49,8 +49,6 @@ namespace RapidTireEstimates.ViewModels
 
         //Storage Variables
         public Customer Customer { get; set; }
-
-        //Customer List
         public IEnumerable<Customer> Customers { get; set; }
 
         //Return Address Values (for dynamic return feature)

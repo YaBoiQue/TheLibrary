@@ -22,7 +22,8 @@ namespace RapidTireEstimates.Repositories
         {
             var supply = await _context.ShopSupply.WithSpecification(byIdSpec).SingleOrDefaultAsync();
 
-            supply ??= new ShopSupply();
+            if (supply == new ShopSupply()||supply == null)
+                return;
 
             _ = _context.Remove(supply);
             _ = await _context.SaveChangesAsync();
@@ -51,12 +52,10 @@ namespace RapidTireEstimates.Repositories
             if (shopSupplyViewModel == null)
                 return new ShopSupply();
 
-            var supply = new ShopSupply(shopSupplyViewModel);
-
-            _ = _context.Add(supply);
+            _ = _context.Add(shopSupplyViewModel.ShopSupply);
             _ = await _context.SaveChangesAsync();
 
-            return supply;
+            return shopSupplyViewModel.ShopSupply;
         }
 
         public async Task<ShopSupply> Update(ISpecification<ShopSupply> byIdSpec, ShopSupplyViewModel shopSupplyViewModel)
@@ -66,9 +65,10 @@ namespace RapidTireEstimates.Repositories
             if (supply == null || shopSupplyViewModel == null)
                 return new ShopSupply();
 
-            supply.Name = shopSupplyViewModel.Name;
-            supply.Description = shopSupplyViewModel.Description;
-            supply.Value = shopSupplyViewModel.Value;
+            if (supply.Id == shopSupplyViewModel.ShopSupply.Id)
+                return new ShopSupply();
+
+            supply = shopSupplyViewModel.ShopSupply;
 
             _ = _context.Update(supply);
             _ = await _context.SaveChangesAsync();

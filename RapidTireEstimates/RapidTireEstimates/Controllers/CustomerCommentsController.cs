@@ -55,7 +55,7 @@ namespace RapidTireEstimates.Controllers
         }
 
         // GET: CustomerComments/Create
-        public IActionResult Create(CustomerCommentViewModel customerCommentViewModel, int dif = 0)
+        public IActionResult Create(CustomerCommentViewModel customerCommentViewModel)
         {
             customerCommentViewModel ??= new CustomerCommentViewModel();
 
@@ -65,9 +65,9 @@ namespace RapidTireEstimates.Controllers
         // POST: CustomerComments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost, ActionName("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerId,Id,Contents,DateCreated")] CustomerCommentViewModel customerCommentViewModel)
+        public async Task<IActionResult> CreateConfirmed([Bind("CustomerId,Id,Contents,DateCreated")] CustomerCommentViewModel customerCommentViewModel)
         {
             if (ModelState.IsValid)
             {

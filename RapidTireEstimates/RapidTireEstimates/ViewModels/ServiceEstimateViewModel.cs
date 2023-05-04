@@ -7,6 +7,7 @@ namespace RapidTireEstimates.ViewModels
     {
         public ServiceEstimateViewModel()
         {
+            ServiceEstimate = new ServiceEstimate();
             ServiceEstimates = new List<ServiceEstimate>();
 
             ReturnController = "ServiceEstimates";
@@ -17,8 +18,7 @@ namespace RapidTireEstimates.ViewModels
         }
 
         //Storage Variables
-
-        //ServiceEstimate List
+        public ServiceEstimate ServiceEstimate { get; set; }
         public IEnumerable<ServiceEstimate> ServiceEstimates { get; set; }
 
         //Return values(for address return feature)

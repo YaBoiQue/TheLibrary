@@ -7,6 +7,7 @@ namespace RapidTireEstimates.ViewModels
     {
         public ServiceEstimateCommentViewModel()
         {
+            ServiceEstimateComment = new ServiceEstimateComment();
             ServiceEstimateComments = new List<ServiceEstimateComment>();
 
             ReturnController = "ServiceEstimateComments";
@@ -34,6 +35,7 @@ namespace RapidTireEstimates.ViewModels
                 SortByValue = serviceEstimateCommentViewModel.SortByValue;
             }
 
+            ServiceEstimateComment ??= new ServiceEstimateComment();
             ServiceEstimateComments ??= new List<ServiceEstimateComment>();
 
             ReturnController ??= "ServiceEstimateComments";
@@ -43,8 +45,7 @@ namespace RapidTireEstimates.ViewModels
         }
 
         //Storage Variables
-
-        //EstimateComment List
+        public ServiceEstimateComment ServiceEstimateComment { get; set; }
         public IEnumerable<ServiceEstimateComment> ServiceEstimateComments { get; set; }
 
         //Return values(for address return feature)

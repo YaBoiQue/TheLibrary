@@ -52,44 +52,43 @@ namespace RapidTireEstimates.Controllers
         }
 
         // GET: EstimateComments/Create
-        public IActionResult Create()
+        public IActionResult Create(EstimateCommentViewModel viewModel)
         {
-            ViewData["EstimateId"] = new SelectList(_context.Estimate, "Id", "Id");
-            return View();
+            viewModel ??= new EstimateCommentViewModel();
+
+            return View(viewModel);
         }
 
         // POST: EstimateComments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost, ActionName("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EstimateId,Id,Contents,DateCreated")] EstimateComment estimateComment)
+        public async Task<IActionResult> CreateConfirmed([Bind("EstimateId,Id,Contents,DateCreated")] EstimateCommentViewModel viewModel)
         {
+            if (viewModel == null)
+                return NotFound();
+
             if (ModelState.IsValid)
             {
-                _ = _context.Add(estimateComment);
-                _ = await _context.SaveChangesAsync();
+                await _estimateCommentRepository.Insert(viewModel);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EstimateId"] = new SelectList(_context.Estimate, "Id", "Id", estimateComment.EstimateId);
-            return View(estimateComment);
+            return View(viewModel);
         }
 
         // GET: EstimateComments/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(EstimateCommentViewModel viewModel)
         {
-            if (id == null || _context.EstimateComment == null)
-            {
-                return NotFound();
-            }
+            EstimateComment? estimateComment = await _estimateCommentRepository.GetById(new GetEstimateCommentById(viewModel.Id));
 
-            EstimateComment? estimateComment = await _context.EstimateComment.FindAsync(id);
             if (estimateComment == null)
             {
                 return NotFound();
             }
-            ViewData["EstimateId"] = new SelectList(_context.Estimate, "Id", "Id", estimateComment.EstimateId);
-            return View(estimateComment);
+
+            viewModel.EstimateComment = estimateComment;
+            return View(viewModel);
         }
 
         // POST: EstimateComments/Edit/5
@@ -97,9 +96,9 @@ namespace RapidTireEstimates.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EstimateId,Id,Contents,DateCreated")] EstimateComment estimateComment)
+        public async Task<IActionResult> Edit(int id, [Bind("EstimateId,Id,Contents,DateCreated")] EstimateCommentViewModel viewModel)
         {
-            if (id != estimateComment.Id)
+            if (id != viewModel.Id)
             {
                 return NotFound();
             }
@@ -108,12 +107,13 @@ namespace RapidTireEstimates.Controllers
             {
                 try
                 {
-                    _ = _context.Update(estimateComment);
-                    _ = await _context.SaveChangesAsync();
+                    await _estimateCommentRepository.Update(new GetEstimateCommentById(id), viewModel);
+
+                    return View(viewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EstimateCommentExists(estimateComment.Id))
+                    if (!(await EstimateCommentExists(viewModel.Id)))
                     {
                         return NotFound();
                     }
@@ -122,48 +122,31 @@ namespace RapidTireEstimates.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["EstimateId"] = new SelectList(_context.Estimate, "Id", "Id", estimateComment.EstimateId);
-            return View(estimateComment);
+            return View(viewModel);
         }
 
         // GET: EstimateComments/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(EstimateCommentViewModel viewModel)
         {
-            if (id == null || _context.EstimateComment == null)
-            {
-                return NotFound();
-            }
-
-            EstimateComment? estimateComment = await _context.EstimateComment
-                .Include(e => e.Estimate)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            return estimateComment == null ? NotFound() : View(estimateComment);
+            viewModel.EstimateComment = await _estimateCommentRepository.GetById(new GetEstimateCommentById(viewModel.Id));
+            return viewModel.EstimateComment == new EstimateComment() ? NotFound() : View(viewModel);
         }
 
         // POST: EstimateComments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(EstimateCommentViewModel viewModel)
         {
-            if (_context.EstimateComment == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.EstimateComment'  is null.");
-            }
-            EstimateComment? estimateComment = await _context.EstimateComment.FindAsync(id);
-            if (estimateComment != null)
-            {
-                _ = _context.EstimateComment.Remove(estimateComment);
-            }
-
-            _ = await _context.SaveChangesAsync();
+            await _estimateCommentRepository.Delete(new GetEstimateCommentById(viewModel.Id));
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EstimateCommentExists(int id)
+        private async Task<bool> EstimateCommentExists(int id)
         {
-            return _context.EstimateComment.Any(e => e.Id == id);
+            EstimateComment estimateComment = await _estimateCommentRepository.GetById(new GetEstimateCommentById((int)id));
+
+            return estimateComment != null ? true : false;
         }
     }
 }

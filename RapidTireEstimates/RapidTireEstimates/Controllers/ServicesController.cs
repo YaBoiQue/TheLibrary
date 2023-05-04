@@ -41,15 +41,9 @@ namespace RapidTireEstimates.Controllers
         {
             viewModel ??= new ServiceViewModel();
 
-            var service = await _serviceRepository.GetById(new GetServiceById(viewModel.Id));
+            viewModel.Service = await _serviceRepository.GetById(new GetServiceById(viewModel.Id));
 
-            viewModel.Name = service.Name;
-            viewModel.Description = service.Description;
-            viewModel.Number = service.Number;
-            viewModel.Hours = service.Hours;
-            viewModel.Rate = service.Rate;
-
-            return service == new Service() ? NotFound() : View(viewModel);
+            return viewModel.Service == new Service() ? NotFound() : View(viewModel);
         }
 
         // GET: Services/Create
@@ -99,11 +93,7 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            viewModel.Name = service.Name;
-            viewModel.Description = service.Description;
-            viewModel.Number = service.Number;
-            viewModel.Hours = service.Hours;
-            viewModel.Rate = service.Rate;
+            viewModel.Service = service;
 
             return View(viewModel);
         }
@@ -135,8 +125,8 @@ namespace RapidTireEstimates.Controllers
         // GET: Services/Delete/5
         public async Task<IActionResult> Delete(ServiceViewModel viewModel)
         {
-            Service? service = await _serviceRepository.GetById(new GetServiceById(viewModel.Id));
-            return service == new Service() ? NotFound() : View(viewModel);
+            viewModel.Service = await _serviceRepository.GetById(new GetServiceById(viewModel.Id));
+            return viewModel.Service == new Service() ? NotFound() : View(viewModel);
         }
 
 
@@ -145,7 +135,7 @@ namespace RapidTireEstimates.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(ServiceViewModel viewModel)
         {
-            await _serviceRepository.Delete(new GetServiceById(viewModel.Id));
+            await _serviceRepository.Delete(new GetServiceById(viewModel.Service.Id));
 
             return RedirectToAction(nameof(Index));
         }

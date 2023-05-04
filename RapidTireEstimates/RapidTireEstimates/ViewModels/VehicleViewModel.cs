@@ -7,6 +7,7 @@ namespace RapidTireEstimates.ViewModels
     {
         public VehicleViewModel()
         {
+            Vehicle = new Vehicle();
             Vehicles = new List<Vehicle>();
 
             ReturnController = "Vehicles";
@@ -17,8 +18,7 @@ namespace RapidTireEstimates.ViewModels
         }
 
         //Storage Variables
-
-        //Vehicle List
+        public Vehicle Vehicle { get; set; }
         public IEnumerable<Vehicle> Vehicles { get; set; }
 
         //Return values(for address return feature)

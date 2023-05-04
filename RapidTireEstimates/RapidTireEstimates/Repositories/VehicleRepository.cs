@@ -72,12 +72,10 @@ namespace RapidTireEstimates.Repositories
             if (vehicleViewModel == null)
                 return new Vehicle();
 
-            var vehicle = new Vehicle(vehicleViewModel);
-
-            _ = _context.Add(vehicle);
+            _ = _context.Add(vehicleViewModel.Vehicle);
             _ = await _context.SaveChangesAsync();
 
-            return vehicle;
+            return vehicleViewModel.Vehicle;
         }
 
         public async Task<Vehicle> Update(ISpecification<Vehicle> byIdSpec, VehicleViewModel vehicleViewModel)
@@ -87,11 +85,10 @@ namespace RapidTireEstimates.Repositories
             if (vehicle == null || vehicleViewModel == null)
                 return new Vehicle();
 
-            vehicle.Year = vehicleViewModel.Year;
-            vehicle.Make = vehicleViewModel.Make;
-            vehicle.Model = vehicleViewModel.Model;
-            vehicle.CustomerId = vehicleViewModel.CustomerId;
-            vehicle.VehicleTypeId = vehicleViewModel.VehicleTypeId;
+            if (vehicle.Id != vehicleViewModel.Vehicle.Id)
+                return new Vehicle();
+
+            vehicle = vehicleViewModel.Vehicle;
 
             _ = _context.Update(vehicle);
             _ = await _context.SaveChangesAsync();

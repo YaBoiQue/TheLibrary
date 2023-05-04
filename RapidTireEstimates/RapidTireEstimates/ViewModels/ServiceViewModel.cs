@@ -52,9 +52,8 @@ namespace RapidTireEstimates.ViewModels
         }
 
         //Storage Variables
+        public Service Service { get; set; }
         public ServicePrice ServicePrice { get; set; }
-        
-        //Service List
         public IEnumerable<Service> Services { get; set; }
 
         //Vehicle Type Values (for vehicle type selection feature)

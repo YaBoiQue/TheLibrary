@@ -35,23 +35,16 @@ namespace RapidTireEstimates.Controllers
         }
 
         // GET: ServicePrices/Details/5
-        public async Task<IActionResult> Details(int? id, string returnController, string returnAction, string returnId)
+        public async Task<IActionResult> Details(ServicePriceViewModel viewModel, string returnController, string returnAction, string returnId)
         {
-            ServicePriceViewModel servicePriceViewModel;
-
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            servicePriceViewModel = new(await _servicePriceRepository.GetById(new GetServicePriceById((int)id)))
+            viewModel = new(await _servicePriceRepository.GetById(new GetServicePriceById(viewModel.Id)))
             {
                 ReturnController = returnController,
                 ReturnAction = returnAction,
                 ReturnId = returnId
             };
 
-            return View(servicePriceViewModel);
+            return View(viewModel);
         }
 
         // GET: ServicePrices/Create
@@ -109,23 +102,14 @@ namespace RapidTireEstimates.Controllers
         }
 
         // GET: ServicePrices/Edit/5
-        public async Task<IActionResult> Edit(int? id, string returnController, string returnAction, string returnId)
+        public async Task<IActionResult> Edit(ServicePriceViewModel servicePriceViewModel, string returnController, string returnAction, string returnId)
         {
-            ServicePriceViewModel servicePriceViewModel;
-
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            servicePriceViewModel = new(await _servicePriceRepository.GetById(new GetServicePriceById((int)id)))
-            {
-                ReturnController = returnController,
-                ReturnAction = returnAction,
-                ReturnId = returnId
-            };
-
-            return servicePriceViewModel.Id == 0 ? NotFound() : View(servicePriceViewModel);
+            servicePriceViewModel.ServicePrice = await _servicePriceRepository.GetById(new GetServicePriceById(servicePriceViewModel.Id));
+            servicePriceViewModel.ReturnController = returnController;
+            servicePriceViewModel.ReturnId = returnAction;
+            servicePriceViewModel.ReturnId = returnId;
+            
+            return servicePriceViewModel.ServicePrice == new ServicePrice() ? NotFound() : View(servicePriceViewModel);
         }
 
         // POST: ServicePrices/Edit/5
@@ -157,21 +141,15 @@ namespace RapidTireEstimates.Controllers
         }
 
         // GET: ServicePrices/Delete/5
-        public async Task<IActionResult> Delete(int? id, string returnController, string returnAction, string returnId)
+        public async Task<IActionResult> Delete(ServicePriceViewModel servicePriceViewModel, string returnController, string returnAction, string returnId)
         {
-            ServicePriceViewModel servicePriceViewModel;
+            servicePriceViewModel.ServicePrice = await _servicePriceRepository.GetById(new GetServicePriceById(servicePriceViewModel.Id));
 
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            servicePriceViewModel = new(await _servicePriceRepository.GetById(new GetServicePriceById((int)id)))
-            {
-                ReturnController = returnController,
-                ReturnAction = returnAction,
-                ReturnId = returnId
-            };
+            servicePriceViewModel.ReturnController = returnController;
+            servicePriceViewModel.ReturnAction = returnAction;
+            servicePriceViewModel.ReturnId = returnId;
+            
 
             return servicePriceViewModel.Id == 0 ? NotFound() : View(servicePriceViewModel);
         }
@@ -179,11 +157,19 @@ namespace RapidTireEstimates.Controllers
         // POST: ServicePrices/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id, string returnController, string returnAction, string returnId)
+        public async Task<IActionResult> DeleteConfirmed(ServicePriceViewModel viewModel, string returnController = "", string returnAction = "", string returnId = "")
         {
-            await _servicePriceRepository.Delete(new GetServicePriceById(id));
+            await _servicePriceRepository.Delete(new GetServicePriceById(viewModel.Id));
 
-            return returnAction == null ? RedirectToAction(nameof(Index)) : (IActionResult)RedirectToAction(returnAction, returnController, returnId);
+            if (returnController != "")
+                viewModel.ReturnController = returnController;
+            if (returnAction != "")
+                viewModel.ReturnAction = returnAction;
+            if (returnId != "")
+                viewModel.ReturnId = returnId;
+
+
+            return viewModel.ReturnAction == null ? RedirectToAction(nameof(Index)) : (IActionResult)RedirectToAction(viewModel.ReturnAction, viewModel.ReturnController, viewModel.ReturnId);
         }
     }
 }

@@ -110,9 +110,9 @@ namespace RapidTireEstimates.Repositories
             if (serviceViewModel == null)
                 return new Service();
 
-            Service? service = new() { Id = serviceViewModel.Id, Name = serviceViewModel.Name, Description = serviceViewModel.Description, Hours = serviceViewModel.Hours, Rate = serviceViewModel.Rate };
+            Service service = serviceViewModel.Service;
 
-            List<Service> services = await _context.Service.Where(s => s.Name == serviceViewModel.Name).ToListAsync();
+            List<Service> services = await _context.Service.Where(s => s.Name == serviceViewModel.Service.Name).ToListAsync();
 
             service.Number = services.Count;
             

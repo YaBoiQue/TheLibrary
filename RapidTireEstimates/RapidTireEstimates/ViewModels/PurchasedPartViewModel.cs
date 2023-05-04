@@ -8,6 +8,7 @@ namespace RapidTireEstimates.ViewModels
     {
         public PurchasedPartViewModel()
         {
+            PurchasedPart = new PurchasedPart();
             PurchasedParts = new List<PurchasedPart>();
 
             ReturnController = "PurchasedParts";
@@ -18,8 +19,7 @@ namespace RapidTireEstimates.ViewModels
         }
 
         //Storage Variables
-
-        //PurchasedPart List
+        public PurchasedPart PurchasedPart { get; set; }
         public IEnumerable<PurchasedPart> PurchasedParts { get; set; }
 
         //Return values(for address return feature)

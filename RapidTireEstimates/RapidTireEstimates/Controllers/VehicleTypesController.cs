@@ -34,9 +34,7 @@ namespace RapidTireEstimates.Controllers
         {
             viewModel ??= new VehicleTypeViewModel();
 
-            var vehicleType = await _repository.GetById(new GetVehicleTypeById(viewModel.Id));
-
-            viewModel.Name = vehicleType.Name;
+            viewModel.VehicleType = await _repository.GetById(new GetVehicleTypeById(viewModel.Id));
 
             return vehicleType == new VehicleType() ? NotFound() : View(viewModel);
         }
@@ -70,11 +68,9 @@ namespace RapidTireEstimates.Controllers
                 return NotFound();
             }
 
-            VehicleType vehicleType = await _repository.GetById(new GetVehicleTypeById(viewModel.Id));
+            viewModel.VehicleType = await _repository.GetById(new GetVehicleTypeById(viewModel.Id));
 
-            viewModel.Name = vehicleType.Name;
-
-            return vehicleType == new VehicleType() ? NotFound() : View(viewModel);
+            return viewModel.VehicleType == new VehicleType() ? NotFound() : View(viewModel);
         }
 
         // POST: VehicleTypes/Edit/5

@@ -2,24 +2,38 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RapidTireEstimates.Data;
+using RapidTireEstimates.Interfaces;
 using RapidTireEstimates.Models;
+using RapidTireEstimates.Specifications;
+using RapidTireEstimates.ViewModels;
+using static RapidTireEstimates.Helpers.Constants;
 
 namespace RapidTireEstimates.Controllers
 {
     public class ServiceEstimatesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IServiceEstimateRepository _repo;
 
-        public ServiceEstimatesController(ApplicationDbContext context)
+        public ServiceEstimatesController(IServiceEstimateRepository repo)
         {
-            _context = context;
+            _repo = repo;
         }
 
         // GET: ServiceEstimates
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(ServiceEstimateViewModel serviceEstimateViewModel)
         {
-            Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<ServiceEstimate, Service> applicationDbContext = _context.ServiceEstimate.Include(s => s.Estimate).Include(s => s.Service);
-            return View(await applicationDbContext.ToListAsync());
+            serviceEstimateViewModel.SortByLevel = (serviceEstimateViewModel.SortBy == SortByParameter.LevelASC)
+                ? SortByParameter.LevelDESC : SortByParameter.LevelASC;
+            serviceEstimateViewModel.SortByValue = (serviceEstimateViewModel.SortBy == SortByParameter.ValueASC)
+                ? SortByParameter.ValueDESC : SortByParameter.ValueASC;
+            serviceEstimateViewModel.ReturnController = "ServiceEstimates";
+            serviceEstimateViewModel.ReturnAction = "Index";
+            serviceEstimateViewModel.ReturnId = "";
+            serviceEstimateViewModel.ServiceEstimates = await _repo.GetAll(
+                new GetServiceEstimatesFilteredBy(serviceEstimateViewModel.FilterBy),
+                new GetServiceEstimatesOrderedBy(serviceEstimateViewModel.SortBy));
+
+            return View(serviceEstimateViewModel);
         }
 
         // GET: ServiceEstimates/Details/5

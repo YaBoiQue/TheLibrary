@@ -2,46 +2,60 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RapidTireEstimates.Data;
+using RapidTireEstimates.Interfaces;
 using RapidTireEstimates.Models;
+using RapidTireEstimates.Specifications;
+using RapidTireEstimates.ViewModels;
+using System.Reflection.Metadata;
+using static RapidTireEstimates.Helpers.Constants;
+using ViewModel = RapidTireEstimates.ViewModels.EstimateViewModel;
 
 namespace RapidTireEstimates.Controllers
 {
     public class EstimatesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        
+        private readonly IEstimateRepository _estimateRepository;
 
-        public EstimatesController(ApplicationDbContext context)
+        public EstimatesController(IEstimateRepository estimateRepository)
         {
-            _context = context;
+            _estimateRepository = estimateRepository;
         }
 
         // GET: Estimates
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(ViewModel viewModel)
         {
-            Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<Estimate, Vehicle> applicationDbContext = _context.Estimate.Include(e => e.Customer).Include(e => e.Vehicle);
-            return View(await applicationDbContext.ToListAsync());
+            viewModel.SortByValue = (viewModel.SortBy == SortByParameter.ValueASC)
+                ? SortByParameter.ValueDESC : SortByParameter.ValueASC;
+            viewModel.SortByLevel = (viewModel.SortBy == SortByParameter.LevelASC)
+                ? SortByParameter.LevelDESC : SortByParameter.LevelASC;
+            viewModel.ReturnController = "Estimates";
+            viewModel.ReturnAction = "Index";
+            viewModel.ReturnId = "";
+            viewModel.Estimates = await _estimateRepository.GetAll(
+                new GetEstimatesFilteredBy(viewModel.FilterBy),
+                new GetEstimatesOrderedBy(viewModel.SortBy));
+
+            return View(viewModel);
         }
 
         // GET: Estimates/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(ViewModel viewModel)
         {
-            if (id == null || _context.Estimate == null)
-            {
-                return NotFound();
-            }
+            viewModel ??= new ViewModel();
 
-            Estimate? estimate = await _context.Estimate
-                .Include(e => e.Customer)
-                .Include(e => e.Vehicle)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            return estimate == null ? NotFound() : View(estimate);
+            viewModel.Estimate = await _estimateRepository.GetById(new GetEstimateById(viewModel.Id));
+
+            return viewModel.Estimate == null ? NotFound() : View(viewModel);
         }
 
         // GET: Estimates/Create
-        public IActionResult Create()
+        public IActionResult Create(ViewModel viewModel)
         {
-            ViewData["CustomerId"] = new SelectList(_context.Customer, "Id", "Name");
-            ViewData["VehicleId"] = new SelectList(_context.Vehicle, "Id", "Make");
+            viewModel ??= new ViewModel();
+
+            viewModel.
+
             return View();
         }
 

@@ -12,8 +12,7 @@ Specifications: (All order specifications have basic switch statements)
 -VehicleType
 
 Controllers:
--CustomerComment
--EstimateComment
+-CustomerComment?
 -Estimate
 -PurchasedPart
 -ServiceEstimateComment

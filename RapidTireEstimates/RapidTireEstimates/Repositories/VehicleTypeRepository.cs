@@ -62,12 +62,10 @@ namespace RapidTireEstimates.Repositories
             if (vehicleTypeViewModel == null)
                 return new VehicleType();
 
-            var type = new VehicleType(vehicleTypeViewModel);
-
-            _ = _context.Add(type);
+            _ = _context.Add(vehicleTypeViewModel.VehicleType);
             _ = await _context.SaveChangesAsync();
 
-            return type;
+            return vehicleTypeViewModel.VehicleType;
         }
 
         public async Task<VehicleType> Update(ISpecification<VehicleType> byIdSpec, VehicleTypeViewModel vehicleTypeViewModel)
@@ -77,7 +75,10 @@ namespace RapidTireEstimates.Repositories
             if (type == null || vehicleTypeViewModel == null)
                 return new VehicleType();
 
-            type.Name = vehicleTypeViewModel.Name;
+            if (type.Id != vehicleTypeViewModel.VehicleType.Id)
+                return new VehicleType();
+
+            type = vehicleTypeViewModel.VehicleType;
 
             _ = _context.Update(type);
             _ = await _context.SaveChangesAsync();
