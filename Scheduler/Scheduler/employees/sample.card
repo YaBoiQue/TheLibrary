@@ -1,0 +1,17 @@
+//-----Sample Employee Card-----
+
+//---employee name/ID---
+first John
+middle Dick
+last Doe
+
+id 192837465//---employee availability---
+available from 7:30 to 20:00 on everyday
+unavailable from 9:30 to 12:00 on tuesday
+
+//-----Employee Compatibility-----
+compatible id 1726529
+compatible name Sue Jane
+incompatible id 1228562
+incompatible name Billy Bob
+
