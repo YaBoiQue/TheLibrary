@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -g -shared -Wl,-soname,libdeckLib.so -o libdeckLib.so CMakeFiles/deckLib.dir/deckLib.cpp.o 

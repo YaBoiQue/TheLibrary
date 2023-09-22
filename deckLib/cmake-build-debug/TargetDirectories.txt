@@ -1,0 +1,4 @@
+/mnt/c/dev/github/TheLibrary/deckLib/cmake-build-debug/CMakeFiles/deckLib.dir
+/mnt/c/dev/github/TheLibrary/deckLib/cmake-build-debug/CMakeFiles/deckLib_test.dir
+/mnt/c/dev/github/TheLibrary/deckLib/cmake-build-debug/CMakeFiles/edit_cache.dir
+/mnt/c/dev/github/TheLibrary/deckLib/cmake-build-debug/CMakeFiles/rebuild_cache.dir
