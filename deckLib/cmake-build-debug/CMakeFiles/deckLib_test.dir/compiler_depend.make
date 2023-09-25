@@ -345,10 +345,10 @@ CMakeFiles/deckLib_test.dir/test/deckLib_test.cpp.o: /mnt/c/dev/github/TheLibrar
   /usr/include/c++/11/bits/regex_executor.h \
   /usr/include/c++/11/bits/regex_executor.tcc \
   /usr/include/c++/11/iostream \
-  /mnt/c/dev/github/TheLibrary/deckLib/deckLib.h
+  /mnt/c/dev/github/TheLibrary/deckLib/deckLib.cpp
 
 
-/mnt/c/dev/github/TheLibrary/deckLib/deckLib.h:
+/mnt/c/dev/github/TheLibrary/deckLib/deckLib.cpp:
 
 /usr/include/c++/11/bits/regex_executor.h:
 

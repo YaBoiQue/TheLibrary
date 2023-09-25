@@ -92,7 +92,7 @@ deckLib_test_EXTERNAL_OBJECTS =
 
 deckLib_test: CMakeFiles/deckLib_test.dir/test/deckLib_test.cpp.o
 deckLib_test: CMakeFiles/deckLib_test.dir/build.make
-deckLib_test: /mnt/c/dev/github/TheLibrary/deckLib/lib/libdeckLib.so
+deckLib_test: libdeckLib.so
 deckLib_test: CMakeFiles/deckLib_test.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/dev/github/TheLibrary/deckLib/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable deckLib_test"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/deckLib_test.dir/link.txt --verbose=$(VERBOSE)

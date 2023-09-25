@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -DdeckLib_EXPORTS
 
-CXX_INCLUDES = 
+CXX_INCLUDES = -I/mnt/c/dev/github/TheLibrary/deckLib/lib
 
 CXX_FLAGS = -g -fPIC -fdiagnostics-color=always
 
