@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/deckLib_test.dir/test/deckLib_test.cpp.o -o deckLib_test  -Wl,-rpath,/mnt/c/dev/github/TheLibrary/deckLib/lib /mnt/c/dev/github/TheLibrary/deckLib/lib/libdeckLib.so 
