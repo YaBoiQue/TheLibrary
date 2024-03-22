@@ -5,11 +5,11 @@ namespace TheWarehouse.Models;
 
 public partial class Supply
 {
-    public int IdSupplies { get; set; }
+    public int SupplyId { get; set; }
 
     public string Name { get; set; } = null!;
 
-    public string TypeId { get; set; } = null!;
+    public int SupplyCategoryId { get; set; }
 
     public int? SupplierId { get; set; }
 
@@ -17,11 +17,11 @@ public partial class Supply
 
     public DateTime UpdatedTs { get; set; }
 
+    public virtual Supplycategory Supplycategory { get; set; } = null!;
+
     public virtual ICollection<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
 
-    public virtual ICollection<Inventory> Inventories { get; set; } = new List<Inventory>();
+    public virtual ICollection<Stock> Stocks { get; set; } = new List<Stock>();
 
     public virtual Supplier? Supplier { get; set; }
-
-    public virtual Supplytype Type { get; set; } = null!;
 }

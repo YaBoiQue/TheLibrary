@@ -5,7 +5,7 @@ namespace TheWarehouse.Models;
 
 public partial class Transactioncode
 {
-    public string Name { get; set; } = null!;
+    public string Code { get; set; } = null!;
 
     public string? Description { get; set; }
 

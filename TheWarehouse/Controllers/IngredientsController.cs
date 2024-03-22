@@ -12,9 +12,9 @@ namespace TheWarehouse.Controllers
 {
     public class IngredientsController : Controller
     {
-        private readonly WarehouseDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public IngredientsController(WarehouseDbContext context)
+        public IngredientsController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -22,8 +22,8 @@ namespace TheWarehouse.Controllers
         // GET: Ingredients
         public async Task<IActionResult> Index()
         {
-            var warehouseDbContext = _context.Ingredients.Include(i => i.MenuItem).Include(i => i.Supply);
-            return View(await warehouseDbContext.ToListAsync());
+            var applicationDbContext = _context.Ingredients.Include(i => i.MenuItem).Include(i => i.Supply);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Ingredients/Details/5
@@ -37,7 +37,7 @@ namespace TheWarehouse.Controllers
             var ingredient = await _context.Ingredients
                 .Include(i => i.MenuItem)
                 .Include(i => i.Supply)
-                .FirstOrDefaultAsync(m => m.IdIngredients == id);
+                .FirstOrDefaultAsync(m => m.IngredientId == id);
             if (ingredient == null)
             {
                 return NotFound();
@@ -49,8 +49,8 @@ namespace TheWarehouse.Controllers
         // GET: Ingredients/Create
         public IActionResult Create()
         {
-            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "IdMenuItems", "IdMenuItems");
-            ViewData["SupplyId"] = new SelectList(_context.Supplies, "IdSupplies", "IdSupplies");
+            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "MenuItemId", "MenuItemId");
+            ViewData["SupplyId"] = new SelectList(_context.Supplies, "SupplyId", "SupplyId");
             return View();
         }
 
@@ -59,7 +59,7 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdIngredients,MenuItemId,SupplyId,CreatedTs,UpdatedTs")] Ingredient ingredient)
+        public async Task<IActionResult> Create([Bind("IngredientId,MenuItemId,SupplyId,CreatedTs,UpdatedTs")] Ingredient ingredient)
         {
             if (ModelState.IsValid)
             {
@@ -67,8 +67,8 @@ namespace TheWarehouse.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "IdMenuItems", "IdMenuItems", ingredient.MenuItemId);
-            ViewData["SupplyId"] = new SelectList(_context.Supplies, "IdSupplies", "IdSupplies", ingredient.SupplyId);
+            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "MenuItemId", "MenuItemId", ingredient.MenuItemId);
+            ViewData["SupplyId"] = new SelectList(_context.Supplies, "SupplyId", "SupplyId", ingredient.SupplyId);
             return View(ingredient);
         }
 
@@ -85,8 +85,8 @@ namespace TheWarehouse.Controllers
             {
                 return NotFound();
             }
-            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "IdMenuItems", "IdMenuItems", ingredient.MenuItemId);
-            ViewData["SupplyId"] = new SelectList(_context.Supplies, "IdSupplies", "IdSupplies", ingredient.SupplyId);
+            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "MenuItemId", "MenuItemId", ingredient.MenuItemId);
+            ViewData["SupplyId"] = new SelectList(_context.Supplies, "SupplyId", "SupplyId", ingredient.SupplyId);
             return View(ingredient);
         }
 
@@ -95,9 +95,9 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdIngredients,MenuItemId,SupplyId,CreatedTs,UpdatedTs")] Ingredient ingredient)
+        public async Task<IActionResult> Edit(int id, [Bind("IngredientId,MenuItemId,SupplyId,CreatedTs,UpdatedTs")] Ingredient ingredient)
         {
-            if (id != ingredient.IdIngredients)
+            if (id != ingredient.IngredientId)
             {
                 return NotFound();
             }
@@ -111,7 +111,7 @@ namespace TheWarehouse.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!IngredientExists(ingredient.IdIngredients))
+                    if (!IngredientExists(ingredient.IngredientId))
                     {
                         return NotFound();
                     }
@@ -122,8 +122,8 @@ namespace TheWarehouse.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "IdMenuItems", "IdMenuItems", ingredient.MenuItemId);
-            ViewData["SupplyId"] = new SelectList(_context.Supplies, "IdSupplies", "IdSupplies", ingredient.SupplyId);
+            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "MenuItemId", "MenuItemId", ingredient.MenuItemId);
+            ViewData["SupplyId"] = new SelectList(_context.Supplies, "SupplyId", "SupplyId", ingredient.SupplyId);
             return View(ingredient);
         }
 
@@ -138,7 +138,7 @@ namespace TheWarehouse.Controllers
             var ingredient = await _context.Ingredients
                 .Include(i => i.MenuItem)
                 .Include(i => i.Supply)
-                .FirstOrDefaultAsync(m => m.IdIngredients == id);
+                .FirstOrDefaultAsync(m => m.IngredientId == id);
             if (ingredient == null)
             {
                 return NotFound();
@@ -164,7 +164,7 @@ namespace TheWarehouse.Controllers
 
         private bool IngredientExists(int id)
         {
-            return _context.Ingredients.Any(e => e.IdIngredients == id);
+            return _context.Ingredients.Any(e => e.IngredientId == id);
         }
     }
 }

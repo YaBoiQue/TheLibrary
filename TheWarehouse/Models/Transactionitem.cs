@@ -5,7 +5,7 @@ namespace TheWarehouse.Models;
 
 public partial class Transactionitem
 {
-    public int IdTransactionItems { get; set; }
+    public int TransactionItemId { get; set; }
 
     public int TransactionId { get; set; }
 

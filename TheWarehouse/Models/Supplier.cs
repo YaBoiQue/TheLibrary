@@ -5,7 +5,7 @@ namespace TheWarehouse.Models;
 
 public partial class Supplier
 {
-    public int IdSuppliers { get; set; }
+    public int SupplierId { get; set; }
 
     public string Name { get; set; } = null!;
 

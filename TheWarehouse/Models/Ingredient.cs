@@ -5,7 +5,7 @@ namespace TheWarehouse.Models;
 
 public partial class Ingredient
 {
-    public int IdIngredients { get; set; }
+    public int IngredientId { get; set; }
 
     public int MenuItemId { get; set; }
 

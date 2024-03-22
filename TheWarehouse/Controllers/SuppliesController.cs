@@ -12,9 +12,9 @@ namespace TheWarehouse.Controllers
 {
     public class SuppliesController : Controller
     {
-        private readonly WarehouseDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public SuppliesController(WarehouseDbContext context)
+        public SuppliesController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -22,8 +22,8 @@ namespace TheWarehouse.Controllers
         // GET: Supplies
         public async Task<IActionResult> Index()
         {
-            var warehouseDbContext = _context.Supplies.Include(s => s.Supplier).Include(s => s.Type);
-            return View(await warehouseDbContext.ToListAsync());
+            var applicationDbContext = _context.Supplies.Include(s => s.Supplycategory).Include(s => s.Supplier);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Supplies/Details/5
@@ -35,9 +35,9 @@ namespace TheWarehouse.Controllers
             }
 
             var supply = await _context.Supplies
+                .Include(s => s.Supplycategory)
                 .Include(s => s.Supplier)
-                .Include(s => s.Type)
-                .FirstOrDefaultAsync(m => m.IdSupplies == id);
+                .FirstOrDefaultAsync(m => m.SupplyId == id);
             if (supply == null)
             {
                 return NotFound();
@@ -49,8 +49,8 @@ namespace TheWarehouse.Controllers
         // GET: Supplies/Create
         public IActionResult Create()
         {
-            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "IdSuppliers", "IdSuppliers");
-            ViewData["TypeId"] = new SelectList(_context.Supplytypes, "Name", "Name");
+            ViewData["SupplyCategoryId"] = new SelectList(_context.Supplycategories, "SupplycategoryId", "SupplycategoryId");
+            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "SupplierId");
             return View();
         }
 
@@ -59,7 +59,7 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdSupplies,Name,TypeId,SupplierId,CreatedTs,UpdatedTs")] Supply supply)
+        public async Task<IActionResult> Create([Bind("SupplyId,Name,SupplyCategoryId,SupplierId,CreatedTs,UpdatedTs")] Supply supply)
         {
             if (ModelState.IsValid)
             {
@@ -67,8 +67,8 @@ namespace TheWarehouse.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "IdSuppliers", "IdSuppliers", supply.SupplierId);
-            ViewData["TypeId"] = new SelectList(_context.Supplytypes, "Name", "Name", supply.TypeId);
+            ViewData["SupplyCategoryId"] = new SelectList(_context.Supplycategories, "SupplycategoryId", "SupplycategoryId", supply.SupplyCategoryId);
+            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "SupplierId", supply.SupplierId);
             return View(supply);
         }
 
@@ -85,8 +85,8 @@ namespace TheWarehouse.Controllers
             {
                 return NotFound();
             }
-            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "IdSuppliers", "IdSuppliers", supply.SupplierId);
-            ViewData["TypeId"] = new SelectList(_context.Supplytypes, "Name", "Name", supply.TypeId);
+            ViewData["SupplyCategoryId"] = new SelectList(_context.Supplycategories, "SupplycategoryId", "SupplycategoryId", supply.SupplyCategoryId);
+            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "SupplierId", supply.SupplierId);
             return View(supply);
         }
 
@@ -95,9 +95,9 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdSupplies,Name,TypeId,SupplierId,CreatedTs,UpdatedTs")] Supply supply)
+        public async Task<IActionResult> Edit(int id, [Bind("SupplyId,Name,SupplyCategoryId,SupplierId,CreatedTs,UpdatedTs")] Supply supply)
         {
-            if (id != supply.IdSupplies)
+            if (id != supply.SupplyId)
             {
                 return NotFound();
             }
@@ -111,7 +111,7 @@ namespace TheWarehouse.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SupplyExists(supply.IdSupplies))
+                    if (!SupplyExists(supply.SupplyId))
                     {
                         return NotFound();
                     }
@@ -122,8 +122,8 @@ namespace TheWarehouse.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "IdSuppliers", "IdSuppliers", supply.SupplierId);
-            ViewData["TypeId"] = new SelectList(_context.Supplytypes, "Name", "Name", supply.TypeId);
+            ViewData["SupplyCategoryId"] = new SelectList(_context.Supplycategories, "SupplycategoryId", "SupplycategoryId", supply.SupplyCategoryId);
+            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "SupplierId", supply.SupplierId);
             return View(supply);
         }
 
@@ -136,9 +136,9 @@ namespace TheWarehouse.Controllers
             }
 
             var supply = await _context.Supplies
+                .Include(s => s.Supplycategory)
                 .Include(s => s.Supplier)
-                .Include(s => s.Type)
-                .FirstOrDefaultAsync(m => m.IdSupplies == id);
+                .FirstOrDefaultAsync(m => m.SupplyId == id);
             if (supply == null)
             {
                 return NotFound();
@@ -164,7 +164,7 @@ namespace TheWarehouse.Controllers
 
         private bool SupplyExists(int id)
         {
-            return _context.Supplies.Any(e => e.IdSupplies == id);
+            return _context.Supplies.Any(e => e.SupplyId == id);
         }
     }
 }

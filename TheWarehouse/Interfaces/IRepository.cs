@@ -4,10 +4,10 @@ namespace TheWarehouse.Interfaces
 {
     public interface IRepository<TEntity> : IDisposable
     {
-        void Create(TEntity obj);
-        void Save(TEntity obj);
-        void Delete(TEntity obj);
-        object GetById(object objId);
-        IQueryable<TEntity> ToList();
+        Task<TEntity?> Create(TEntity obj);
+        Task<TEntity?> Save(ISpecification<TEntity> objId, TEntity obj );
+        Task<TEntity?> Delete(ISpecification<TEntity> objId);
+        Task<TEntity?> GetById(ISpecification<TEntity> objId);
+        Task<IEnumerable<TEntity>?> ToList(ISpecification<TEntity> filterBy, ISpecification<TEntity> orderBy);
     }
 }

@@ -12,9 +12,9 @@ namespace TheWarehouse.Controllers
 {
     public class MenuitemsController : Controller
     {
-        private readonly WarehouseDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public MenuitemsController(WarehouseDbContext context)
+        public MenuitemsController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -22,8 +22,8 @@ namespace TheWarehouse.Controllers
         // GET: Menuitems
         public async Task<IActionResult> Index()
         {
-            var warehouseDbContext = _context.Menuitems.Include(m => m.Category);
-            return View(await warehouseDbContext.ToListAsync());
+            var applicationDbContext = _context.Menuitems.Include(m => m.Menucategory);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Menuitems/Details/5
@@ -35,8 +35,8 @@ namespace TheWarehouse.Controllers
             }
 
             var menuitem = await _context.Menuitems
-                .Include(m => m.Category)
-                .FirstOrDefaultAsync(m => m.IdMenuItems == id);
+                .Include(m => m.Menucategory)
+                .FirstOrDefaultAsync(m => m.MenuItemId == id);
             if (menuitem == null)
             {
                 return NotFound();
@@ -48,7 +48,7 @@ namespace TheWarehouse.Controllers
         // GET: Menuitems/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "IdCategories", "IdCategories");
+            ViewData["SupplyCategoryId"] = new SelectList(_context.Menucategories, "SupplyCategoryId", "SupplyCategoryId");
             return View();
         }
 
@@ -57,7 +57,7 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdMenuItems,Name,Price,CategoryId,CreatedTs,UpdatedTs")] Menuitem menuitem)
+        public async Task<IActionResult> Create([Bind("MenuItemId,Name,Price,SupplyCategoryId,CreatedTs,UpdatedTs")] Menuitem menuitem)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +65,7 @@ namespace TheWarehouse.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "IdCategories", "IdCategories", menuitem.CategoryId);
+            ViewData["SupplyCategoryId"] = new SelectList(_context.Menucategories, "SupplyCategoryId", "SupplyCategoryId", menuitem.MenucategoryId);
             return View(menuitem);
         }
 
@@ -82,7 +82,7 @@ namespace TheWarehouse.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "IdCategories", "IdCategories", menuitem.CategoryId);
+            ViewData["SupplyCategoryId"] = new SelectList(_context.Menucategories, "SupplyCategoryId", "SupplyCategoryId", menuitem.MenucategoryId);
             return View(menuitem);
         }
 
@@ -91,9 +91,9 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdMenuItems,Name,Price,CategoryId,CreatedTs,UpdatedTs")] Menuitem menuitem)
+        public async Task<IActionResult> Edit(int id, [Bind("MenuItemId,Name,Price,SupplyCategoryId,CreatedTs,UpdatedTs")] Menuitem menuitem)
         {
-            if (id != menuitem.IdMenuItems)
+            if (id != menuitem.MenuItemId)
             {
                 return NotFound();
             }
@@ -107,7 +107,7 @@ namespace TheWarehouse.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MenuitemExists(menuitem.IdMenuItems))
+                    if (!MenuitemExists(menuitem.MenuItemId))
                     {
                         return NotFound();
                     }
@@ -118,7 +118,7 @@ namespace TheWarehouse.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "IdCategories", "IdCategories", menuitem.CategoryId);
+            ViewData["SupplyCategoryId"] = new SelectList(_context.Menucategories, "SupplyCategoryId", "SupplyCategoryId", menuitem.MenucategoryId);
             return View(menuitem);
         }
 
@@ -131,8 +131,8 @@ namespace TheWarehouse.Controllers
             }
 
             var menuitem = await _context.Menuitems
-                .Include(m => m.Category)
-                .FirstOrDefaultAsync(m => m.IdMenuItems == id);
+                .Include(m => m.Menucategory)
+                .FirstOrDefaultAsync(m => m.MenuItemId == id);
             if (menuitem == null)
             {
                 return NotFound();
@@ -158,7 +158,7 @@ namespace TheWarehouse.Controllers
 
         private bool MenuitemExists(int id)
         {
-            return _context.Menuitems.Any(e => e.IdMenuItems == id);
+            return _context.Menuitems.Any(e => e.MenuItemId == id);
         }
     }
 }

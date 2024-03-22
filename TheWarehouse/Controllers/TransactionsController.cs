@@ -12,9 +12,9 @@ namespace TheWarehouse.Controllers
 {
     public class TransactionsController : Controller
     {
-        private readonly WarehouseDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public TransactionsController(WarehouseDbContext context)
+        public TransactionsController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -22,8 +22,8 @@ namespace TheWarehouse.Controllers
         // GET: Transactions
         public async Task<IActionResult> Index()
         {
-            var warehouseDbContext = _context.Transactions.Include(t => t.CodeNavigation).Include(t => t.Employee);
-            return View(await warehouseDbContext.ToListAsync());
+            var applicationDbContext = _context.Transactions.Include(t => t.CodeNavigation).Include(t => t.User);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Transactions/Details/5
@@ -36,8 +36,8 @@ namespace TheWarehouse.Controllers
 
             var transaction = await _context.Transactions
                 .Include(t => t.CodeNavigation)
-                .Include(t => t.Employee)
-                .FirstOrDefaultAsync(m => m.IdTransactions == id);
+                .Include(t => t.User)
+                .FirstOrDefaultAsync(m => m.TransactionId == id);
             if (transaction == null)
             {
                 return NotFound();
@@ -49,8 +49,8 @@ namespace TheWarehouse.Controllers
         // GET: Transactions/Create
         public IActionResult Create()
         {
-            ViewData["Code"] = new SelectList(_context.Transactioncodes, "Name", "Name");
-            ViewData["EmployeeId"] = new SelectList(_context.Employees, "IdEmployees", "IdEmployees");
+            ViewData["Code"] = new SelectList(_context.Transactioncodes, "Code", "Code");
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -59,7 +59,7 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdTransactions,EmployeeId,Code,Timestamp")] Transaction transaction)
+        public async Task<IActionResult> Create([Bind("TransactionId,UserId,Code,Timestamp")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
@@ -67,8 +67,8 @@ namespace TheWarehouse.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Code"] = new SelectList(_context.Transactioncodes, "Name", "Name", transaction.Code);
-            ViewData["EmployeeId"] = new SelectList(_context.Employees, "IdEmployees", "IdEmployees", transaction.EmployeeId);
+            ViewData["Code"] = new SelectList(_context.Transactioncodes, "Code", "Code", transaction.Code);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", transaction.UserId);
             return View(transaction);
         }
 
@@ -85,8 +85,8 @@ namespace TheWarehouse.Controllers
             {
                 return NotFound();
             }
-            ViewData["Code"] = new SelectList(_context.Transactioncodes, "Name", "Name", transaction.Code);
-            ViewData["EmployeeId"] = new SelectList(_context.Employees, "IdEmployees", "IdEmployees", transaction.EmployeeId);
+            ViewData["Code"] = new SelectList(_context.Transactioncodes, "Code", "Code", transaction.Code);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", transaction.UserId);
             return View(transaction);
         }
 
@@ -95,9 +95,9 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdTransactions,EmployeeId,Code,Timestamp")] Transaction transaction)
+        public async Task<IActionResult> Edit(int id, [Bind("TransactionId,UserId,Code,Timestamp")] Transaction transaction)
         {
-            if (id != transaction.IdTransactions)
+            if (id != transaction.TransactionId)
             {
                 return NotFound();
             }
@@ -111,7 +111,7 @@ namespace TheWarehouse.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TransactionExists(transaction.IdTransactions))
+                    if (!TransactionExists(transaction.TransactionId))
                     {
                         return NotFound();
                     }
@@ -122,8 +122,8 @@ namespace TheWarehouse.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Code"] = new SelectList(_context.Transactioncodes, "Name", "Name", transaction.Code);
-            ViewData["EmployeeId"] = new SelectList(_context.Employees, "IdEmployees", "IdEmployees", transaction.EmployeeId);
+            ViewData["Code"] = new SelectList(_context.Transactioncodes, "Code", "Code", transaction.Code);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", transaction.UserId);
             return View(transaction);
         }
 
@@ -137,8 +137,8 @@ namespace TheWarehouse.Controllers
 
             var transaction = await _context.Transactions
                 .Include(t => t.CodeNavigation)
-                .Include(t => t.Employee)
-                .FirstOrDefaultAsync(m => m.IdTransactions == id);
+                .Include(t => t.User)
+                .FirstOrDefaultAsync(m => m.TransactionId == id);
             if (transaction == null)
             {
                 return NotFound();
@@ -164,7 +164,7 @@ namespace TheWarehouse.Controllers
 
         private bool TransactionExists(int id)
         {
-            return _context.Transactions.Any(e => e.IdTransactions == id);
+            return _context.Transactions.Any(e => e.TransactionId == id);
         }
     }
 }

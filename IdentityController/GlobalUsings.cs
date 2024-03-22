@@ -1,0 +1,9 @@
+﻿global using System;
+global using System.Collections.Generic;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.EntityFrameworkCore;
+global using IdentityController.Data;
+global using IdentityController.Models;
+global using Ardalis.Specification;
+global using Ardalis.Specification.EntityFrameworkCore;
+global using Pomelo.EntityFrameworkCore.MySql;

@@ -12,9 +12,9 @@ namespace TheWarehouse.Controllers
 {
     public class TransactioncodesController : Controller
     {
-        private readonly WarehouseDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public TransactioncodesController(WarehouseDbContext context)
+        public TransactioncodesController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -34,7 +34,7 @@ namespace TheWarehouse.Controllers
             }
 
             var transactioncode = await _context.Transactioncodes
-                .FirstOrDefaultAsync(m => m.Name == id);
+                .FirstOrDefaultAsync(m => m.Code == id);
             if (transactioncode == null)
             {
                 return NotFound();
@@ -54,7 +54,7 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description")] Transactioncode transactioncode)
+        public async Task<IActionResult> Create([Bind("Code,Description")] Transactioncode transactioncode)
         {
             if (ModelState.IsValid)
             {
@@ -86,9 +86,9 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Name,Description")] Transactioncode transactioncode)
+        public async Task<IActionResult> Edit(string id, [Bind("Code,Description")] Transactioncode transactioncode)
         {
-            if (id != transactioncode.Name)
+            if (id != transactioncode.Code)
             {
                 return NotFound();
             }
@@ -102,7 +102,7 @@ namespace TheWarehouse.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TransactioncodeExists(transactioncode.Name))
+                    if (!TransactioncodeExists(transactioncode.Code))
                     {
                         return NotFound();
                     }
@@ -125,7 +125,7 @@ namespace TheWarehouse.Controllers
             }
 
             var transactioncode = await _context.Transactioncodes
-                .FirstOrDefaultAsync(m => m.Name == id);
+                .FirstOrDefaultAsync(m => m.Code == id);
             if (transactioncode == null)
             {
                 return NotFound();
@@ -151,7 +151,7 @@ namespace TheWarehouse.Controllers
 
         private bool TransactioncodeExists(string id)
         {
-            return _context.Transactioncodes.Any(e => e.Name == id);
+            return _context.Transactioncodes.Any(e => e.Code == id);
         }
     }
 }

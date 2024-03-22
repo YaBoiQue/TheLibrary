@@ -12,9 +12,9 @@ namespace TheWarehouse.Controllers
 {
     public class SuppliersController : Controller
     {
-        private readonly WarehouseDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public SuppliersController(WarehouseDbContext context)
+        public SuppliersController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -34,7 +34,7 @@ namespace TheWarehouse.Controllers
             }
 
             var supplier = await _context.Suppliers
-                .FirstOrDefaultAsync(m => m.IdSuppliers == id);
+                .FirstOrDefaultAsync(m => m.SupplierId == id);
             if (supplier == null)
             {
                 return NotFound();
@@ -54,7 +54,7 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdSuppliers,Name,CreatedTs,UpdatedTs")] Supplier supplier)
+        public async Task<IActionResult> Create([Bind("SupplierId,Name,CreatedTs,UpdatedTs")] Supplier supplier)
         {
             if (ModelState.IsValid)
             {
@@ -86,9 +86,9 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdSuppliers,Name,CreatedTs,UpdatedTs")] Supplier supplier)
+        public async Task<IActionResult> Edit(int id, [Bind("SupplierId,Name,CreatedTs,UpdatedTs")] Supplier supplier)
         {
-            if (id != supplier.IdSuppliers)
+            if (id != supplier.SupplierId)
             {
                 return NotFound();
             }
@@ -102,7 +102,7 @@ namespace TheWarehouse.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SupplierExists(supplier.IdSuppliers))
+                    if (!SupplierExists(supplier.SupplierId))
                     {
                         return NotFound();
                     }
@@ -125,7 +125,7 @@ namespace TheWarehouse.Controllers
             }
 
             var supplier = await _context.Suppliers
-                .FirstOrDefaultAsync(m => m.IdSuppliers == id);
+                .FirstOrDefaultAsync(m => m.SupplierId == id);
             if (supplier == null)
             {
                 return NotFound();
@@ -151,7 +151,7 @@ namespace TheWarehouse.Controllers
 
         private bool SupplierExists(int id)
         {
-            return _context.Suppliers.Any(e => e.IdSuppliers == id);
+            return _context.Suppliers.Any(e => e.SupplierId == id);
         }
     }
 }

@@ -5,9 +5,9 @@ namespace TheWarehouse.Models;
 
 public partial class Transaction
 {
-    public int IdTransactions { get; set; }
+    public int TransactionId { get; set; }
 
-    public int EmployeeId { get; set; }
+    public string UserId { get; set; } = null!;
 
     public string? Code { get; set; }
 
@@ -15,7 +15,7 @@ public partial class Transaction
 
     public virtual Transactioncode? CodeNavigation { get; set; }
 
-    public virtual Employee Employee { get; set; } = null!;
-
     public virtual ICollection<Transactionitem> Transactionitems { get; set; } = new List<Transactionitem>();
+
+    public virtual User User { get; set; } = null!;
 }

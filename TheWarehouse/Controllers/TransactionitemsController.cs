@@ -12,9 +12,9 @@ namespace TheWarehouse.Controllers
 {
     public class TransactionitemsController : Controller
     {
-        private readonly WarehouseDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public TransactionitemsController(WarehouseDbContext context)
+        public TransactionitemsController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -22,8 +22,8 @@ namespace TheWarehouse.Controllers
         // GET: Transactionitems
         public async Task<IActionResult> Index()
         {
-            var warehouseDbContext = _context.Transactionitems.Include(t => t.MenuItem).Include(t => t.Transaction);
-            return View(await warehouseDbContext.ToListAsync());
+            var applicationDbContext = _context.Transactionitems.Include(t => t.MenuItem).Include(t => t.Transaction);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Transactionitems/Details/5
@@ -37,7 +37,7 @@ namespace TheWarehouse.Controllers
             var transactionitem = await _context.Transactionitems
                 .Include(t => t.MenuItem)
                 .Include(t => t.Transaction)
-                .FirstOrDefaultAsync(m => m.IdTransactionItems == id);
+                .FirstOrDefaultAsync(m => m.TransactionItemId == id);
             if (transactionitem == null)
             {
                 return NotFound();
@@ -49,8 +49,8 @@ namespace TheWarehouse.Controllers
         // GET: Transactionitems/Create
         public IActionResult Create()
         {
-            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "IdMenuItems", "IdMenuItems");
-            ViewData["TransactionId"] = new SelectList(_context.Transactions, "IdTransactions", "IdTransactions");
+            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "MenuItemId", "MenuItemId");
+            ViewData["TransactionId"] = new SelectList(_context.Transactions, "TransactionId", "TransactionId");
             return View();
         }
 
@@ -59,7 +59,7 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdTransactionItems,TransactionId,MenuItemId,Count,Price,Timestamp")] Transactionitem transactionitem)
+        public async Task<IActionResult> Create([Bind("TransactionItemId,TransactionId,MenuItemId,Count,Price,Timestamp")] Transactionitem transactionitem)
         {
             if (ModelState.IsValid)
             {
@@ -67,8 +67,8 @@ namespace TheWarehouse.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "IdMenuItems", "IdMenuItems", transactionitem.MenuItemId);
-            ViewData["TransactionId"] = new SelectList(_context.Transactions, "IdTransactions", "IdTransactions", transactionitem.TransactionId);
+            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "MenuItemId", "MenuItemId", transactionitem.MenuItemId);
+            ViewData["TransactionId"] = new SelectList(_context.Transactions, "TransactionId", "TransactionId", transactionitem.TransactionId);
             return View(transactionitem);
         }
 
@@ -85,8 +85,8 @@ namespace TheWarehouse.Controllers
             {
                 return NotFound();
             }
-            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "IdMenuItems", "IdMenuItems", transactionitem.MenuItemId);
-            ViewData["TransactionId"] = new SelectList(_context.Transactions, "IdTransactions", "IdTransactions", transactionitem.TransactionId);
+            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "MenuItemId", "MenuItemId", transactionitem.MenuItemId);
+            ViewData["TransactionId"] = new SelectList(_context.Transactions, "TransactionId", "TransactionId", transactionitem.TransactionId);
             return View(transactionitem);
         }
 
@@ -95,9 +95,9 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdTransactionItems,TransactionId,MenuItemId,Count,Price,Timestamp")] Transactionitem transactionitem)
+        public async Task<IActionResult> Edit(int id, [Bind("TransactionItemId,TransactionId,MenuItemId,Count,Price,Timestamp")] Transactionitem transactionitem)
         {
-            if (id != transactionitem.IdTransactionItems)
+            if (id != transactionitem.TransactionItemId)
             {
                 return NotFound();
             }
@@ -111,7 +111,7 @@ namespace TheWarehouse.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TransactionitemExists(transactionitem.IdTransactionItems))
+                    if (!TransactionitemExists(transactionitem.TransactionItemId))
                     {
                         return NotFound();
                     }
@@ -122,8 +122,8 @@ namespace TheWarehouse.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "IdMenuItems", "IdMenuItems", transactionitem.MenuItemId);
-            ViewData["TransactionId"] = new SelectList(_context.Transactions, "IdTransactions", "IdTransactions", transactionitem.TransactionId);
+            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "MenuItemId", "MenuItemId", transactionitem.MenuItemId);
+            ViewData["TransactionId"] = new SelectList(_context.Transactions, "TransactionId", "TransactionId", transactionitem.TransactionId);
             return View(transactionitem);
         }
 
@@ -138,7 +138,7 @@ namespace TheWarehouse.Controllers
             var transactionitem = await _context.Transactionitems
                 .Include(t => t.MenuItem)
                 .Include(t => t.Transaction)
-                .FirstOrDefaultAsync(m => m.IdTransactionItems == id);
+                .FirstOrDefaultAsync(m => m.TransactionItemId == id);
             if (transactionitem == null)
             {
                 return NotFound();
@@ -164,7 +164,7 @@ namespace TheWarehouse.Controllers
 
         private bool TransactionitemExists(int id)
         {
-            return _context.Transactionitems.Any(e => e.IdTransactionItems == id);
+            return _context.Transactionitems.Any(e => e.TransactionItemId == id);
         }
     }
 }
