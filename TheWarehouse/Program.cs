@@ -8,20 +8,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Test if local or docker connection string
 string identityConnectionString;
-string harnessConnectionString;
+string warehouseConnectionString;
 try
 {
     identityConnectionString = builder.Configuration.GetConnectionString("LocalIdentityConnection") ?? throw new InvalidOperationException("Connection string 'LocalIdentityConnection' not found.");
     ServerVersion.AutoDetect(identityConnectionString);
 
-    harnessConnectionString = builder.Configuration.GetConnectionString("LocalWarehouseConnection") ?? throw new InvalidOperationException("Connection string 'LocalWarehouseConnection' not found.");
-    ServerVersion.AutoDetect(harnessConnectionString);
+    warehouseConnectionString = builder.Configuration.GetConnectionString("LocalWarehouseConnection") ?? throw new InvalidOperationException("Connection string 'LocalWarehouseConnection' not found.");
+    ServerVersion.AutoDetect(warehouseConnectionString);
 }
 catch
 {
     identityConnectionString = builder.Configuration.GetConnectionString("DockerIdentityConnection") ?? throw new InvalidOperationException("Connection string 'DockerIdentityConnection' not found.");
 
-    identityConnectionString = builder.Configuration.GetConnectionString("DockerWarehouseConnection") ?? throw new InvalidOperationException("Connection string 'DockerWarehouseConnection' not found.");
+    warehouseConnectionString = builder.Configuration.GetConnectionString("DockerWarehouseConnection") ?? throw new InvalidOperationException("Connection string 'DockerWarehouseConnection' not found.");
 }
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -29,6 +29,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         o.MigrationsHistoryTable(
             tableName: HistoryRepository.DefaultTableName,
             schema: "Identity");
+        o.SchemaBehavior(MySqlSchemaBehavior.Ignore);
+        o.EnableRetryOnFailure();
+    }));
+
+builder.Services.AddDbContext<WarehouseDbContext>(options =>
+    options.UseMySql(warehouseConnectionString, ServerVersion.AutoDetect(warehouseConnectionString), o => {
+        o.MigrationsHistoryTable(
+            tableName: HistoryRepository.DefaultTableName,
+            schema: "Warehouse");
         o.SchemaBehavior(MySqlSchemaBehavior.Ignore);
         o.EnableRetryOnFailure();
     }));

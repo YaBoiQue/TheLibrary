@@ -25,7 +25,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
             tableName: HistoryRepository.DefaultTableName,
             schema: "Identity");
         o.SchemaBehavior(MySqlSchemaBehavior.Ignore);
-        o.EnableRetryOnFailure();
     }));
 
 try
@@ -43,7 +42,6 @@ builder.Services.AddDbContext<HarnessDbContext>(options =>
             tableName: HistoryRepository.DefaultTableName,
             schema: "Harness");
         o.SchemaBehavior(MySqlSchemaBehavior.Ignore);
-        o.EnableRetryOnFailure();
     }));
 
 
