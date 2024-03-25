@@ -25,7 +25,7 @@
                 @Html.DisplayNameFor(model => model.UpdatedTs)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Category)
+                @Html.DisplayNameFor(model => model.Menucategory)
             </th>
             <th></th>
         </tr>
@@ -46,12 +46,12 @@
                 @Html.DisplayFor(modelItem => item.UpdatedTs)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Category.IdCategories)
+                @Html.DisplayFor(modelItem => item.Menucategory.MenucategoryId)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdMenuItems">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdMenuItems">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdMenuItems">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.MenuItemId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.MenuItemId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.MenuItemId">Delete</a>
             </td>
         </tr>
 }

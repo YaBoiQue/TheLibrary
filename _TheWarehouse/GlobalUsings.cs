@@ -1,0 +1,16 @@
+﻿global using System;
+global using System.Collections.Generic;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.EntityFrameworkCore;
+global using TheWarehouse.Data;
+global using TheWarehouse.Models;
+global using TheWarehouse.Interfaces;
+global using TheWarehouse.Interfaces.Views;
+global using TheWarehouse.Repositories;
+global using TheWarehouse.Repositories.Views;
+global using TheWarehouse.Specifications;
+global using TheWarehouse.ViewModels;
+global using static TheWarehouse.Helpers.Constants;
+global using Ardalis.Specification;
+global using Ardalis.Specification.EntityFrameworkCore;
+global using Pomelo.EntityFrameworkCore.MySql;

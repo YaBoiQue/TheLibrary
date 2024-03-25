@@ -36,15 +36,15 @@
             @Html.DisplayFor(model => model.UpdatedTs)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
+            @Html.DisplayNameFor(model => model.Menucategory)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.IdCategories)
+            @Html.DisplayFor(model => model.Menucategory.MenucategoryId)
         </dd>
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="IdMenuItems" />
+        <input type="hidden" asp-for="MenuItemId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>

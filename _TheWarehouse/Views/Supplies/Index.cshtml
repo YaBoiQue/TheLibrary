@@ -22,10 +22,10 @@
                 @Html.DisplayNameFor(model => model.UpdatedTs)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Supplier)
+                @Html.DisplayNameFor(model => model.Supplycategory)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Type)
+                @Html.DisplayNameFor(model => model.Supplier)
             </th>
             <th></th>
         </tr>
@@ -43,15 +43,15 @@
                 @Html.DisplayFor(modelItem => item.UpdatedTs)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Supplier.IdSuppliers)
+                @Html.DisplayFor(modelItem => item.Supplycategory.SupplycategoryId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Type.Name)
+                @Html.DisplayFor(modelItem => item.Supplier.SupplierId)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdSupplies">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdSupplies">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdSupplies">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.SupplyId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.SupplyId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.SupplyId">Delete</a>
             </td>
         </tr>
 }

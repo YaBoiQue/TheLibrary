@@ -8,17 +8,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using TheWarehouse.Areas.Identity.Models;
 
 namespace TheWarehouse.Areas.Identity.Pages.Account.Manage
 {
     public class SetPasswordModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<Aspnetuser> _userManager;
+        private readonly SignInManager<Aspnetuser> _signInManager;
 
         public SetPasswordModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            UserManager<Aspnetuser> userManager,
+            SignInManager<Aspnetuser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;

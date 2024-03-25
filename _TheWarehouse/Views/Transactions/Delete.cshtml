@@ -21,18 +21,18 @@
             @Html.DisplayNameFor(model => model.CodeNavigation)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CodeNavigation.Name)
+            @Html.DisplayFor(model => model.CodeNavigation.Code)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Employee)
+            @Html.DisplayNameFor(model => model.User)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Employee.IdEmployees)
+            @Html.DisplayFor(model => model.User.Id)
         </dd>
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="IdTransactions" />
+        <input type="hidden" asp-for="TransactionId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>

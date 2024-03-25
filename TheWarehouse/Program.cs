@@ -1,47 +1,43 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using TheWarehouse.Data;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-string connectionString;
+// Test if local or docker connection string
+string identityConnectionString;
+string harnessConnectionString;
 try
 {
-    connectionString = builder.Configuration.GetConnectionString("LocalWarehouseDb") ?? throw new InvalidOperationException("Connection string 'LocalWarehouseDb' not found.");
-    ServerVersion.AutoDetect(connectionString);
+    identityConnectionString = builder.Configuration.GetConnectionString("LocalIdentityConnection") ?? throw new InvalidOperationException("Connection string 'LocalIdentityConnection' not found.");
+    ServerVersion.AutoDetect(identityConnectionString);
+
+    harnessConnectionString = builder.Configuration.GetConnectionString("LocalWarehouseConnection") ?? throw new InvalidOperationException("Connection string 'LocalWarehouseConnection' not found.");
+    ServerVersion.AutoDetect(harnessConnectionString);
 }
 catch
 {
-    connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'LocalWarehouseDb' not found.");
+    identityConnectionString = builder.Configuration.GetConnectionString("DockerIdentityConnection") ?? throw new InvalidOperationException("Connection string 'DockerIdentityConnection' not found.");
+
+    identityConnectionString = builder.Configuration.GetConnectionString("DockerWarehouseConnection") ?? throw new InvalidOperationException("Connection string 'DockerWarehouseConnection' not found.");
 }
 
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseMySql(identityConnectionString, ServerVersion.AutoDetect(identityConnectionString), o => {
+        o.MigrationsHistoryTable(
+            tableName: HistoryRepository.DefaultTableName,
+            schema: "Identity");
+        o.SchemaBehavior(MySqlSchemaBehavior.Ignore);
+        o.EnableRetryOnFailure();
+    }));
 
-builder.Services.AddDbContext<ApplicationDbContext>(
-    dbContextOptions => dbContextOptions
-        .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
-        // The following three options help with debugging, but should
-        // be changed or removed for production.
-        .LogTo(Console.WriteLine, LogLevel.Information)
-        .EnableSensitiveDataLogging()
-        .EnableDetailedErrors()
-);
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddIdentity<Aspnetuser, Aspnetrole>(options => options.SignIn.RequireConfirmedAccount = true)
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultUI()
+            .AddDefaultTokenProviders();
 
-builder.Services.AddIdentity<User, Role>()
-    .AddUserManager<UserManager<User>>()
-    .AddDefaultUI()
-    .AddDefaultTokenProviders()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-
-builder.Services.AddRazorPages();
-
-//IdentityBuilder identityBuilder = builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
-//    .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -62,7 +58,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(

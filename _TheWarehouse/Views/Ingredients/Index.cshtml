@@ -37,15 +37,15 @@
                 @Html.DisplayFor(modelItem => item.UpdatedTs)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MenuItem.IdMenuItems)
+                @Html.DisplayFor(modelItem => item.MenuItem.MenuItemId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Supply.IdSupplies)
+                @Html.DisplayFor(modelItem => item.Supply.SupplyId)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdIngredients">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdIngredients">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdIngredients">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.IngredientId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IngredientId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IngredientId">Delete</a>
             </td>
         </tr>
 }

@@ -1,29 +1,47 @@
-
-
-using MySql.Data.EntityFramework;
-using NHibernate.Criterion;
-using System.Data.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using TheWarehouse.Data;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-/*var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));*/
+string connectionString;
+try
+{
+    connectionString = builder.Configuration.GetConnectionString("LocalWarehouseDb") ?? throw new InvalidOperationException("Connection string 'LocalWarehouseDb' not found.");
+    ServerVersion.AutoDetect(connectionString);
+}
+catch
+{
+    connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'LocalWarehouseDb' not found.");
+}
 
-var warehouseConnectionString = builder.Configuration.GetConnectionString("WarehouseDB") ?? throw new InvalidOperationException("Connection string 'WarehouseDB' not found.");
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-/*
-builder.Services.AddDbContext<WarehouseDbContext>(options => options.UseMySQL(warehouseConnectionString, ));
-*/
-DbConfiguration.SetConfiguration(new MySqlEFConfiguration());
+builder.Services.AddDbContext<ApplicationDbContext>(
+    dbContextOptions => dbContextOptions
+        .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+        // The following three options help with debugging, but should
+        // be changed or removed for production.
+        .LogTo(Console.WriteLine, LogLevel.Information)
+        .EnableSensitiveDataLogging()
+        .EnableDetailedErrors()
+);
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+builder.Services.AddIdentity<User, Role>()
+    .AddUserManager<UserManager<User>>()
+    .AddDefaultUI()
+    .AddDefaultTokenProviders()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<WarehouseDbContext>();
+builder.Services.AddRazorPages();
+
+//IdentityBuilder identityBuilder = builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+//    .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -44,7 +62,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
