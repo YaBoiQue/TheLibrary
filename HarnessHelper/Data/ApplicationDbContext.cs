@@ -43,6 +43,8 @@ public partial class ApplicationDbContext : IdentityDbContext<Aspnetuser, Aspnet
             .UseCollation("utf8mb4_0900_ai_ci")
             .HasCharSet("utf8mb4");
 
+        modelBuilder.HasDefaultSchema("Identity");
+
         modelBuilder.Entity<Aspnetuser>(b =>
         {
             b.HasKey(r => r.Id).HasName("Primary");

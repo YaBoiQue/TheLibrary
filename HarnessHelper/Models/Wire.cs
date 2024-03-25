@@ -15,7 +15,5 @@ public partial class Wire
 
     public string UserId { get; set; } = null!;
 
-    public virtual Aspnetuser? User { get; set; }
-
     public virtual ICollection<Pin> Pins { get; set; } = new List<Pin>();
 }

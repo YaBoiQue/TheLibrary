@@ -44,6 +44,8 @@ public partial class HarnessDbContext : DbContext
             .UseCollation("utf8mb4_0900_ai_ci")
             .HasCharSet("utf8mb4");
 
+        modelBuilder.HasDefaultSchema("Harness");
+
         modelBuilder.Entity<Color>(entity =>
         {
             entity.HasKey(e => e.ColorCode).HasName("PRIMARY");
@@ -240,9 +242,5 @@ public partial class HarnessDbContext : DbContext
                 .HasColumnName("numPlugs");
             entity.Property(e => e.WireId).HasColumnName("wireId");
         });
-
-        OnModelCreatingPartial(modelBuilder);
     }
-
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

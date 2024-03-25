@@ -15,7 +15,5 @@ public partial class Device
 
     public string UserId { get; set; } = null!;
 
-    public virtual Aspnetuser? User { get; set; }
-
     public virtual ICollection<Plug> Plugs { get; set; } = new List<Plug>();
 }

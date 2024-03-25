@@ -17,8 +17,6 @@ public partial class Plug
 
     public string UserId { get; set; } = null!;
 
-    public virtual Aspnetuser? User { get; set; }
-
     public virtual Device? Device { get; set; }
 
     public virtual ICollection<Pin> Pins { get; set; } = new List<Pin>();
