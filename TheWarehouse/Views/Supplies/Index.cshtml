@@ -1,11 +1,17 @@
 ﻿@model IEnumerable<TheWarehouse.Models.Supply>
 
 @{
-    ViewData["Title"] = "Index";
+    Layout = null;
 }
 
-<h1>Index</h1>
+<!DOCTYPE html>
 
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -22,7 +28,10 @@
                 @Html.DisplayNameFor(model => model.UpdatedTs)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UserId)
+                @Html.DisplayNameFor(model => model.CreatedUserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpdatedUserId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Supplier)
@@ -46,7 +55,10 @@
                 @Html.DisplayFor(modelItem => item.UpdatedTs)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UserId)
+                @Html.DisplayFor(modelItem => item.CreatedUserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdatedUserId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Supplier.SupplierId)
@@ -63,3 +75,5 @@
 }
     </tbody>
 </table>
+</body>
+</html>

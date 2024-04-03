@@ -9,7 +9,5 @@ public partial class Stockcode
 
     public string? Description { get; set; }
 
-    public string UserId { get; set; } = null!;
-
     public virtual ICollection<Stock> Stocks { get; set; } = new List<Stock>();
 }

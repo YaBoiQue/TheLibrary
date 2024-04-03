@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TheWarehouse.Models.Menuitem>
+﻿@model MenuitemViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -19,22 +19,13 @@
                 @Html.DisplayNameFor(model => model.Price)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreatedTs)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdatedTs)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Menucategory)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.menuitems) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -43,16 +34,7 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CreatedTs)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedTs)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Menucategory.MenucategoryId)
+                @Html.DisplayFor(modelItem => item.Menucategory.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.MenuItemId">Edit</a> |

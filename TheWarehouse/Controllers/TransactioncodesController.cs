@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using TheWarehouse.Data;
-using TheWarehouse.Models;
-
-namespace TheWarehouse.Controllers
+﻿namespace TheWarehouse.Controllers
 {
-    public class TransactioncodesController : Controller
+    public class TransactioncodesController : BaseController
     {
         private readonly WarehouseDbContext _context;
 
@@ -54,7 +44,7 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Code,Description,UserId")] Transactioncode transactioncode)
+        public async Task<IActionResult> Create([Bind("Code,Description")] Transactioncode transactioncode)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +76,7 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Code,Description,UserId")] Transactioncode transactioncode)
+        public async Task<IActionResult> Edit(string id, [Bind("Code,Description")] Transactioncode transactioncode)
         {
             if (id != transactioncode.Code)
             {

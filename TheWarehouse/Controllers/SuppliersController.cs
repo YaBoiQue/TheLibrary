@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using TheWarehouse.Data;
-using TheWarehouse.Models;
-
-namespace TheWarehouse.Controllers
+﻿namespace TheWarehouse.Controllers
 {
-    public class SuppliersController : Controller
+    public class SuppliersController : BaseController
     {
         private readonly WarehouseDbContext _context;
 
@@ -54,7 +44,7 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SupplierId,Name,CreatedTs,UpdatedTs,UserId")] Supplier supplier)
+        public async Task<IActionResult> Create([Bind("SupplierId,Name,CreatedTs,UpdatedTs,CreatedUserId,UdatedUserId")] Supplier supplier)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +76,7 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SupplierId,Name,CreatedTs,UpdatedTs,UserId")] Supplier supplier)
+        public async Task<IActionResult> Edit(int id, [Bind("SupplierId,Name,CreatedTs,UpdatedTs,CreatedUserId,UdatedUserId")] Supplier supplier)
         {
             if (id != supplier.SupplierId)
             {

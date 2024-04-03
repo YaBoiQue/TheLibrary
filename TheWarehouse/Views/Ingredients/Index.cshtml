@@ -19,6 +19,12 @@
                 @Html.DisplayNameFor(model => model.UpdatedTs)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.CreatedUserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpdatedUserId)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.MenuItem)
             </th>
             <th>
@@ -35,6 +41,12 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.UpdatedTs)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedUserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdatedUserId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.MenuItem.MenuItemId)

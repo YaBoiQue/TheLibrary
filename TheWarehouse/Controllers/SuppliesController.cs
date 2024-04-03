@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using TheWarehouse.Data;
-using TheWarehouse.Models;
-
-namespace TheWarehouse.Controllers
+﻿namespace TheWarehouse.Controllers
 {
-    public class SuppliesController : Controller
+    public class SuppliesController : BaseController
     {
         private readonly WarehouseDbContext _context;
 
@@ -59,7 +49,7 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SupplyId,Name,SupplyCategoryId,SupplierId,CreatedTs,UpdatedTs,UserId")] Supply supply)
+        public async Task<IActionResult> Create([Bind("SupplyId,Name,SupplyCategoryId,SupplierId,CreatedTs,UpdatedTs,CreatedUserId,UpdatedUserId")] Supply supply)
         {
             if (ModelState.IsValid)
             {
@@ -95,7 +85,7 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SupplyId,Name,SupplyCategoryId,SupplierId,CreatedTs,UpdatedTs,UserId")] Supply supply)
+        public async Task<IActionResult> Edit(int id, [Bind("SupplyId,Name,SupplyCategoryId,SupplierId,CreatedTs,UpdatedTs,CreatedUserId,UpdatedUserId")] Supply supply)
         {
             if (id != supply.SupplyId)
             {

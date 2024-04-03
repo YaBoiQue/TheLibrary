@@ -47,17 +47,18 @@ public partial class WarehouseDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
-            .UseCollation("utf8mb4_0900_ai_ci")
-            .HasCharSet("utf8mb4");
+            .UseCollation("utf8mb3_general_ci")
+            .HasCharSet("utf8mb3");
 
         modelBuilder.Entity<Ingredient>(entity =>
         {
             entity.HasKey(e => e.IngredientId).HasName("PRIMARY");
 
-            entity
-                .ToTable("ingredients")
-                .HasCharSet("utf8mb3")
-                .UseCollation("utf8mb3_general_ci");
+            entity.ToTable("ingredients");
+
+            entity.HasIndex(e => e.CreatedUserId, "Ingredients_CreatedUser_idx");
+
+            entity.HasIndex(e => e.UpdatedUserId, "Ingredients_UpdatedUser_idx");
 
             entity.HasIndex(e => e.MenuItemId, "MenuItems_idx");
 
@@ -69,10 +70,18 @@ public partial class WarehouseDbContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime")
                 .HasColumnName("created_ts");
+            entity.Property(e => e.CreatedUserId)
+                .HasColumnName("created_userId")
+                .UseCollation("utf8mb4_0900_ai_ci")
+                .HasCharSet("utf8mb4");
             entity.Property(e => e.UpdatedTs)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime")
                 .HasColumnName("updated_ts");
+            entity.Property(e => e.UpdatedUserId)
+                .HasColumnName("updated_userId")
+                .UseCollation("utf8mb4_0900_ai_ci")
+                .HasCharSet("utf8mb4");
 
             entity.HasOne(d => d.MenuItem).WithMany(p => p.Ingredients)
                 .HasForeignKey(d => d.MenuItemId)
@@ -89,47 +98,47 @@ public partial class WarehouseDbContext : DbContext
         {
             entity.HasKey(e => e.MenucategoryId).HasName("PRIMARY");
 
-            entity
-                .ToTable("menucategories")
-                .HasCharSet("utf8mb3")
-                .UseCollation("utf8mb3_general_ci");
-
-            entity.HasIndex(e => e.UserId, "MenuCategories_Users_idx");
+            entity.ToTable("menucategories");
 
             entity.HasIndex(e => e.MenucategoryId, "idMenucategories_UNIQUE").IsUnique();
 
             entity.Property(e => e.Name).HasMaxLength(45);
-            entity.Property(e => e.UserId)
-                .UseCollation("utf8mb4_0900_ai_ci")
-                .HasCharSet("utf8mb4");
         });
 
         modelBuilder.Entity<Menuitem>(entity =>
         {
             entity.HasKey(e => e.MenuItemId).HasName("PRIMARY");
 
-            entity
-                .ToTable("menuitems")
-                .HasCharSet("utf8mb3")
-                .UseCollation("utf8mb3_general_ci");
+            entity.ToTable("menuitems");
 
-            entity.HasIndex(e => e.UserId, "MenuItems_Users_idx");
+            entity.HasIndex(e => e.CreatedUserId, "MenuItems_CreatedUser_idx");
+
+            entity.HasIndex(e => e.UpdatedUserId, "MenuItems_UpdatedUser_idx");
 
             entity.HasIndex(e => e.MenucategoryId, "Menucategory_idx");
 
             entity.HasIndex(e => e.MenuItemId, "idMenuItems_UNIQUE").IsUnique();
 
+            entity.Property(e => e.Active)
+                .HasDefaultValueSql("b'0'")
+                .HasComment("Bit value represents boolean\n0 = true\n1 = false")
+                .HasColumnType("bit(1)");
             entity.Property(e => e.CreatedTs)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime")
                 .HasColumnName("created_ts");
+            entity.Property(e => e.CreatedUserId)
+                .HasColumnName("created_userId")
+                .UseCollation("utf8mb4_0900_ai_ci")
+                .HasCharSet("utf8mb4");
             entity.Property(e => e.Name).HasMaxLength(45);
             entity.Property(e => e.Price).HasPrecision(5, 2);
             entity.Property(e => e.UpdatedTs)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime")
                 .HasColumnName("updated_ts");
-            entity.Property(e => e.UserId)
+            entity.Property(e => e.UpdatedUserId)
+                .HasColumnName("updated_userId")
                 .UseCollation("utf8mb4_0900_ai_ci")
                 .HasCharSet("utf8mb4");
 
@@ -142,12 +151,11 @@ public partial class WarehouseDbContext : DbContext
         {
             entity.HasKey(e => e.StockId).HasName("PRIMARY");
 
-            entity
-                .ToTable("stocks")
-                .HasCharSet("utf8mb3")
-                .UseCollation("utf8mb3_general_ci");
+            entity.ToTable("stocks");
 
             entity.HasIndex(e => e.Code, "Stock_Stockcodes_idx");
+
+            entity.HasIndex(e => e.UserId, "Stock_Users_idx");
 
             entity.HasIndex(e => e.SupplyId, "Supplies_idx1");
 
@@ -160,7 +168,9 @@ public partial class WarehouseDbContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime")
                 .HasColumnName("timestamp");
-            entity.Property(e => e.UserId).HasMaxLength(128);
+            entity.Property(e => e.UserId)
+                .UseCollation("utf8mb4_0900_ai_ci")
+                .HasCharSet("utf8mb4");
 
             entity.HasOne(d => d.CodeNavigation).WithMany(p => p.Stocks)
                 .HasForeignKey(d => d.Code)
@@ -177,32 +187,23 @@ public partial class WarehouseDbContext : DbContext
         {
             entity.HasKey(e => e.Code).HasName("PRIMARY");
 
-            entity
-                .ToTable("stockcodes")
-                .HasCharSet("utf8mb3")
-                .UseCollation("utf8mb3_general_ci");
+            entity.ToTable("stockcodes");
 
             entity.HasIndex(e => e.Code, "Code_UNIQUE").IsUnique();
 
-            entity.HasIndex(e => e.UserId, "StockCodes_Users_idx");
-
             entity.Property(e => e.Code).HasMaxLength(45);
             entity.Property(e => e.Description).HasColumnType("mediumtext");
-            entity.Property(e => e.UserId)
-                .UseCollation("utf8mb4_0900_ai_ci")
-                .HasCharSet("utf8mb4");
         });
 
         modelBuilder.Entity<Supplier>(entity =>
         {
             entity.HasKey(e => e.SupplierId).HasName("PRIMARY");
 
-            entity
-                .ToTable("suppliers")
-                .HasCharSet("utf8mb3")
-                .UseCollation("utf8mb3_general_ci");
+            entity.ToTable("suppliers");
 
-            entity.HasIndex(e => e.UserId, "Suppliers_Users_idx");
+            entity.HasIndex(e => e.CreatedUserId, "Suppliers_CreatedUser_idx");
+
+            entity.HasIndex(e => e.UdatedUserId, "Suppliers_UpdatedUser_idx");
 
             entity.HasIndex(e => e.SupplierId, "idSuppliers_UNIQUE").IsUnique();
 
@@ -210,28 +211,32 @@ public partial class WarehouseDbContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime")
                 .HasColumnName("created_ts");
+            entity.Property(e => e.CreatedUserId)
+                .HasColumnName("created_userId")
+                .UseCollation("utf8mb4_0900_ai_ci")
+                .HasCharSet("utf8mb4");
             entity.Property(e => e.Name).HasMaxLength(45);
+            entity.Property(e => e.UdatedUserId)
+                .HasColumnName("udated_userId")
+                .UseCollation("utf8mb4_0900_ai_ci")
+                .HasCharSet("utf8mb4");
             entity.Property(e => e.UpdatedTs)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime")
                 .HasColumnName("updated_ts");
-            entity.Property(e => e.UserId)
-                .UseCollation("utf8mb4_0900_ai_ci")
-                .HasCharSet("utf8mb4");
         });
 
         modelBuilder.Entity<Supply>(entity =>
         {
             entity.HasKey(e => e.SupplyId).HasName("PRIMARY");
 
-            entity
-                .ToTable("supplies")
-                .HasCharSet("utf8mb3")
-                .UseCollation("utf8mb3_general_ci");
+            entity.ToTable("supplies");
+
+            entity.HasIndex(e => e.CreatedUserId, "Supplies_CreatedUser_idx");
 
             entity.HasIndex(e => e.SupplierId, "Supplies_Suppliers_idx");
 
-            entity.HasIndex(e => e.UserId, "Supplies_Users_idx");
+            entity.HasIndex(e => e.UpdatedUserId, "Supplies_UpdatedUser_idx");
 
             entity.HasIndex(e => e.SupplyCategoryId, "Supplycategory_idx");
 
@@ -241,12 +246,17 @@ public partial class WarehouseDbContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime")
                 .HasColumnName("created_ts");
+            entity.Property(e => e.CreatedUserId)
+                .HasColumnName("created_userId")
+                .UseCollation("utf8mb4_0900_ai_ci")
+                .HasCharSet("utf8mb4");
             entity.Property(e => e.Name).HasMaxLength(45);
             entity.Property(e => e.UpdatedTs)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime")
                 .HasColumnName("updated_ts");
-            entity.Property(e => e.UserId)
+            entity.Property(e => e.UpdatedUserId)
+                .HasColumnName("updated_userId")
                 .UseCollation("utf8mb4_0900_ai_ci")
                 .HasCharSet("utf8mb4");
 
@@ -264,32 +274,21 @@ public partial class WarehouseDbContext : DbContext
         {
             entity.HasKey(e => e.SupplycategoryId).HasName("PRIMARY");
 
-            entity
-                .ToTable("supplycategories")
-                .HasCharSet("utf8mb3")
-                .UseCollation("utf8mb3_general_ci");
+            entity.ToTable("supplycategories");
 
             entity.HasIndex(e => e.Name, "Name_UNIQUE").IsUnique();
-
-            entity.HasIndex(e => e.UserId, "SupplyCategories_Users_idx");
 
             entity.HasIndex(e => e.SupplycategoryId, "idSupplycategory_UNIQUE").IsUnique();
 
             entity.Property(e => e.SupplycategoryId).ValueGeneratedNever();
             entity.Property(e => e.Name).HasMaxLength(45);
-            entity.Property(e => e.UserId)
-                .UseCollation("utf8mb4_0900_ai_ci")
-                .HasCharSet("utf8mb4");
         });
 
         modelBuilder.Entity<Transaction>(entity =>
         {
             entity.HasKey(e => e.TransactionId).HasName("PRIMARY");
 
-            entity
-                .ToTable("transactions")
-                .HasCharSet("utf8mb3")
-                .UseCollation("utf8mb3_general_ci");
+            entity.ToTable("transactions");
 
             entity.HasIndex(e => e.Code, "Transactions_TransactionCodes_idx");
 
@@ -315,30 +314,19 @@ public partial class WarehouseDbContext : DbContext
         {
             entity.HasKey(e => e.Code).HasName("PRIMARY");
 
-            entity
-                .ToTable("transactioncodes")
-                .HasCharSet("utf8mb3")
-                .UseCollation("utf8mb3_general_ci");
+            entity.ToTable("transactioncodes");
 
             entity.HasIndex(e => e.Code, "Code_UNIQUE1").IsUnique();
 
-            entity.HasIndex(e => e.UserId, "Transaction_Codes_Users_idx");
-
             entity.Property(e => e.Code).HasMaxLength(45);
             entity.Property(e => e.Description).HasColumnType("mediumtext");
-            entity.Property(e => e.UserId)
-                .UseCollation("utf8mb4_0900_ai_ci")
-                .HasCharSet("utf8mb4");
         });
 
         modelBuilder.Entity<Transactionitem>(entity =>
         {
             entity.HasKey(e => e.TransactionItemId).HasName("PRIMARY");
 
-            entity
-                .ToTable("transactionitems")
-                .HasCharSet("utf8mb3")
-                .UseCollation("utf8mb3_general_ci");
+            entity.ToTable("transactionitems");
 
             entity.HasIndex(e => e.MenuItemId, "MenuItems_idx1");
 

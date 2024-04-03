@@ -7,13 +7,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TheWarehouse.Data.Migrations.Warehouse
 {
     /// <inheritdoc />
-    public partial class InitialIdentity : Migration
+    public partial class InitialWarehouse : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8mb3");
 
             migrationBuilder.CreateTable(
                 name: "menucategories",
@@ -22,9 +22,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                     MenucategoryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: false, collation: "utf8mb3_general_ci")
-                        .Annotation("MySql:CharSet", "utf8mb3"),
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false, collation: "utf8mb4_0900_ai_ci")
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb3")
                 },
                 constraints: table =>
                 {
@@ -40,9 +38,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                     Code = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: false, collation: "utf8mb3_general_ci")
                         .Annotation("MySql:CharSet", "utf8mb3"),
                     Description = table.Column<string>(type: "mediumtext", nullable: true, collation: "utf8mb3_general_ci")
-                        .Annotation("MySql:CharSet", "utf8mb3"),
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false, collation: "utf8mb4_0900_ai_ci")
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb3")
                 },
                 constraints: table =>
                 {
@@ -61,7 +57,9 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .Annotation("MySql:CharSet", "utf8mb3"),
                     created_ts = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     updated_ts = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false, collation: "utf8mb4_0900_ai_ci")
+                    created_userId = table.Column<string>(type: "varchar(255)", nullable: false, collation: "utf8mb4_0900_ai_ci")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    udated_userId = table.Column<string>(type: "varchar(255)", nullable: false, collation: "utf8mb4_0900_ai_ci")
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -77,9 +75,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                 {
                     SupplycategoryId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: false, collation: "utf8mb3_general_ci")
-                        .Annotation("MySql:CharSet", "utf8mb3"),
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false, collation: "utf8mb4_0900_ai_ci")
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb3")
                 },
                 constraints: table =>
                 {
@@ -95,9 +91,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                     Code = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: false, collation: "utf8mb3_general_ci")
                         .Annotation("MySql:CharSet", "utf8mb3"),
                     Description = table.Column<string>(type: "mediumtext", nullable: true, collation: "utf8mb3_general_ci")
-                        .Annotation("MySql:CharSet", "utf8mb3"),
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false, collation: "utf8mb4_0900_ai_ci")
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb3")
                 },
                 constraints: table =>
                 {
@@ -116,9 +110,12 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .Annotation("MySql:CharSet", "utf8mb3"),
                     Price = table.Column<decimal>(type: "decimal(5,2)", precision: 5, scale: 2, nullable: true),
                     MenucategoryId = table.Column<int>(type: "int", nullable: true),
+                    Active = table.Column<ulong>(type: "bit(1)", nullable: false, defaultValueSql: "b'0'", comment: "Bit value represents boolean\n0 = true\n1 = false"),
                     created_ts = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     updated_ts = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false, collation: "utf8mb4_0900_ai_ci")
+                    created_userId = table.Column<string>(type: "varchar(255)", nullable: false, collation: "utf8mb4_0900_ai_ci")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    updated_userId = table.Column<string>(type: "varchar(255)", nullable: false, collation: "utf8mb4_0900_ai_ci")
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -145,7 +142,9 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                     SupplierId = table.Column<int>(type: "int", nullable: true),
                     created_ts = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     updated_ts = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false, collation: "utf8mb4_0900_ai_ci")
+                    created_userId = table.Column<string>(type: "varchar(255)", nullable: false, collation: "utf8mb4_0900_ai_ci")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    updated_userId = table.Column<string>(type: "varchar(255)", nullable: false, collation: "utf8mb4_0900_ai_ci")
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -198,7 +197,11 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                     MenuItemId = table.Column<int>(type: "int", nullable: false),
                     SupplyId = table.Column<int>(type: "int", nullable: false),
                     created_ts = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    updated_ts = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
+                    updated_ts = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    created_userId = table.Column<string>(type: "varchar(255)", nullable: false, collation: "utf8mb4_0900_ai_ci")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    updated_userId = table.Column<string>(type: "varchar(255)", nullable: false, collation: "utf8mb4_0900_ai_ci")
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -226,9 +229,8 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                     SupplyId = table.Column<int>(type: "int", nullable: false),
                     Count = table.Column<int>(type: "int", nullable: false, defaultValueSql: "'1'"),
                     Price = table.Column<decimal>(type: "decimal(6,2)", precision: 6, scale: 2, nullable: true),
-                    UserId = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false, collation: "utf8mb3_general_ci")
-                        .Annotation("MySql:CharSet", "utf8mb3"),
-                    ReceiptId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false, collation: "utf8mb4_0900_ai_ci")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Code = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: false, collation: "utf8mb3_general_ci")
                         .Annotation("MySql:CharSet", "utf8mb3"),
                     timestamp = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
@@ -286,6 +288,16 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "Ingredients_CreatedUser_idx",
+                table: "ingredients",
+                column: "created_userId");
+
+            migrationBuilder.CreateIndex(
+                name: "Ingredients_UpdatedUser_idx",
+                table: "ingredients",
+                column: "updated_userId");
+
+            migrationBuilder.CreateIndex(
                 name: "MenuItems_idx",
                 table: "ingredients",
                 column: "MenuItemId");
@@ -302,11 +314,6 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "MenuCategories_Users_idx",
-                table: "menucategories",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "idMenuItems_UNIQUE",
                 table: "menuitems",
                 column: "MenuItemId",
@@ -318,20 +325,20 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                 column: "MenucategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "MenuItems_Users_idx",
+                name: "MenuItems_CreatedUser_idx",
                 table: "menuitems",
-                column: "UserId");
+                column: "created_userId");
+
+            migrationBuilder.CreateIndex(
+                name: "MenuItems_UpdatedUser_idx",
+                table: "menuitems",
+                column: "updated_userId");
 
             migrationBuilder.CreateIndex(
                 name: "Code_UNIQUE",
                 table: "stockcodes",
                 column: "Code",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "StockCodes_Users_idx",
-                table: "stockcodes",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "idStock_UNIQUE",
@@ -345,6 +352,11 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                 column: "Code");
 
             migrationBuilder.CreateIndex(
+                name: "Stock_Users_idx",
+                table: "stocks",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "Supplies_idx1",
                 table: "stocks",
                 column: "SupplyId");
@@ -356,9 +368,14 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "Suppliers_Users_idx",
+                name: "Suppliers_CreatedUser_idx",
                 table: "suppliers",
-                column: "UserId");
+                column: "created_userId");
+
+            migrationBuilder.CreateIndex(
+                name: "Suppliers_UpdatedUser_idx",
+                table: "suppliers",
+                column: "udated_userId");
 
             migrationBuilder.CreateIndex(
                 name: "idSupplies_UNIQUE",
@@ -367,14 +384,19 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "Supplies_CreatedUser_idx",
+                table: "supplies",
+                column: "created_userId");
+
+            migrationBuilder.CreateIndex(
                 name: "Supplies_Suppliers_idx",
                 table: "supplies",
                 column: "SupplierId");
 
             migrationBuilder.CreateIndex(
-                name: "Supplies_Users_idx",
+                name: "Supplies_UpdatedUser_idx",
                 table: "supplies",
-                column: "UserId");
+                column: "updated_userId");
 
             migrationBuilder.CreateIndex(
                 name: "Supplycategory_idx",
@@ -394,20 +416,10 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "SupplyCategories_Users_idx",
-                table: "supplycategories",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "Code_UNIQUE1",
                 table: "transactioncodes",
                 column: "Code",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "Transaction_Codes_Users_idx",
-                table: "transactioncodes",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "idSales_UNIQUE",

@@ -13,11 +13,20 @@ public partial class Menuitem
 
     public int? MenucategoryId { get; set; }
 
+    /// <summary>
+    /// Bit value represents boolean
+    /// 0 = true
+    /// 1 = false
+    /// </summary>
+    public ulong Active { get; set; }
+
     public DateTime CreatedTs { get; set; }
 
     public DateTime UpdatedTs { get; set; }
 
-    public string UserId { get; set; } = null!;
+    public string CreatedUserId { get; set; } = null!;
+
+    public string UpdatedUserId { get; set; } = null!;
 
     public virtual ICollection<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
 

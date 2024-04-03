@@ -9,7 +9,5 @@ public partial class Menucategory
 
     public string Name { get; set; } = null!;
 
-    public string UserId { get; set; } = null!;
-
     public virtual ICollection<Menuitem> Menuitems { get; set; } = new List<Menuitem>();
 }

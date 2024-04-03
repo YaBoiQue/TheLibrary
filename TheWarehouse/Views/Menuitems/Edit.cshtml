@@ -29,6 +29,11 @@
                 <span asp-validation-for="MenucategoryId" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Active" class="control-label"></label>
+                <input asp-for="Active" class="form-control" />
+                <span asp-validation-for="Active" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="CreatedTs" class="control-label"></label>
                 <input asp-for="CreatedTs" class="form-control" />
                 <span asp-validation-for="CreatedTs" class="text-danger"></span>
@@ -39,9 +44,14 @@
                 <span asp-validation-for="UpdatedTs" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <input asp-for="UserId" class="form-control" />
-                <span asp-validation-for="UserId" class="text-danger"></span>
+                <label asp-for="CreatedUserId" class="control-label"></label>
+                <input asp-for="CreatedUserId" class="form-control" />
+                <span asp-validation-for="CreatedUserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UpdatedUserId" class="control-label"></label>
+                <input asp-for="UpdatedUserId" class="form-control" />
+                <span asp-validation-for="UpdatedUserId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

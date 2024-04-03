@@ -17,11 +17,11 @@ namespace TheWarehouse.Data.Migrations.Warehouse
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseCollation("utf8mb4_0900_ai_ci")
+                .UseCollation("utf8mb3_general_ci")
                 .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            MySqlModelBuilderExtensions.HasCharSet(modelBuilder, "utf8mb4");
+            MySqlModelBuilderExtensions.HasCharSet(modelBuilder, "utf8mb3");
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("TheWarehouse.Models.Ingredient", b =>
@@ -38,6 +38,14 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .HasColumnName("created_ts")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+                    b.Property<string>("CreatedUserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("created_userId")
+                        .UseCollation("utf8mb4_0900_ai_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("CreatedUserId"), "utf8mb4");
+
                     b.Property<int>("MenuItemId")
                         .HasColumnType("int");
 
@@ -50,8 +58,20 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .HasColumnName("updated_ts")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+                    b.Property<string>("UpdatedUserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("updated_userId")
+                        .UseCollation("utf8mb4_0900_ai_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("UpdatedUserId"), "utf8mb4");
+
                     b.HasKey("IngredientId")
                         .HasName("PRIMARY");
+
+                    b.HasIndex(new[] { "CreatedUserId" }, "Ingredients_CreatedUser_idx");
+
+                    b.HasIndex(new[] { "UpdatedUserId" }, "Ingredients_UpdatedUser_idx");
 
                     b.HasIndex(new[] { "MenuItemId" }, "MenuItems_idx");
 
@@ -61,9 +81,6 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .IsUnique();
 
                     b.ToTable("ingredients", (string)null);
-
-                    MySqlEntityTypeBuilderExtensions.HasCharSet(b, "utf8mb3");
-                    MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb3_general_ci");
                 });
 
             modelBuilder.Entity("TheWarehouse.Models.Menucategory", b =>
@@ -79,25 +96,13 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .HasMaxLength(45)
                         .HasColumnType("varchar(45)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)")
-                        .UseCollation("utf8mb4_0900_ai_ci");
-
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("UserId"), "utf8mb4");
-
                     b.HasKey("MenucategoryId")
                         .HasName("PRIMARY");
-
-                    b.HasIndex(new[] { "UserId" }, "MenuCategories_Users_idx");
 
                     b.HasIndex(new[] { "MenucategoryId" }, "idMenucategories_UNIQUE")
                         .IsUnique();
 
                     b.ToTable("menucategories", (string)null);
-
-                    MySqlEntityTypeBuilderExtensions.HasCharSet(b, "utf8mb3");
-                    MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb3_general_ci");
                 });
 
             modelBuilder.Entity("TheWarehouse.Models.Menuitem", b =>
@@ -108,11 +113,25 @@ namespace TheWarehouse.Data.Migrations.Warehouse
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("MenuItemId"));
 
+                    b.Property<ulong>("Active")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit(1)")
+                        .HasDefaultValueSql("b'0'")
+                        .HasComment("Bit value represents boolean\n0 = true\n1 = false");
+
                     b.Property<DateTime>("CreatedTs")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasColumnName("created_ts")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("CreatedUserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("created_userId")
+                        .UseCollation("utf8mb4_0900_ai_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("CreatedUserId"), "utf8mb4");
 
                     b.Property<int?>("MenucategoryId")
                         .HasColumnType("int");
@@ -132,17 +151,20 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .HasColumnName("updated_ts")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("UpdatedUserId")
                         .IsRequired()
                         .HasColumnType("varchar(255)")
+                        .HasColumnName("updated_userId")
                         .UseCollation("utf8mb4_0900_ai_ci");
 
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("UserId"), "utf8mb4");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("UpdatedUserId"), "utf8mb4");
 
                     b.HasKey("MenuItemId")
                         .HasName("PRIMARY");
 
-                    b.HasIndex(new[] { "UserId" }, "MenuItems_Users_idx");
+                    b.HasIndex(new[] { "CreatedUserId" }, "MenuItems_CreatedUser_idx");
+
+                    b.HasIndex(new[] { "UpdatedUserId" }, "MenuItems_UpdatedUser_idx");
 
                     b.HasIndex(new[] { "MenucategoryId" }, "Menucategory_idx");
 
@@ -150,9 +172,6 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .IsUnique();
 
                     b.ToTable("menuitems", (string)null);
-
-                    MySqlEntityTypeBuilderExtensions.HasCharSet(b, "utf8mb3");
-                    MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb3_general_ci");
                 });
 
             modelBuilder.Entity("TheWarehouse.Models.Stock", b =>
@@ -177,9 +196,6 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .HasPrecision(6, 2)
                         .HasColumnType("decimal(6,2)");
 
-                    b.Property<int?>("ReceiptId")
-                        .HasColumnType("int");
-
                     b.Property<int>("SupplyId")
                         .HasColumnType("int");
 
@@ -191,13 +207,17 @@ namespace TheWarehouse.Data.Migrations.Warehouse
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("varchar(255)")
+                        .UseCollation("utf8mb4_0900_ai_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("UserId"), "utf8mb4");
 
                     b.HasKey("StockId")
                         .HasName("PRIMARY");
 
                     b.HasIndex(new[] { "Code" }, "Stock_Stockcodes_idx");
+
+                    b.HasIndex(new[] { "UserId" }, "Stock_Users_idx");
 
                     b.HasIndex(new[] { "SupplyId" }, "Supplies_idx1");
 
@@ -205,9 +225,6 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .IsUnique();
 
                     b.ToTable("stocks", (string)null);
-
-                    MySqlEntityTypeBuilderExtensions.HasCharSet(b, "utf8mb3");
-                    MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb3_general_ci");
                 });
 
             modelBuilder.Entity("TheWarehouse.Models.Stockcode", b =>
@@ -219,25 +236,13 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                     b.Property<string>("Description")
                         .HasColumnType("mediumtext");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)")
-                        .UseCollation("utf8mb4_0900_ai_ci");
-
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("UserId"), "utf8mb4");
-
                     b.HasKey("Code")
                         .HasName("PRIMARY");
 
                     b.HasIndex(new[] { "Code" }, "Code_UNIQUE")
                         .IsUnique();
 
-                    b.HasIndex(new[] { "UserId" }, "StockCodes_Users_idx");
-
                     b.ToTable("stockcodes", (string)null);
-
-                    MySqlEntityTypeBuilderExtensions.HasCharSet(b, "utf8mb3");
-                    MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb3_general_ci");
                 });
 
             modelBuilder.Entity("TheWarehouse.Models.Supplier", b =>
@@ -254,10 +259,26 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .HasColumnName("created_ts")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+                    b.Property<string>("CreatedUserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("created_userId")
+                        .UseCollation("utf8mb4_0900_ai_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("CreatedUserId"), "utf8mb4");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("varchar(45)");
+
+                    b.Property<string>("UdatedUserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("udated_userId")
+                        .UseCollation("utf8mb4_0900_ai_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("UdatedUserId"), "utf8mb4");
 
                     b.Property<DateTime>("UpdatedTs")
                         .ValueGeneratedOnAdd()
@@ -265,25 +286,17 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .HasColumnName("updated_ts")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)")
-                        .UseCollation("utf8mb4_0900_ai_ci");
-
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("UserId"), "utf8mb4");
-
                     b.HasKey("SupplierId")
                         .HasName("PRIMARY");
 
-                    b.HasIndex(new[] { "UserId" }, "Suppliers_Users_idx");
+                    b.HasIndex(new[] { "CreatedUserId" }, "Suppliers_CreatedUser_idx");
+
+                    b.HasIndex(new[] { "UdatedUserId" }, "Suppliers_UpdatedUser_idx");
 
                     b.HasIndex(new[] { "SupplierId" }, "idSuppliers_UNIQUE")
                         .IsUnique();
 
                     b.ToTable("suppliers", (string)null);
-
-                    MySqlEntityTypeBuilderExtensions.HasCharSet(b, "utf8mb3");
-                    MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb3_general_ci");
                 });
 
             modelBuilder.Entity("TheWarehouse.Models.Supply", b =>
@@ -299,6 +312,14 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .HasColumnType("datetime")
                         .HasColumnName("created_ts")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("CreatedUserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("created_userId")
+                        .UseCollation("utf8mb4_0900_ai_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("CreatedUserId"), "utf8mb4");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -317,19 +338,22 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .HasColumnName("updated_ts")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("UpdatedUserId")
                         .IsRequired()
                         .HasColumnType("varchar(255)")
+                        .HasColumnName("updated_userId")
                         .UseCollation("utf8mb4_0900_ai_ci");
 
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("UserId"), "utf8mb4");
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("UpdatedUserId"), "utf8mb4");
 
                     b.HasKey("SupplyId")
                         .HasName("PRIMARY");
 
+                    b.HasIndex(new[] { "CreatedUserId" }, "Supplies_CreatedUser_idx");
+
                     b.HasIndex(new[] { "SupplierId" }, "Supplies_Suppliers_idx");
 
-                    b.HasIndex(new[] { "UserId" }, "Supplies_Users_idx");
+                    b.HasIndex(new[] { "UpdatedUserId" }, "Supplies_UpdatedUser_idx");
 
                     b.HasIndex(new[] { "SupplyCategoryId" }, "Supplycategory_idx");
 
@@ -337,9 +361,6 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .IsUnique();
 
                     b.ToTable("supplies", (string)null);
-
-                    MySqlEntityTypeBuilderExtensions.HasCharSet(b, "utf8mb3");
-                    MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb3_general_ci");
                 });
 
             modelBuilder.Entity("TheWarehouse.Models.Supplycategory", b =>
@@ -352,28 +373,16 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .HasMaxLength(45)
                         .HasColumnType("varchar(45)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)")
-                        .UseCollation("utf8mb4_0900_ai_ci");
-
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("UserId"), "utf8mb4");
-
                     b.HasKey("SupplycategoryId")
                         .HasName("PRIMARY");
 
                     b.HasIndex(new[] { "Name" }, "Name_UNIQUE")
                         .IsUnique();
 
-                    b.HasIndex(new[] { "UserId" }, "SupplyCategories_Users_idx");
-
                     b.HasIndex(new[] { "SupplycategoryId" }, "idSupplycategory_UNIQUE")
                         .IsUnique();
 
                     b.ToTable("supplycategories", (string)null);
-
-                    MySqlEntityTypeBuilderExtensions.HasCharSet(b, "utf8mb3");
-                    MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb3_general_ci");
                 });
 
             modelBuilder.Entity("TheWarehouse.Models.Transaction", b =>
@@ -412,9 +421,6 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .IsUnique();
 
                     b.ToTable("transactions", (string)null);
-
-                    MySqlEntityTypeBuilderExtensions.HasCharSet(b, "utf8mb3");
-                    MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb3_general_ci");
                 });
 
             modelBuilder.Entity("TheWarehouse.Models.Transactioncode", b =>
@@ -426,25 +432,13 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                     b.Property<string>("Description")
                         .HasColumnType("mediumtext");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)")
-                        .UseCollation("utf8mb4_0900_ai_ci");
-
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("UserId"), "utf8mb4");
-
                     b.HasKey("Code")
                         .HasName("PRIMARY");
 
                     b.HasIndex(new[] { "Code" }, "Code_UNIQUE1")
                         .IsUnique();
 
-                    b.HasIndex(new[] { "UserId" }, "Transaction_Codes_Users_idx");
-
                     b.ToTable("transactioncodes", (string)null);
-
-                    MySqlEntityTypeBuilderExtensions.HasCharSet(b, "utf8mb3");
-                    MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb3_general_ci");
                 });
 
             modelBuilder.Entity("TheWarehouse.Models.Transactionitem", b =>
@@ -486,9 +480,6 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .IsUnique();
 
                     b.ToTable("transactionitems", (string)null);
-
-                    MySqlEntityTypeBuilderExtensions.HasCharSet(b, "utf8mb3");
-                    MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb3_general_ci");
                 });
 
             modelBuilder.Entity("TheWarehouse.Models.Ingredient", b =>

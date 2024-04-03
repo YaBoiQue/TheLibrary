@@ -17,7 +17,9 @@ public partial class Supply
 
     public DateTime UpdatedTs { get; set; }
 
-    public string UserId { get; set; } = null!;
+    public string CreatedUserId { get; set; } = null!;
+
+    public string UpdatedUserId { get; set; } = null!;
 
     public virtual ICollection<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
 

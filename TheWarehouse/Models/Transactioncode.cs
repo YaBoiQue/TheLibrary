@@ -9,7 +9,5 @@ public partial class Transactioncode
 
     public string? Description { get; set; }
 
-    public string UserId { get; set; } = null!;
-
     public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 }

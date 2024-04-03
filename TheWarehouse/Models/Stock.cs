@@ -15,8 +15,6 @@ public partial class Stock
 
     public string UserId { get; set; } = null!;
 
-    public int? ReceiptId { get; set; }
-
     public string Code { get; set; } = null!;
 
     public DateTime Timestamp { get; set; }

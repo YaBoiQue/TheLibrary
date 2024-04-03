@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using TheWarehouse.Data;
-using TheWarehouse.Models;
-
-namespace TheWarehouse.Controllers
+﻿namespace TheWarehouse.Controllers
 {
-    public class MenucategoriesController : Controller
+    public class MenucategoriesController : BaseController
     {
         private readonly WarehouseDbContext _context;
 
@@ -54,7 +44,7 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MenucategoryId,Name,UserId")] Menucategory menucategory)
+        public async Task<IActionResult> Create([Bind("MenucategoryId,Name")] Menucategory menucategory)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +76,7 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MenucategoryId,Name,UserId")] Menucategory menucategory)
+        public async Task<IActionResult> Edit(int id, [Bind("MenucategoryId,Name")] Menucategory menucategory)
         {
             if (id != menucategory.MenucategoryId)
             {

@@ -15,6 +15,10 @@ public partial class Ingredient
 
     public DateTime UpdatedTs { get; set; }
 
+    public string CreatedUserId { get; set; } = null!;
+
+    public string UpdatedUserId { get; set; } = null!;
+
     public virtual Menuitem MenuItem { get; set; } = null!;
 
     public virtual Supply Supply { get; set; } = null!;

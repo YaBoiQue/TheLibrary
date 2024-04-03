@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using TheWarehouse.Data;
-using TheWarehouse.Models;
-
-namespace TheWarehouse.Controllers
+﻿namespace TheWarehouse.Controllers
 {
-    public class MenuitemsController : Controller
+    public class MenuitemsController : BaseController
     {
         private readonly WarehouseDbContext _context;
 
@@ -22,8 +12,13 @@ namespace TheWarehouse.Controllers
         // GET: Menuitems
         public async Task<IActionResult> Index()
         {
-            var warehouseDbContext = _context.Menuitems.Include(m => m.Menucategory);
-            return View(await warehouseDbContext.ToListAsync());
+            MenuitemViewModel viewModel = new MenuitemViewModel(await _context.Menuitems.Include(m => m.Menucategory).ToListAsync());
+
+            foreach (var item in viewModel.menuitems)
+            {
+                item.Menucategory = _context.Menucategories.Where(c => c.MenucategoryId == item.MenucategoryId).FirstOrDefault();
+            }
+            return View(viewModel);
         }
 
         // GET: Menuitems/Details/5
@@ -57,10 +52,17 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MenuItemId,Name,Price,MenucategoryId,CreatedTs,UpdatedTs,UserId")] Menuitem menuitem)
+        public async Task<IActionResult> Create([Bind("MenuItemId,Name,Price,MenucategoryId,Active,CreatedTs,UpdatedTs,CreatedUserId,UpdatedUserId")] Menuitem menuitem)
         {
+            ModelState.Remove("UpdatedUserId");
+            ModelState.Remove("CreatedUserId");
             if (ModelState.IsValid)
             {
+                var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                menuitem.CreatedUserId = UserId;
+                menuitem.UpdatedUserId = UserId;
+                menuitem.CreatedTs = DateTime.UtcNow;
+                menuitem.UpdatedTs = DateTime.UtcNow;
                 _context.Add(menuitem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -91,7 +93,7 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MenuItemId,Name,Price,MenucategoryId,CreatedTs,UpdatedTs,UserId")] Menuitem menuitem)
+        public async Task<IActionResult> Edit(int id, [Bind("MenuItemId,Name,Price,MenucategoryId,Active,CreatedTs,UpdatedTs,CreatedUserId,UpdatedUserId")] Menuitem menuitem)
         {
             if (id != menuitem.MenuItemId)
             {
@@ -102,6 +104,8 @@ namespace TheWarehouse.Controllers
             {
                 try
                 {
+                    menuitem.UpdatedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    menuitem.UpdatedTs = DateTime.UtcNow;
                     _context.Update(menuitem);
                     await _context.SaveChangesAsync();
                 }

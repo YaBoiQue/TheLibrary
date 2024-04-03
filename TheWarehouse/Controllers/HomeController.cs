@@ -1,17 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using TheWarehouse.Models;
-
 namespace TheWarehouse.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(ILogger<HomeController> logger) : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+        private readonly ILogger<HomeController> _logger = logger;
 
         public IActionResult Index()
         {
