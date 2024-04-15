@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheWarehouse.Data;
 
@@ -11,9 +12,11 @@ using TheWarehouse.Data;
 namespace TheWarehouse.Data.Migrations.Warehouse
 {
     [DbContext(typeof(WarehouseDbContext))]
-    partial class WarehouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240410205933_ImagePaths")]
+    partial class ImagePaths
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -137,6 +140,10 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("CreatedUserId"), "utf8mb4");
 
                     b.Property<string>("ImageName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int?>("MenucategoryId")

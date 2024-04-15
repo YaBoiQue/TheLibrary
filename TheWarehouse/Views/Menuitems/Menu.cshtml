@@ -1,0 +1,28 @@
+﻿@model IEnumerable<TheWarehouse.Models.Menuitem>
+
+@{
+    ViewData["Title"] = "Menu";
+}
+
+<h1>Menu</h1>
+<a class="nav-link" asp-area="" asp-controller="Menuitems" asp-action="Index">List</a>
+
+<table class="table">
+    <tbody>
+        <div class="card-group">
+            @foreach (var item in Model)
+            {
+                <div class="row">
+                    <div class="card border-primary mb-3 text-center" style="width: 18rem;">
+                        <a class="card-block stretched-link text-decoration-none" asp-area="" asp-controller="" asp-action="">
+                            <div class="card-body">
+                                <img class="card-img" src="@item.ImagePath" />
+                                <h5 class="card-title"> @item.Name</h5>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </tbody>
+</table>

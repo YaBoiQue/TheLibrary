@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace TheWarehouse.Models;
 
@@ -19,6 +21,17 @@ public partial class Menuitem
     /// 1 = false
     /// </summary>
     public ulong Active { get; set; }
+
+    public string? ImageName { get; set; }
+
+    [NotMapped]
+    [AllowNull]
+    [DisplayName("Upload File")]
+    public IFormFile ImageFile { get; set; }
+
+    [NotMapped]
+    [AllowNull]
+    public string? ImagePath { get; set; }
 
     public DateTime CreatedTs { get; set; }
 

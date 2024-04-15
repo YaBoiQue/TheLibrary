@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace TheWarehouse.Models;
 
@@ -9,6 +11,15 @@ public partial class Supplier
 
     public string Name { get; set; } = null!;
 
+    public string? ImageName { get; set; }
+
+    [NotMapped]
+    [AllowNull]
+    [DisplayName("Upload File")]
+    public IFormFile ImageFile { get; set; }
+
+    public string ImagePath { get; set; }
+
     public DateTime CreatedTs { get; set; }
 
     public DateTime UpdatedTs { get; set; }
@@ -17,5 +28,5 @@ public partial class Supplier
 
     public string UdatedUserId { get; set; } = null!;
 
-    public virtual ICollection<Supply> Supplies { get; set; } = new List<Supply>();
+    public virtual ICollection<Supply> Supplies { get; set; } = [];
 }

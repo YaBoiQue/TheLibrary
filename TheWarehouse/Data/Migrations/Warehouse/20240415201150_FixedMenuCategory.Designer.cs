@@ -12,8 +12,8 @@ using TheWarehouse.Data;
 namespace TheWarehouse.Data.Migrations.Warehouse
 {
     [DbContext(typeof(WarehouseDbContext))]
-    [Migration("20240327181939_InitialWarehouse")]
-    partial class InitialWarehouse
+    [Migration("20240415201150_FixedMenuCategory")]
+    partial class FixedMenuCategory
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
 #pragma warning disable 612, 618
             modelBuilder
                 .UseCollation("utf8mb3_general_ci")
-                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.HasCharSet(modelBuilder, "utf8mb3");
@@ -94,6 +94,9 @@ namespace TheWarehouse.Data.Migrations.Warehouse
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("MenucategoryId"));
 
+                    b.Property<string>("ImageName")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(45)
@@ -135,6 +138,9 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .UseCollation("utf8mb4_0900_ai_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("CreatedUserId"), "utf8mb4");
+
+                    b.Property<string>("ImageName")
+                        .HasColumnType("longtext");
 
                     b.Property<int?>("MenucategoryId")
                         .HasColumnType("int");
@@ -269,6 +275,13 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .UseCollation("utf8mb4_0900_ai_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("CreatedUserId"), "utf8mb4");
+
+                    b.Property<string>("ImageName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .IsRequired()

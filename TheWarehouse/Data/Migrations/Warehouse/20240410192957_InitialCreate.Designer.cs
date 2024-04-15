@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheWarehouse.Data;
 
@@ -11,18 +12,45 @@ using TheWarehouse.Data;
 namespace TheWarehouse.Data.Migrations.Warehouse
 {
     [DbContext(typeof(WarehouseDbContext))]
-    partial class WarehouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240410192957_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .UseCollation("utf8mb3_general_ci")
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.HasCharSet(modelBuilder, "utf8mb3");
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("TheWarehouse.Models.Image", b =>
+                {
+                    b.Property<int>("ImageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("ImageId"));
+
+                    b.Property<string>("ImageName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("ImageId")
+                        .HasName("PRIMARY");
+
+                    b.HasIndex(new[] { "ImageId" }, "idImages_UNIQUE")
+                        .IsUnique();
+
+                    b.ToTable("images", (string)null);
+                });
 
             modelBuilder.Entity("TheWarehouse.Models.Ingredient", b =>
                 {
@@ -91,8 +119,8 @@ namespace TheWarehouse.Data.Migrations.Warehouse
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("MenucategoryId"));
 
-                    b.Property<string>("ImageName")
-                        .HasColumnType("longtext");
+                    b.Property<int>("ImageId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -101,6 +129,8 @@ namespace TheWarehouse.Data.Migrations.Warehouse
 
                     b.HasKey("MenucategoryId")
                         .HasName("PRIMARY");
+
+                    b.HasIndex("ImageId");
 
                     b.HasIndex(new[] { "MenucategoryId" }, "idMenucategories_UNIQUE")
                         .IsUnique();
@@ -136,8 +166,8 @@ namespace TheWarehouse.Data.Migrations.Warehouse
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("CreatedUserId"), "utf8mb4");
 
-                    b.Property<string>("ImageName")
-                        .HasColumnType("longtext");
+                    b.Property<int>("ImageId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("MenucategoryId")
                         .HasColumnType("int");
@@ -167,6 +197,8 @@ namespace TheWarehouse.Data.Migrations.Warehouse
 
                     b.HasKey("MenuItemId")
                         .HasName("PRIMARY");
+
+                    b.HasIndex("ImageId");
 
                     b.HasIndex(new[] { "CreatedUserId" }, "MenuItems_CreatedUser_idx");
 
@@ -273,12 +305,8 @@ namespace TheWarehouse.Data.Migrations.Warehouse
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("CreatedUserId"), "utf8mb4");
 
-                    b.Property<string>("ImageName")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("ImageId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -301,6 +329,8 @@ namespace TheWarehouse.Data.Migrations.Warehouse
 
                     b.HasKey("SupplierId")
                         .HasName("PRIMARY");
+
+                    b.HasIndex("ImageId");
 
                     b.HasIndex(new[] { "CreatedUserId" }, "Suppliers_CreatedUser_idx");
 
@@ -514,12 +544,31 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                     b.Navigation("Supply");
                 });
 
+            modelBuilder.Entity("TheWarehouse.Models.Menucategory", b =>
+                {
+                    b.HasOne("TheWarehouse.Models.Image", "Image")
+                        .WithMany("MenuCategories")
+                        .HasForeignKey("ImageId")
+                        .IsRequired()
+                        .HasConstraintName("Menucategory_Image");
+
+                    b.Navigation("Image");
+                });
+
             modelBuilder.Entity("TheWarehouse.Models.Menuitem", b =>
                 {
+                    b.HasOne("TheWarehouse.Models.Image", "Image")
+                        .WithMany("Menuitems")
+                        .HasForeignKey("ImageId")
+                        .IsRequired()
+                        .HasConstraintName("MenuItem_Image");
+
                     b.HasOne("TheWarehouse.Models.Menucategory", "Menucategory")
                         .WithMany("Menuitems")
                         .HasForeignKey("MenucategoryId")
                         .HasConstraintName("MenuItems_Menucategory");
+
+                    b.Navigation("Image");
 
                     b.Navigation("Menucategory");
                 });
@@ -541,6 +590,17 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                     b.Navigation("CodeNavigation");
 
                     b.Navigation("Supply");
+                });
+
+            modelBuilder.Entity("TheWarehouse.Models.Supplier", b =>
+                {
+                    b.HasOne("TheWarehouse.Models.Image", "Image")
+                        .WithMany("Suppliers")
+                        .HasForeignKey("ImageId")
+                        .IsRequired()
+                        .HasConstraintName("Supplier_Image");
+
+                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("TheWarehouse.Models.Supply", b =>
@@ -588,6 +648,15 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                     b.Navigation("MenuItem");
 
                     b.Navigation("Transaction");
+                });
+
+            modelBuilder.Entity("TheWarehouse.Models.Image", b =>
+                {
+                    b.Navigation("MenuCategories");
+
+                    b.Navigation("Menuitems");
+
+                    b.Navigation("Suppliers");
                 });
 
             modelBuilder.Entity("TheWarehouse.Models.Menucategory", b =>
