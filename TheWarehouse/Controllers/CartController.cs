@@ -18,7 +18,7 @@ namespace TheWarehouse.Controllers
         }
         public async IActionResult AddToCart(int MenuitemId)
         {
-            if (Session["cart"] == null)
+            if (HttpContext.Session. == null)
             {
                 Menuitem? menuitem = await _context.Menuitems.Where(m => m.MenuItemId == MenuitemId).FirstOrDefaultAsync();
             }
