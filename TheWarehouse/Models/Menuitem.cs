@@ -7,10 +7,12 @@ namespace TheWarehouse.Models;
 
 public partial class Menuitem
 {
-    public int MenuItemId { get; set; }
+    public int MenuitemId { get; set; }
 
+    [Display(Name = "Item Name")]
     public string Name { get; set; } = null!;
 
+    [DataType(DataType.Currency)]
     public decimal? Price { get; set; }
 
     public int? MenucategoryId { get; set; }
@@ -33,13 +35,17 @@ public partial class Menuitem
     [AllowNull]
     public string? ImagePath { get; set; }
 
+    [AllowNull]
     public DateTime CreatedTs { get; set; }
 
+    [AllowNull]
     public DateTime UpdatedTs { get; set; }
 
-    public string CreatedUserId { get; set; } = null!;
+    [AllowNull]
+    public string? CreatedUserId { get; set; }
 
-    public string UpdatedUserId { get; set; } = null!;
+    [AllowNull]
+    public string? UpdatedUserId { get; set; }
 
     public virtual ICollection<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
 

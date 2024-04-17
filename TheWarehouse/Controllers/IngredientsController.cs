@@ -39,7 +39,7 @@
         // GET: Ingredients/Create
         public IActionResult Create()
         {
-            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "MenuItemId", "MenuItemId");
+            ViewData["MenuitemId"] = new SelectList(_context.Menuitems, "MenuitemId", "MenuitemId");
             ViewData["SupplyId"] = new SelectList(_context.Supplies, "SupplyId", "SupplyId");
             return View();
         }
@@ -49,7 +49,7 @@
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IngredientId,MenuItemId,SupplyId,CreatedTs,UpdatedTs,CreatedUserId,UpdatedUserId")] Ingredient ingredient)
+        public async Task<IActionResult> Create([Bind("IngredientId,MenuitemId,SupplyId,CreatedTs,UpdatedTs,CreatedUserId,UpdatedUserId")] Ingredient ingredient)
         {
             if (ModelState.IsValid)
             {
@@ -57,7 +57,7 @@
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "MenuItemId", "MenuItemId", ingredient.MenuItemId);
+            ViewData["MenuitemId"] = new SelectList(_context.Menuitems, "MenuitemId", "MenuitemId", ingredient.MenuItemId);
             ViewData["SupplyId"] = new SelectList(_context.Supplies, "SupplyId", "SupplyId", ingredient.SupplyId);
             return View(ingredient);
         }
@@ -75,7 +75,7 @@
             {
                 return NotFound();
             }
-            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "MenuItemId", "MenuItemId", ingredient.MenuItemId);
+            ViewData["MenuitemId"] = new SelectList(_context.Menuitems, "MenuitemId", "MenuitemId", ingredient.MenuItemId);
             ViewData["SupplyId"] = new SelectList(_context.Supplies, "SupplyId", "SupplyId", ingredient.SupplyId);
             return View(ingredient);
         }
@@ -85,7 +85,7 @@
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IngredientId,MenuItemId,SupplyId,CreatedTs,UpdatedTs,CreatedUserId,UpdatedUserId")] Ingredient ingredient)
+        public async Task<IActionResult> Edit(int id, [Bind("IngredientId,MenuitemId,SupplyId,CreatedTs,UpdatedTs,CreatedUserId,UpdatedUserId")] Ingredient ingredient)
         {
             if (id != ingredient.IngredientId)
             {
@@ -112,7 +112,7 @@
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "MenuItemId", "MenuItemId", ingredient.MenuItemId);
+            ViewData["MenuitemId"] = new SelectList(_context.Menuitems, "MenuitemId", "MenuitemId", ingredient.MenuItemId);
             ViewData["SupplyId"] = new SelectList(_context.Supplies, "SupplyId", "SupplyId", ingredient.SupplyId);
             return View(ingredient);
         }

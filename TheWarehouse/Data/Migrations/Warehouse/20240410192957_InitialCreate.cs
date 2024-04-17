@@ -241,7 +241,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         name: "TransactionItems_MenuItems",
                         column: x => x.MenuItemId,
                         principalTable: "menuitems",
-                        principalColumn: "MenuItemId");
+                        principalColumn: "MenuitemId");
                     table.ForeignKey(
                         name: "TransactionItems_Transactions",
                         column: x => x.TransactionId,
@@ -273,7 +273,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         name: "Ingredients_MenuItems",
                         column: x => x.MenuItemId,
                         principalTable: "menuitems",
-                        principalColumn: "MenuItemId");
+                        principalColumn: "MenuitemId");
                     table.ForeignKey(
                         name: "Ingredients_Supplies",
                         column: x => x.SupplyId,
@@ -340,7 +340,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
             migrationBuilder.CreateIndex(
                 name: "MenuItems_idx",
                 table: "ingredients",
-                column: "MenuItemId");
+                column: "MenuitemId");
 
             migrationBuilder.CreateIndex(
                 name: "Supplies_idx",
@@ -361,7 +361,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
             migrationBuilder.CreateIndex(
                 name: "idMenuItems_UNIQUE",
                 table: "menuitems",
-                column: "MenuItemId",
+                column: "MenuitemId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -485,7 +485,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
             migrationBuilder.CreateIndex(
                 name: "MenuItems_idx1",
                 table: "transactionitems",
-                column: "MenuItemId");
+                column: "MenuitemId");
 
             migrationBuilder.CreateIndex(
                 name: "Transactions_idx",

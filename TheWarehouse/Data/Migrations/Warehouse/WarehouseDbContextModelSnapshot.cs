@@ -46,7 +46,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("CreatedUserId"), "utf8mb4");
 
-                    b.Property<int>("MenuItemId")
+                    b.Property<int>("MenuitemId")
                         .HasColumnType("int");
 
                     b.Property<int>("SupplyId")
@@ -73,7 +73,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
 
                     b.HasIndex(new[] { "UpdatedUserId" }, "Ingredients_UpdatedUser_idx");
 
-                    b.HasIndex(new[] { "MenuItemId" }, "MenuItems_idx");
+                    b.HasIndex(new[] { "MenuitemId" }, "MenuItems_idx");
 
                     b.HasIndex(new[] { "SupplyId" }, "Supplies_idx");
 
@@ -110,11 +110,11 @@ namespace TheWarehouse.Data.Migrations.Warehouse
 
             modelBuilder.Entity("TheWarehouse.Models.Menuitem", b =>
                 {
-                    b.Property<int>("MenuItemId")
+                    b.Property<int>("MenuitemId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("MenuItemId"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("MenuitemId"));
 
                     b.Property<ulong>("Active")
                         .ValueGeneratedOnAdd()
@@ -165,7 +165,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("UpdatedUserId"), "utf8mb4");
 
-                    b.HasKey("MenuItemId")
+                    b.HasKey("MenuitemId")
                         .HasName("PRIMARY");
 
                     b.HasIndex(new[] { "CreatedUserId" }, "MenuItems_CreatedUser_idx");
@@ -174,7 +174,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
 
                     b.HasIndex(new[] { "MenucategoryId" }, "Menucategory_idx");
 
-                    b.HasIndex(new[] { "MenuItemId" }, "idMenuItems_UNIQUE")
+                    b.HasIndex(new[] { "MenuitemId" }, "idMenuItems_UNIQUE")
                         .IsUnique();
 
                     b.ToTable("menuitems", (string)null);
@@ -467,7 +467,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .HasColumnType("int")
                         .HasDefaultValueSql("'1'");
 
-                    b.Property<int>("MenuItemId")
+                    b.Property<int>("MenuitemId")
                         .HasColumnType("int");
 
                     b.Property<double>("Price")
@@ -485,7 +485,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                     b.HasKey("TransactionItemId")
                         .HasName("PRIMARY");
 
-                    b.HasIndex(new[] { "MenuItemId" }, "MenuItems_idx1");
+                    b.HasIndex(new[] { "MenuitemId" }, "MenuItems_idx1");
 
                     b.HasIndex(new[] { "TransactionId" }, "Transactions_idx");
 
@@ -499,7 +499,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                 {
                     b.HasOne("TheWarehouse.Models.Menuitem", "MenuItem")
                         .WithMany("Ingredients")
-                        .HasForeignKey("MenuItemId")
+                        .HasForeignKey("MenuitemId")
                         .IsRequired()
                         .HasConstraintName("Ingredients_MenuItems");
 
@@ -575,7 +575,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                 {
                     b.HasOne("TheWarehouse.Models.Menuitem", "MenuItem")
                         .WithMany("Transactionitems")
-                        .HasForeignKey("MenuItemId")
+                        .HasForeignKey("MenuitemId")
                         .IsRequired()
                         .HasConstraintName("TransactionItems_MenuItems");
 

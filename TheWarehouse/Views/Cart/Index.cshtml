@@ -1,0 +1,58 @@
+﻿@model TheWarehouse.ViewModels.CartListVM
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Cart</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Cartitem.Menuitem.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cartitem.Menuitem.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cartitem.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cartitem.Total)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Cartitems) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Menuitem.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Menuitem.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Total)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td></td>
+            <td></td>
+            <td>Cart Total: </td>
+            <td>@Html.DisplayFor(model => model.Total)</td>
+        </tr>
+    </tfoot>
+</table>

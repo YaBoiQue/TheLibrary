@@ -52,7 +52,7 @@ namespace TheWarehouse.Controllers
 
             var menuitem = await _context.Menuitems
                 .Include(m => m.Menucategory)
-                .FirstOrDefaultAsync(m => m.MenuItemId == id);
+                .FirstOrDefaultAsync(m => m.MenuitemId == id);
             if (menuitem == null)
             {
                 return NotFound();
@@ -75,7 +75,7 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MenuItemId,Name,Price,MenucategoryId,ImageFile,Active,CreatedTs,UpdatedTs,CreatedUserId,UpdatedUserId")] Menuitem menuitem)
+        public async Task<IActionResult> Create([Bind("MenuitemId,Name,Price,MenucategoryId,ImageFile,Active,CreatedTs,UpdatedTs,CreatedUserId,UpdatedUserId")] Menuitem menuitem)
         {
             ModelState.Remove("UpdatedUserId");
             ModelState.Remove("CreatedUserId");
@@ -131,9 +131,9 @@ namespace TheWarehouse.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MenuItemId,Name,Price,MenucategoryId,ImageName,ImageFile,Active,CreatedTs,UpdatedTs,CreatedUserId,UpdatedUserId")] Menuitem menuitem)
+        public async Task<IActionResult> Edit(int id, [Bind("MenuitemId,Name,Price,MenucategoryId,ImageName,ImageFile,Active,CreatedTs,UpdatedTs,CreatedUserId,UpdatedUserId")] Menuitem menuitem)
         {
-            if (id != menuitem.MenuItemId)
+            if (id != menuitem.MenuitemId)
             {
                 return NotFound();
             }
@@ -145,7 +145,7 @@ namespace TheWarehouse.Controllers
                     //Save image to wwroot/img/menuCategories
                     if (menuitem.ImageFile != null)
                     {
-                        string path = Path.Combine("~/img/menuitems/" + menuitem.ImageName);
+                        string path = Path.Combine(_basePath + menuitem.ImageName);
                         FileInfo fi = new FileInfo(path);
                         if (fi.Exists)
                             fi.Delete();
@@ -153,7 +153,7 @@ namespace TheWarehouse.Controllers
                         string fileName = Path.GetFileNameWithoutExtension(menuitem.ImageFile.FileName);
                         string extension = Path.GetExtension(menuitem.ImageFile.FileName).ToLower();
                         menuitem.ImageName = fileName = fileName + DateTime.Now.ToString("yymmssffff") + extension;
-                        path = Path.Combine("~/img/menuitems/" + fileName);
+                        path = Path.Combine(_basePath + fileName);
 
                         using (var fileStream = new FileStream(path, FileMode.Create))
                         {
@@ -167,7 +167,7 @@ namespace TheWarehouse.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MenuitemExists(menuitem.MenuItemId))
+                    if (!MenuitemExists(menuitem.MenuitemId))
                     {
                         return NotFound();
                     }
@@ -192,7 +192,7 @@ namespace TheWarehouse.Controllers
 
             var menuitem = await _context.Menuitems
                 .Include(m => m.Menucategory)
-                .FirstOrDefaultAsync(m => m.MenuItemId == id);
+                .FirstOrDefaultAsync(m => m.MenuitemId == id);
             if (menuitem == null)
             {
                 return NotFound();
@@ -222,7 +222,7 @@ namespace TheWarehouse.Controllers
 
         private bool MenuitemExists(int id)
         {
-            return _context.Menuitems.Any(e => e.MenuItemId == id);
+            return _context.Menuitems.Any(e => e.MenuitemId == id);
         }
     }
 }

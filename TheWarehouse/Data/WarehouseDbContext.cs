@@ -107,7 +107,7 @@ public partial class WarehouseDbContext : DbContext
 
         modelBuilder.Entity<Menuitem>(entity =>
         {
-            entity.HasKey(e => e.MenuItemId).HasName("PRIMARY");
+            entity.HasKey(e => e.MenuitemId).HasName("PRIMARY");
 
             entity.ToTable("menuitems");
 
@@ -117,7 +117,7 @@ public partial class WarehouseDbContext : DbContext
 
             entity.HasIndex(e => e.MenucategoryId, "Menucategory_idx");
 
-            entity.HasIndex(e => e.MenuItemId, "idMenuItems_UNIQUE").IsUnique();
+            entity.HasIndex(e => e.MenuitemId, "idMenuItems_UNIQUE").IsUnique();
 
             entity.Property(e => e.Active)
                 .HasDefaultValueSql("b'0'")

@@ -39,7 +39,7 @@
         // GET: Transactionitems/Create
         public IActionResult Create()
         {
-            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "MenuItemId", "MenuItemId");
+            ViewData["MenuitemId"] = new SelectList(_context.Menuitems, "MenuitemId", "MenuitemId");
             ViewData["TransactionId"] = new SelectList(_context.Transactions, "TransactionId", "TransactionId");
             return View();
         }
@@ -49,7 +49,7 @@
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TransactionItemId,TransactionId,MenuItemId,Count,Price,Timestamp")] Transactionitem transactionitem)
+        public async Task<IActionResult> Create([Bind("TransactionItemId,TransactionId,MenuitemId,Count,Price,Timestamp")] Transactionitem transactionitem)
         {
             if (ModelState.IsValid)
             {
@@ -57,7 +57,7 @@
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "MenuItemId", "MenuItemId", transactionitem.MenuItemId);
+            ViewData["MenuitemId"] = new SelectList(_context.Menuitems, "MenuitemId", "MenuitemId", transactionitem.MenuItemId);
             ViewData["TransactionId"] = new SelectList(_context.Transactions, "TransactionId", "TransactionId", transactionitem.TransactionId);
             return View(transactionitem);
         }
@@ -75,7 +75,7 @@
             {
                 return NotFound();
             }
-            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "MenuItemId", "MenuItemId", transactionitem.MenuItemId);
+            ViewData["MenuitemId"] = new SelectList(_context.Menuitems, "MenuitemId", "MenuitemId", transactionitem.MenuItemId);
             ViewData["TransactionId"] = new SelectList(_context.Transactions, "TransactionId", "TransactionId", transactionitem.TransactionId);
             return View(transactionitem);
         }
@@ -85,7 +85,7 @@
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TransactionItemId,TransactionId,MenuItemId,Count,Price,Timestamp")] Transactionitem transactionitem)
+        public async Task<IActionResult> Edit(int id, [Bind("TransactionItemId,TransactionId,MenuitemId,Count,Price,Timestamp")] Transactionitem transactionitem)
         {
             if (id != transactionitem.TransactionItemId)
             {
@@ -112,7 +112,7 @@
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MenuItemId"] = new SelectList(_context.Menuitems, "MenuItemId", "MenuItemId", transactionitem.MenuItemId);
+            ViewData["MenuitemId"] = new SelectList(_context.Menuitems, "MenuitemId", "MenuitemId", transactionitem.MenuItemId);
             ViewData["TransactionId"] = new SelectList(_context.Transactions, "TransactionId", "TransactionId", transactionitem.TransactionId);
             return View(transactionitem);
         }
