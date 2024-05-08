@@ -18,7 +18,8 @@ public partial class Supplier
     [DisplayName("Upload File")]
     public IFormFile ImageFile { get; set; }
 
-    public string ImagePath { get; set; }
+    [DisplayName("Logo")]
+    public string? ImagePath { get; set; }
 
     public DateTime CreatedTs { get; set; }
 
@@ -26,7 +27,9 @@ public partial class Supplier
 
     public string CreatedUserId { get; set; } = null!;
 
-    public string UdatedUserId { get; set; } = null!;
+    public string UpdatedUserId { get; set; } = null!;
 
     public virtual ICollection<Supply> Supplies { get; set; } = [];
+
+    public virtual ICollection<Stockreceipt> Stockreceipts { get; set; } = [];
 }

@@ -1,0 +1,90 @@
+﻿@model TheWarehouse.Models.Stockreceipt
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Stockreceipt</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <input type="hidden" asp-for="ImageName" class="form-control" />
+            <input type="hidden" asp-for="UserId" class="form-control" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="DateTimePurchased" class="control-label"></label>
+                <input asp-for="DateTimePurchased" class="form-control" />
+                <span asp-validation-for="DateTimePurchased" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SupplierId" class="control-label"></label>
+                <select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageFile" class="control-label"></label>
+                <input asp-for="ImageFile" accept="image/*" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+            <a asp-action="AddStock" >Add Item</a>
+            @foreach(var item in Model.Stocks)
+            {
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => item.Supply.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => item.Supply.Supplier.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => item.Code)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => item.Price)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => item.Count)
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(model => item.Supply.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => item.Supply.Supplier.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => item.Code)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => item.Price)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => item.Count)
+                            </td>
+                            <th>
+                                <a asp-action="RemoveStock" asp-route-id="@item.SupplyId">Remove Item</a>
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+            }
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

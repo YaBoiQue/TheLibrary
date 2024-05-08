@@ -1,0 +1,36 @@
+﻿@model TheWarehouse.Models.Ingredient
+
+@{
+    ViewData["Title"] = "CreateIngredient";
+}
+
+<h1>Add Ingredient</h1>
+
+<h4>Ingredient</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateIngredient">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="UpdatedUserId" class="form-control" />
+            <input type="hidden" asp-for="CreatedUserId" class="form-control" />
+            <input type="hidden" asp-for="MenuItemId" class="form-control" />
+            <input type="hidden" asp-for="SupplyId" class="form-control" />
+            <label asp-for="MenuItem.Name" class="control-label"/>
+            <input type="text" asp-for="MenuItem.Name" class="form-control" readonly />
+            <label asp-for="Supply.Name" class="control-label" />
+            <input type="text" asp-for="Supply.Name" class="form-control" readonly />
+            <div class="form-group">
+                <input type="submit" value="Add Ingredient" class="btn btn-primary" />
+                <a asp-action="ChooseSupply" asp-route-menuitemid="@Model.MenuItemId" asp-route-supplycategoryid="@Model.Supply.SupplyCategoryId"><input type="submit" value="Cancel" class="btn btn-primary"/></a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

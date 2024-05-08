@@ -7,6 +7,8 @@ public partial class Stock
 {
     public int StockId { get; set; }
 
+    public int StockreceiptId { get; set; }
+
     public int SupplyId { get; set; }
 
     public int Count { get; set; }
@@ -19,7 +21,9 @@ public partial class Stock
 
     public DateTime Timestamp { get; set; }
 
-    public virtual Stockcode CodeNavigation { get; set; } = null!;
+    public virtual Stockreceipt Stockreceipt { get; set; } = new();
 
-    public virtual Supply Supply { get; set; } = null!;
+    public virtual Stockcode CodeNavigation { get; set; } = new();
+
+    public virtual Supply Supply { get; set; } = new();
 }

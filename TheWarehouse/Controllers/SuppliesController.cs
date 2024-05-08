@@ -39,9 +39,16 @@
         // GET: Supplies/Create
         public IActionResult Create()
         {
-            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "SupplierId");
-            ViewData["SupplyCategoryId"] = new SelectList(_context.Supplycategories, "SupplycategoryId", "SupplycategoryId");
-            return View();
+            ViewData["Supplier"] = new SelectList(_context.Suppliers, "SupplierId", "Name");
+            ViewData["SupplyCategory"] = new SelectList(_context.Supplycategories, "SupplycategoryId", "Name");
+
+            Supply supply = new();
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            supply.CreatedUserId = userId;
+            supply.UpdatedUserId = userId;
+
+            return View(supply);
         }
 
         // POST: Supplies/Create
@@ -53,12 +60,15 @@
         {
             if (ModelState.IsValid)
             {
+                supply.CreatedTs = DateTime.Now;
+                supply.UpdatedTs = DateTime.Now;
+
                 _context.Add(supply);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "SupplierId", supply.SupplierId);
-            ViewData["SupplyCategoryId"] = new SelectList(_context.Supplycategories, "SupplycategoryId", "SupplycategoryId", supply.SupplyCategoryId);
+            ViewData["Supplier"] = new SelectList(_context.Suppliers, "SupplierId", "Name", supply.SupplierId);
+            ViewData["SupplyCategory"] = new SelectList(_context.Supplycategories, "SupplycategoryId", "Name", supply.SupplyCategoryId);
             return View(supply);
         }
 
@@ -75,8 +85,8 @@
             {
                 return NotFound();
             }
-            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "SupplierId", supply.SupplierId);
-            ViewData["SupplyCategoryId"] = new SelectList(_context.Supplycategories, "SupplycategoryId", "SupplycategoryId", supply.SupplyCategoryId);
+            ViewData["Supplier"] = new SelectList(_context.Suppliers, "SupplierId", "Name", supply.SupplierId);
+            ViewData["supplyCategory"] = new SelectList(_context.Supplycategories, "SupplycategoryId", "Name", supply.SupplyCategoryId);
             return View(supply);
         }
 
@@ -112,8 +122,8 @@
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "SupplierId", supply.SupplierId);
-            ViewData["SupplyCategoryId"] = new SelectList(_context.Supplycategories, "SupplycategoryId", "SupplycategoryId", supply.SupplyCategoryId);
+            ViewData["Supplier"] = new SelectList(_context.Suppliers, "SupplierId", "Name", supply.SupplierId);
+            ViewData["SupplyCategory"] = new SelectList(_context.Supplycategories, "SupplycategoryId", "Name", supply.SupplyCategoryId);
             return View(supply);
         }
 

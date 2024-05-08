@@ -1,12 +1,12 @@
 ﻿namespace TheWarehouse.ViewModels
 {
-    public class MenuitemViewModel : Menuitem
+    public class MenuitemVM : Menuitem
     {
-        public MenuitemViewModel()
+        public MenuitemVM()
         {
             menuitems = [];
         }
-        public MenuitemViewModel(ICollection<Menuitem> menuitems)
+        public MenuitemVM(ICollection<Menuitem> menuitems)
         {
             this.menuitems = menuitems;
         }

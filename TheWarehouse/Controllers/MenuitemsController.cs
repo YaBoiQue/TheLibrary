@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Hosting;
 using TheWarehouse.Models;
+using TheWarehouse.ViewModels;
 
 namespace TheWarehouse.Controllers
 {
@@ -18,11 +19,12 @@ namespace TheWarehouse.Controllers
         // GET: Menuitems
         public async Task<IActionResult> Index()
         {
-            MenuitemViewModel viewModel = new MenuitemViewModel(await _context.Menuitems.Include(m => m.Menucategory).ToListAsync());
+            MenuitemVM viewModel = new MenuitemVM(await _context.Menuitems.Include(m => m.Menucategory).ToListAsync());
 
             foreach (var item in viewModel.menuitems)
             {
-                item.Menucategory = _context.Menucategories.Where(c => c.MenucategoryId == item.MenucategoryId).FirstOrDefault();
+//                item.Menucategory = await _context.Menucategories.Where(c => c.MenucategoryId == item.MenucategoryId).FirstOrDefaultAsync();
+                item.Ingredients = await _context.Ingredients.Where(i => i.MenuItemId == item.MenuitemId).Include(i => i.Supply).ToListAsync();
             }
             return View(viewModel);
         }
@@ -52,10 +54,16 @@ namespace TheWarehouse.Controllers
 
             var menuitem = await _context.Menuitems
                 .Include(m => m.Menucategory)
+                .Include(m => m.Ingredients)
                 .FirstOrDefaultAsync(m => m.MenuitemId == id);
             if (menuitem == null)
             {
                 return NotFound();
+            }
+
+            foreach (Ingredient item in menuitem.Ingredients)
+            {
+                item.Supply = await _context.Supplies.Where(s => s.SupplyId == item.SupplyId).Include(s => s.Supplier).FirstOrDefaultAsync();
             }
 
             menuitem.ImagePath = Url.Content("~/img/menuitems/" + menuitem.ImageName);
@@ -63,10 +71,80 @@ namespace TheWarehouse.Controllers
             return View(menuitem);
         }
 
+        public async Task<IActionResult> ChooseSupplyCategory(int id)
+        {
+            Menuitem? menuitem = await _context.Menuitems.Where(m => m.MenuitemId == id).FirstOrDefaultAsync();
+
+            if (menuitem == null)
+                return NotFound();
+
+            ChooseSupplyCategoryVM vm = new(id, await _context.Supplycategories.ToListAsync());
+
+            return View(vm);
+        }
+
+        public async Task<IActionResult> ChooseSupply(int menuitemid, int supplycategoryid)
+        {
+            Menuitem? menuitem = await _context.Menuitems.Where(m => m.MenuitemId == menuitemid).FirstOrDefaultAsync();
+            Supplycategory? supplycategory = await _context.Supplycategories.Where(s => s.SupplycategoryId == supplycategoryid).FirstOrDefaultAsync();
+
+            if (menuitem == null || supplycategory == null)
+                return NotFound();
+
+            ChooseSupplyVM vm = new(menuitemid, await _context.Supplies.Where(s => s.SupplyCategoryId == supplycategoryid).ToListAsync());
+
+            return View(vm);
+        }
+
+        public async  Task<IActionResult> CreateIngredient(int menuitemid, int supplyid)
+        {
+            Menuitem? menuitem = await _context.Menuitems.Where(m => m.MenuitemId == menuitemid).FirstOrDefaultAsync();
+            Supply? supply = await _context.Supplies.Where(s => s.SupplyId == supplyid).FirstOrDefaultAsync();
+
+            if (menuitem == null || supply == null)
+                return NotFound();
+
+            Ingredient? ingredient = await _context.Ingredients.Where(i => i.MenuItemId == menuitemid && i.SupplyId == supplyid).FirstOrDefaultAsync();
+            if (ingredient != null)
+                return RedirectToAction("Edit", new { id = menuitemid });
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+                return NotFound();
+
+            ingredient = new()
+            {
+                MenuItemId = menuitemid,
+                SupplyId = supplyid,
+                MenuItem = menuitem,
+                Supply = supply,
+                CreatedUserId = userId,
+                UpdatedUserId = userId
+        };
+
+            return View(ingredient);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateIngredient([Bind("CreatedUserId, UpdatedUserId, MenuItemId, SupplyId")] Ingredient ingredient)
+        {
+            if (ModelState.IsValid)
+            {
+                ingredient.CreatedTs = DateTime.Now;
+                ingredient.UpdatedTs = DateTime.Now;
+
+                _context.Add(ingredient);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Edit", new { id = ingredient.MenuItemId });
+            }
+            return View(ingredient);
+        }
+
         // GET: Menuitems/Create
         public IActionResult Create()
         {
-            ViewData["MenucategoryId"] = new SelectList(_context.Menucategories, "MenucategoryId", "Name");
+            ViewData["Menucategory"] = new SelectList(_context.Menucategories, "MenucategoryId", "Name");
             return View();
         }
 
@@ -105,7 +183,7 @@ namespace TheWarehouse.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MenucategoryId"] = new SelectList(_context.Menucategories, "MenucategoryId", "MenucategoryId", menuitem.MenucategoryId);
+            ViewData["Menucategory"] = new SelectList(_context.Menucategories, "MenucategoryId", "Name", menuitem.MenucategoryId);
             return View(menuitem);
         }
 
@@ -122,7 +200,15 @@ namespace TheWarehouse.Controllers
             {
                 return NotFound();
             }
-            ViewData["MenucategoryId"] = new SelectList(_context.Menucategories, "MenucategoryId", "MenucategoryId", menuitem.MenucategoryId);
+
+            menuitem.Ingredients = await _context.Ingredients.Where(i => i.MenuItemId == id).ToListAsync();
+
+            foreach (Ingredient item in menuitem.Ingredients)
+            {
+                item.Supply = await _context.Supplies.Where(s => s.SupplyId == item.SupplyId).Include(s => s.Supplier).FirstOrDefaultAsync();
+            }
+
+            ViewData["Menucategory"] = new SelectList(_context.Menucategories, "MenucategoryId", "Name", menuitem.MenucategoryId);
             return View(menuitem);
         }
 
@@ -145,17 +231,17 @@ namespace TheWarehouse.Controllers
                     //Save image to wwroot/img/menuCategories
                     if (menuitem.ImageFile != null)
                     {
-                        string path = Path.Combine(_basePath + menuitem.ImageName);
-                        FileInfo fi = new FileInfo(path);
+                        menuitem.ImagePath = _basePath + "/" + menuitem.ImageName;
+                        FileInfo fi = new FileInfo(menuitem.ImagePath);
                         if (fi.Exists)
                             fi.Delete();
 
                         string fileName = Path.GetFileNameWithoutExtension(menuitem.ImageFile.FileName);
                         string extension = Path.GetExtension(menuitem.ImageFile.FileName).ToLower();
                         menuitem.ImageName = fileName = fileName + DateTime.Now.ToString("yymmssffff") + extension;
-                        path = Path.Combine(_basePath + fileName);
+                        menuitem.ImagePath = Path.Combine(_basePath + fileName);
 
-                        using (var fileStream = new FileStream(path, FileMode.Create))
+                        using (var fileStream = new FileStream(menuitem.ImagePath, FileMode.Create))
                         {
                             await menuitem.ImageFile.CopyToAsync(fileStream);
                         }
@@ -167,6 +253,11 @@ namespace TheWarehouse.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
+                    menuitem.ImagePath = _basePath + "/" + menuitem.ImageName;
+                    FileInfo fi = new FileInfo(menuitem.ImagePath);
+                    if (fi.Exists)
+                        fi.Delete();
+
                     if (!MenuitemExists(menuitem.MenuitemId))
                     {
                         return NotFound();
@@ -178,8 +269,40 @@ namespace TheWarehouse.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MenucategoryId"] = new SelectList(_context.Menucategories, "MenucategoryId", "MenucategoryId", menuitem.MenucategoryId);
+            ViewData["Menucategory"] = new SelectList(_context.Menucategories, "MenucategoryId", "Name", menuitem.MenucategoryId);
             return View(menuitem);
+        }
+
+        public async Task<IActionResult> DeleteIngredient (int id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var ingredient = await _context.Ingredients.FirstOrDefaultAsync();
+
+            if (ingredient == null)
+            {
+                return NotFound();
+            }
+
+            return View(ingredient);
+        }
+
+        [HttpPost, ActionName("DeleteIngredient")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteIngredientConfirmed (int id)
+        {
+            Ingredient? ingredient = await _context.Ingredients.FindAsync(id);
+            if (ingredient != null)
+            {
+                _context.Ingredients.Remove(ingredient);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Edit", new { id = ingredient.MenuItemId });
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Menuitems/Delete/5
@@ -209,8 +332,8 @@ namespace TheWarehouse.Controllers
             var menuitem = await _context.Menuitems.FindAsync(id);
             if (menuitem != null)
             {
-                string path = Path.Combine("~/img/menuitems/" + menuitem.ImageName);
-                FileInfo fi = new FileInfo(path);
+                menuitem.ImagePath = _basePath + "/" + menuitem.ImageName;
+                FileInfo fi = new FileInfo(menuitem.ImagePath);
                 if (fi.Exists)
                     fi.Delete();
                 _context.Menuitems.Remove(menuitem);

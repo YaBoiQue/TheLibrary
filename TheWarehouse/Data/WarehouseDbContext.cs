@@ -122,7 +122,8 @@ public partial class WarehouseDbContext : DbContext
             entity.Property(e => e.Active)
                 .HasDefaultValueSql("b'0'")
                 .HasComment("Bit value represents boolean\n0 = true\n1 = false")
-                .HasColumnType("bit(1)");
+                .HasColumnType("bit(1)")
+                .HasSentinel(true);
             entity.Property(e => e.CreatedTs)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime")
@@ -153,6 +154,8 @@ public partial class WarehouseDbContext : DbContext
 
             entity.ToTable("stocks");
 
+            entity.HasIndex(e => e.StockreceiptId, "Stock_Stockreceipt_idx");
+
             entity.HasIndex(e => e.Code, "Stock_Stockcodes_idx");
 
             entity.HasIndex(e => e.UserId, "Stock_Users_idx");
@@ -171,6 +174,11 @@ public partial class WarehouseDbContext : DbContext
             entity.Property(e => e.UserId)
                 .UseCollation("utf8mb4_0900_ai_ci")
                 .HasCharSet("utf8mb4");
+
+            entity.HasOne(e => e.Stockreceipt).WithMany(p => p.Stocks)
+                .HasForeignKey(e => e.StockreceiptId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("Stock_Stockreceipt");
 
             entity.HasOne(d => d.CodeNavigation).WithMany(p => p.Stocks)
                 .HasForeignKey(d => d.Code)
@@ -195,6 +203,39 @@ public partial class WarehouseDbContext : DbContext
             entity.Property(e => e.Description).HasColumnType("mediumtext");
         });
 
+        modelBuilder.Entity<Stockreceipt>(entity =>
+        {
+            entity.HasKey(e => e.StockreceiptId).HasName("PRIMARY");
+
+            entity.ToTable("stockreceipts");
+
+            entity.HasIndex(e => e.StockreceiptId, "StockreceiptId_UNIQUE").IsUnique();
+
+            entity.HasIndex(e => e.SupplierId, "Stockreceipt_Supplier_idx");
+
+            entity.HasIndex(e => e.UserId, "Stock_Users_idx");
+
+
+            entity.Property(e => e.ImageName).HasMaxLength(255);
+
+            entity.Property(e => e.Timestamp)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("datetime")
+                .HasColumnName("timestamp");
+            entity.Property(e => e.DateTimePurchased)
+                .HasColumnType("datetime")
+                .HasColumnName("datetimepurchased");
+            entity.Property(e => e.UserId)
+                .UseCollation("utf8mb4_0900_ai_ci")
+                .HasCharSet("utf8mb4");
+
+            entity.HasOne(e => e.Supplier).WithMany(s => s.Stockreceipts)
+                .HasForeignKey(e => e.SupplierId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("Stockreceipt_Supplier");
+
+        });
+
         modelBuilder.Entity<Supplier>(entity =>
         {
             entity.HasKey(e => e.SupplierId).HasName("PRIMARY");
@@ -203,7 +244,7 @@ public partial class WarehouseDbContext : DbContext
 
             entity.HasIndex(e => e.CreatedUserId, "Suppliers_CreatedUser_idx");
 
-            entity.HasIndex(e => e.UdatedUserId, "Suppliers_UpdatedUser_idx");
+            entity.HasIndex(e => e.UpdatedUserId, "Suppliers_UpdatedUser_idx");
 
             entity.HasIndex(e => e.SupplierId, "idSuppliers_UNIQUE").IsUnique();
 
@@ -216,7 +257,7 @@ public partial class WarehouseDbContext : DbContext
                 .UseCollation("utf8mb4_0900_ai_ci")
                 .HasCharSet("utf8mb4");
             entity.Property(e => e.Name).HasMaxLength(45);
-            entity.Property(e => e.UdatedUserId)
+            entity.Property(e => e.UpdatedUserId)
                 .HasColumnName("udated_userId")
                 .UseCollation("utf8mb4_0900_ai_ci")
                 .HasCharSet("utf8mb4");
@@ -334,7 +375,7 @@ public partial class WarehouseDbContext : DbContext
 
             entity.HasIndex(e => e.TransactionItemId, "idSales_UNIQUE").IsUnique();
 
-            entity.Property(e => e.Count).HasDefaultValueSql("'1'");
+            entity.Property(e => e.Quantity).HasDefaultValueSql("'1'");
             entity.Property(e => e.Price).HasColumnType("double(6,2)");
             entity.Property(e => e.Timestamp)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -356,4 +397,6 @@ public partial class WarehouseDbContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+public DbSet<TheWarehouse.Models.Stockreceipt> Stockreceipt { get; set; } = default!;
 }

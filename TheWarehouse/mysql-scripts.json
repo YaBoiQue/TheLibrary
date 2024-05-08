@@ -1,0 +1,5 @@
+{
+  "Views": {
+    "SupplyTotalCount" : "SELECT s.SupplyId, s.Name, s.SupplyCategoryId, s.SupplierId, SUM(st.Count) - SUM(ti.Count)  AS \"# Items Sold\" FROM (((supplies s NATURAL LEFT JOIN ingredients i) NATURAL LEFT JOIN menuitems m) NATURAL LEFT JOIN transactionitems ti) LEFT JOIN stocks st ON s.SupplyId = st.SupplyId GROUP BY s.SupplyId;"
+  }
+}

@@ -32,6 +32,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
             tableName: HistoryRepository.DefaultTableName,
             schema: "Identity");
         o.SchemaBehavior(MySqlSchemaBehavior.Ignore);
+        o.EnableRetryOnFailure();
     }));
 
 builder.Services.AddDbContext<WarehouseDbContext>(options =>
@@ -40,6 +41,7 @@ builder.Services.AddDbContext<WarehouseDbContext>(options =>
             tableName: HistoryRepository.DefaultTableName,
             schema: "Warehouse");
         o.SchemaBehavior(MySqlSchemaBehavior.Ignore);
+        o.EnableRetryOnFailure();
     }));
 
 builder.Services.AddIdentity<Aspnetuser, Aspnetrole>(options => options.SignIn.RequireConfirmedAccount = true)

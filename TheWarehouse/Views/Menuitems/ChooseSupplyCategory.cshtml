@@ -1,0 +1,18 @@
+﻿@model TheWarehouse.ViewModels.ChooseSupplyCategoryVM
+
+@{
+    ViewData["Title"] = "ChooseSupplyCategory";
+}
+
+<h1>Choose Category</h1>
+
+<div class="row row-cols-1 row-cols-md-4 g-4" style="margin-top:1rem;">
+    @foreach (var item in Model.Supplycategories)
+    {
+        <a class="card sretched-link text-decoration-none bg-secondary shadow-lg" style="width:17rem;margin-right:1rem;" asp-route-menuitemid="@Model.MenuitemId" asp-route-supplycategoryid=@item.SupplycategoryId asp-action="ChooseSupply">
+            <div class="card-body" style="color:white; text-align:center;">
+                <h5 class="card-title"> @item.Name</h5>
+            </div>
+        </a>
+    }
+</div>

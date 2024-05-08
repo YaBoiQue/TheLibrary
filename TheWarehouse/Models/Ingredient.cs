@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace TheWarehouse.Models;
 
@@ -19,7 +20,7 @@ public partial class Ingredient
 
     public string UpdatedUserId { get; set; } = null!;
 
-    public virtual Menuitem MenuItem { get; set; } = null!;
+    public virtual Menuitem? MenuItem { get; set; }
 
-    public virtual Supply Supply { get; set; } = null!;
+    public virtual Supply? Supply { get; set; }
 }

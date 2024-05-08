@@ -34,15 +34,15 @@
                     @Html.DisplayFor(modelItem => item.Menuitem.Price)
                 </td>
                 <td>
+                    <a asp-action="DecrementItem" asp-route-cartid=@item.CartId>-</a>
                     @Html.DisplayFor(modelItem => item.Quantity)
+                    <a asp-action="IncrementItem" asp-route-cartid=@item.CartId>+</a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Total)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    <a asp-action="RemoveFromCart" asp-route-cartid=@item.CartId>Remove</a>
                 </td>
             </tr>
         }
@@ -53,6 +53,9 @@
             <td></td>
             <td>Cart Total: </td>
             <td>@Html.DisplayFor(model => model.Total)</td>
+            <td>
+                <a asp-controller="Transactions" asp-action="CreateFromCart">Submit</a>
+            </td>
         </tr>
     </tfoot>
 </table>

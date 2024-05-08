@@ -22,14 +22,14 @@ public partial class Menuitem
     /// 0 = true
     /// 1 = false
     /// </summary>
-    public ulong Active { get; set; }
+    public bool Active { get; set; }
 
     public string? ImageName { get; set; }
 
     [NotMapped]
     [AllowNull]
     [DisplayName("Upload File")]
-    public IFormFile ImageFile { get; set; }
+    public IFormFile? ImageFile { get; set; }
 
     [NotMapped]
     [AllowNull]

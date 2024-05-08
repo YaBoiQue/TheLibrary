@@ -44,10 +44,16 @@
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SupplycategoryId,Name")] Supplycategory supplycategory)
+        public async Task<IActionResult> Create([Bind("Name")] Supplycategory supplycategory)
         {
             if (ModelState.IsValid)
             {
+                Random r = new Random();
+                do
+                {
+                    supplycategory.SupplycategoryId = r.Next() % Int16.MaxValue;
+                }
+                while (await _context.Supplycategories.Where(s => s.SupplycategoryId == supplycategory.SupplycategoryId).FirstOrDefaultAsync() != null);
                 _context.Add(supplycategory);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

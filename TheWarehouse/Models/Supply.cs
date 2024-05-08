@@ -27,5 +27,5 @@ public partial class Supply
 
     public virtual Supplier? Supplier { get; set; }
 
-    public virtual Supplycategory SupplyCategory { get; set; } = null!;
+    public virtual Supplycategory? SupplyCategory { get; set; }
 }

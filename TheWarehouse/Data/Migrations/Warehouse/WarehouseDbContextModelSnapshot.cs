@@ -46,7 +46,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("CreatedUserId"), "utf8mb4");
 
-                    b.Property<int>("MenuitemId")
+                    b.Property<int>("MenuItemId")
                         .HasColumnType("int");
 
                     b.Property<int>("SupplyId")
@@ -73,7 +73,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
 
                     b.HasIndex(new[] { "UpdatedUserId" }, "Ingredients_UpdatedUser_idx");
 
-                    b.HasIndex(new[] { "MenuitemId" }, "MenuItems_idx");
+                    b.HasIndex(new[] { "MenuItemId" }, "MenuItems_idx");
 
                     b.HasIndex(new[] { "SupplyId" }, "Supplies_idx");
 
@@ -129,7 +129,6 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("CreatedUserId")
-                        .IsRequired()
                         .HasColumnType("varchar(255)")
                         .HasColumnName("created_userId")
                         .UseCollation("utf8mb4_0900_ai_ci");
@@ -158,7 +157,6 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("UpdatedUserId")
-                        .IsRequired()
                         .HasColumnType("varchar(255)")
                         .HasColumnName("updated_userId")
                         .UseCollation("utf8mb4_0900_ai_ci");
@@ -202,6 +200,9 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .HasPrecision(6, 2)
                         .HasColumnType("decimal(6,2)");
 
+                    b.Property<int>("StockreceiptId")
+                        .HasColumnType("int");
+
                     b.Property<int>("SupplyId")
                         .HasColumnType("int");
 
@@ -222,6 +223,8 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .HasName("PRIMARY");
 
                     b.HasIndex(new[] { "Code" }, "Stock_Stockcodes_idx");
+
+                    b.HasIndex(new[] { "StockreceiptId" }, "Stock_Stockreceipt_idx");
 
                     b.HasIndex(new[] { "UserId" }, "Stock_Users_idx");
 
@@ -251,6 +254,51 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                     b.ToTable("stockcodes", (string)null);
                 });
 
+            modelBuilder.Entity("TheWarehouse.Models.Stockreceipt", b =>
+                {
+                    b.Property<int>("StockreceiptId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("StockreceiptId"));
+
+                    b.Property<DateTime>("DateTimePurchased")
+                        .HasColumnType("datetime")
+                        .HasColumnName("datetimepurchased");
+
+                    b.Property<string>("ImageName")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("SupplierId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Timestamp")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasColumnName("timestamp")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)")
+                        .UseCollation("utf8mb4_0900_ai_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("UserId"), "utf8mb4");
+
+                    b.HasKey("StockreceiptId")
+                        .HasName("PRIMARY");
+
+                    b.HasIndex(new[] { "UserId" }, "Stock_Users_idx")
+                        .HasDatabaseName("Stock_Users_idx1");
+
+                    b.HasIndex(new[] { "StockreceiptId" }, "StockreceiptId_UNIQUE")
+                        .IsUnique();
+
+                    b.HasIndex(new[] { "SupplierId" }, "Stockreceipt_Supplier_idx");
+
+                    b.ToTable("stockreceipts", (string)null);
+                });
+
             modelBuilder.Entity("TheWarehouse.Models.Supplier", b =>
                 {
                     b.Property<int>("SupplierId")
@@ -277,7 +325,6 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .HasColumnType("longtext");
 
                     b.Property<string>("ImagePath")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Name")
@@ -285,26 +332,26 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .HasMaxLength(45)
                         .HasColumnType("varchar(45)");
 
-                    b.Property<string>("UdatedUserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)")
-                        .HasColumnName("udated_userId")
-                        .UseCollation("utf8mb4_0900_ai_ci");
-
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("UdatedUserId"), "utf8mb4");
-
                     b.Property<DateTime>("UpdatedTs")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasColumnName("updated_ts")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+                    b.Property<string>("UpdatedUserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("udated_userId")
+                        .UseCollation("utf8mb4_0900_ai_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("UpdatedUserId"), "utf8mb4");
+
                     b.HasKey("SupplierId")
                         .HasName("PRIMARY");
 
                     b.HasIndex(new[] { "CreatedUserId" }, "Suppliers_CreatedUser_idx");
 
-                    b.HasIndex(new[] { "UdatedUserId" }, "Suppliers_UpdatedUser_idx");
+                    b.HasIndex(new[] { "UpdatedUserId" }, "Suppliers_UpdatedUser_idx");
 
                     b.HasIndex(new[] { "SupplierId" }, "idSuppliers_UNIQUE")
                         .IsUnique();
@@ -462,16 +509,16 @@ namespace TheWarehouse.Data.Migrations.Warehouse
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("TransactionItemId"));
 
-                    b.Property<int>("Count")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValueSql("'1'");
-
-                    b.Property<int>("MenuitemId")
+                    b.Property<int>("MenuItemId")
                         .HasColumnType("int");
 
                     b.Property<double>("Price")
                         .HasColumnType("double(6,2)");
+
+                    b.Property<int>("Quantity")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValueSql("'1'");
 
                     b.Property<DateTime?>("Timestamp")
                         .ValueGeneratedOnAdd()
@@ -485,7 +532,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                     b.HasKey("TransactionItemId")
                         .HasName("PRIMARY");
 
-                    b.HasIndex(new[] { "MenuitemId" }, "MenuItems_idx1");
+                    b.HasIndex(new[] { "MenuItemId" }, "MenuItems_idx1");
 
                     b.HasIndex(new[] { "TransactionId" }, "Transactions_idx");
 
@@ -499,7 +546,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                 {
                     b.HasOne("TheWarehouse.Models.Menuitem", "MenuItem")
                         .WithMany("Ingredients")
-                        .HasForeignKey("MenuitemId")
+                        .HasForeignKey("MenuItemId")
                         .IsRequired()
                         .HasConstraintName("Ingredients_MenuItems");
 
@@ -532,6 +579,12 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                         .IsRequired()
                         .HasConstraintName("Stock_Stockcodes");
 
+                    b.HasOne("TheWarehouse.Models.Stockreceipt", "Stockreceipt")
+                        .WithMany("Stocks")
+                        .HasForeignKey("StockreceiptId")
+                        .IsRequired()
+                        .HasConstraintName("Stock_Stockreceipt");
+
                     b.HasOne("TheWarehouse.Models.Supply", "Supply")
                         .WithMany("Stocks")
                         .HasForeignKey("SupplyId")
@@ -540,7 +593,20 @@ namespace TheWarehouse.Data.Migrations.Warehouse
 
                     b.Navigation("CodeNavigation");
 
+                    b.Navigation("Stockreceipt");
+
                     b.Navigation("Supply");
+                });
+
+            modelBuilder.Entity("TheWarehouse.Models.Stockreceipt", b =>
+                {
+                    b.HasOne("TheWarehouse.Models.Supplier", "Supplier")
+                        .WithMany("Stockreceipts")
+                        .HasForeignKey("SupplierId")
+                        .IsRequired()
+                        .HasConstraintName("Stockreceipt_Supplier");
+
+                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("TheWarehouse.Models.Supply", b =>
@@ -575,7 +641,7 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                 {
                     b.HasOne("TheWarehouse.Models.Menuitem", "MenuItem")
                         .WithMany("Transactionitems")
-                        .HasForeignKey("MenuitemId")
+                        .HasForeignKey("MenuItemId")
                         .IsRequired()
                         .HasConstraintName("TransactionItems_MenuItems");
 
@@ -607,8 +673,15 @@ namespace TheWarehouse.Data.Migrations.Warehouse
                     b.Navigation("Stocks");
                 });
 
+            modelBuilder.Entity("TheWarehouse.Models.Stockreceipt", b =>
+                {
+                    b.Navigation("Stocks");
+                });
+
             modelBuilder.Entity("TheWarehouse.Models.Supplier", b =>
                 {
+                    b.Navigation("Stockreceipts");
+
                     b.Navigation("Supplies");
                 });
 

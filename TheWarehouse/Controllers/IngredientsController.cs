@@ -1,4 +1,6 @@
-﻿namespace TheWarehouse.Controllers
+﻿using TheWarehouse.Models;
+
+namespace TheWarehouse.Controllers
 {
     public class IngredientsController : BaseController
     {
@@ -36,12 +38,36 @@
             return View(ingredient);
         }
 
+        public async Task<IActionResult> CreateFromMenuItem(int menuitemid)
+        {
+            Menuitem? menuitem = await _context.Menuitems.Where(m => m.MenuitemId == menuitemid).FirstOrDefaultAsync();
+
+            if (menuitem == null)
+                return View();
+
+            Ingredient ingredient = new();
+
+            ingredient.MenuItemId = menuitemid;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ingredient.CreatedUserId = userId;
+            ingredient.UpdatedUserId = userId;
+
+            ViewData["Supply"] = new SelectList(_context.Supplies, "SupplyId", "Name");
+
+
+            return View(ingredient);
+        }
+
         // GET: Ingredients/Create
         public IActionResult Create()
         {
-            ViewData["MenuitemId"] = new SelectList(_context.Menuitems, "MenuitemId", "MenuitemId");
-            ViewData["SupplyId"] = new SelectList(_context.Supplies, "SupplyId", "SupplyId");
-            return View();
+            Ingredient ingredient = new();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ingredient.CreatedUserId = userId;
+            ingredient.UpdatedUserId = userId;
+            ViewData["Menuitem"] = new SelectList(_context.Menuitems, "MenuitemId", "Name");
+            ViewData["Supply"] = new SelectList(_context.Supplies, "SupplyId", "Name");
+            return View(ingredient);
         }
 
         // POST: Ingredients/Create
@@ -49,16 +75,19 @@
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IngredientId,MenuitemId,SupplyId,CreatedTs,UpdatedTs,CreatedUserId,UpdatedUserId")] Ingredient ingredient)
+        public async Task<IActionResult> Create([Bind("IngredientId,MenuItemId,SupplyId,CreatedTs,UpdatedTs,CreatedUserId,UpdatedUserId")] Ingredient ingredient)
         {
-            if (ModelState.IsValid)
+                if (ModelState.IsValid)
             {
+                ingredient.CreatedTs = DateTime.Now;
+                ingredient.UpdatedTs = DateTime.Now;
+
                 _context.Add(ingredient);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MenuitemId"] = new SelectList(_context.Menuitems, "MenuitemId", "MenuitemId", ingredient.MenuItemId);
-            ViewData["SupplyId"] = new SelectList(_context.Supplies, "SupplyId", "SupplyId", ingredient.SupplyId);
+            ViewData["Menuitem"] = new SelectList(_context.Menuitems, "MenuitemId", "Name", ingredient.MenuItemId);
+            ViewData["Supply"] = new SelectList(_context.Supplies, "SupplyId", "Name", ingredient.SupplyId);
             return View(ingredient);
         }
 
@@ -75,8 +104,8 @@
             {
                 return NotFound();
             }
-            ViewData["MenuitemId"] = new SelectList(_context.Menuitems, "MenuitemId", "MenuitemId", ingredient.MenuItemId);
-            ViewData["SupplyId"] = new SelectList(_context.Supplies, "SupplyId", "SupplyId", ingredient.SupplyId);
+            ViewData["Menuitem"] = new SelectList(_context.Menuitems, "MenuitemId", "Name", ingredient.MenuItemId);
+            ViewData["Supply"] = new SelectList(_context.Supplies, "SupplyId", "Name", ingredient.SupplyId);
             return View(ingredient);
         }
 
@@ -112,8 +141,8 @@
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MenuitemId"] = new SelectList(_context.Menuitems, "MenuitemId", "MenuitemId", ingredient.MenuItemId);
-            ViewData["SupplyId"] = new SelectList(_context.Supplies, "SupplyId", "SupplyId", ingredient.SupplyId);
+            ViewData["Menuitem"] = new SelectList(_context.Menuitems, "MenuitemId", "Name", ingredient.MenuItemId);
+            ViewData["Supply"] = new SelectList(_context.Supplies, "SupplyId", "Name", ingredient.SupplyId);
             return View(ingredient);
         }
 

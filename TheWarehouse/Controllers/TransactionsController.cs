@@ -1,14 +1,14 @@
-﻿namespace TheWarehouse.Controllers
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+
+namespace TheWarehouse.Controllers
 {
-    public class TransactionsController : BaseController
+    public class TransactionsController(WarehouseDbContext context, IHttpContextAccessor contx) : BaseController
     {
-        private readonly WarehouseDbContext _context;
-
-        public TransactionsController(WarehouseDbContext context)
-        {
-            _context = context;
-        }
-
+        private readonly WarehouseDbContext _context = context;
+        private readonly IHttpContextAccessor _contx = contx;
+        private readonly CartController _cart = new(context, contx);
+        private readonly TransactionitemsController _transitems = new(context);
+        
         // GET: Transactions
         public async Task<IActionResult> Index()
         {
@@ -33,6 +33,30 @@
             }
 
             return View(transaction);
+        }
+
+        public async Task<IActionResult> CreateFromCart()
+        {
+            Transaction? transaction = new();
+
+            transaction.Timestamp = DateTime.Now;
+            transaction.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            List<Cartitem> cartitems = _cart.GetCart();
+            
+            if (cartitems == null)
+                return RedirectToAction("Index");
+
+            foreach(Cartitem item in cartitems)
+            {
+                transaction.Transactionitems.Add(new Transactionitem(item.Menuitem.MenuitemId, (item.Menuitem.Price ??= 0), item.Quantity));
+            }
+
+            _context.Add(transaction);
+            await _context.SaveChangesAsync();
+            _cart.Clear();
+
+            return RedirectToAction("Details", new { id = transaction.TransactionId });
         }
 
         // GET: Transactions/Create
@@ -136,9 +160,13 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var transaction = await _context.Transactions.FindAsync(id);
+            var transaction = await _context.Transactions.Include(t => t.Transactionitems).Where(t => t.TransactionId == id).FirstOrDefaultAsync();
             if (transaction != null)
             {
+                foreach (Transactionitem item in transaction.Transactionitems)
+                {
+                    _context.Transactionitems.Remove(item);
+                }
                 _context.Transactions.Remove(transaction);
             }
 

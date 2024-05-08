@@ -9,10 +9,6 @@ namespace TheWarehouse.Models;
 public partial class Menucategory
 {
 
-    public Menucategory(CreateMenucategoryVM vm)
-    {
-        Name = vm.Name;
-    }
     public Menucategory() { }
 
     public int MenucategoryId { get; set; }

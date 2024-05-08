@@ -1,8 +1,44 @@
-﻿@{
+﻿@model IEnumerable<TheWarehouse.Models.Menucategory> 
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+
+<h1>Menu</h1>
+
+<div class="row row-cols-1 row-cols-md-auto g-0" style="margin-top:1rem;">
+    @foreach (var category in Model)
+    {
+        <div class="card row text-decoration-none bg-secondary shadow-lg" style="min-width:19rem; margin-right:1rem; margin-bottom:1rem;">
+            <div class="card-block text-decoration-none">
+                <div class="card-header" style="color:white; text-align:center">
+                    <h3 class="card-title">@category.Name</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row row-cols-1 row-cols-md-auto g-0">
+                        @foreach(var item in category.Menuitems)
+                        {
+                            <div class="card border-primary mb-3 text-center" style="width:17rem;margin-right:1rem;">
+                                <div class="card-header" style="">
+                                    <h5 class="card-title"> @item.Name</h5>
+                                </div>
+                                <div class="card-body" style="height:15rem;">
+                                    <img class="card-img-top" src="@item.ImagePath" alt="@item.Name" style="max-width:15rem;max-height:14rem;" />
+                                </div>
+                                <div class="card-footer text-center" style="">
+                                    @Html.DisplayFor(model => item.Price)
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>

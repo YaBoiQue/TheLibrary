@@ -1,17 +1,10 @@
 ﻿@model TheWarehouse.Models.Supplier
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Details";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
-</head>
-<body>
+<hq>Details</hq>
 
 <div>
     <h4>Supplier</h4>
@@ -24,28 +17,10 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedTs)
+            @Html.DisplayNameFor(model => model.ImagePath)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedTs)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedTs)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedTs)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedUserId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedUserId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UdatedUserId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UdatedUserId)
+        <dd class="col-sm-10">
+            <img src="@Html.DisplayFor(model => model.ImagePath)" alt="@Html.DisplayFor(model => model.Name)" style="width:500px" />
         </dd>
     </dl>
 </div>
@@ -53,5 +28,3 @@
     <a asp-action="Edit" asp-route-id="@Model?.SupplierId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
-</body>
-</html>

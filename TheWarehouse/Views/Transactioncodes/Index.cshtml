@@ -1,21 +1,15 @@
 ﻿@model IEnumerable<TheWarehouse.Models.Transactioncode>
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Index";
 }
 
-<!DOCTYPE html>
+<h1>Index</h1>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<tabl class="table">
     <thead>
         <tr>
             <th>
@@ -38,6 +32,4 @@
         </tr>
 }
     </tbody>
-</table>
-</body>
-</html>
+</tabl>

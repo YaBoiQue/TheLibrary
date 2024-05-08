@@ -11,10 +11,10 @@ namespace TheWarehouse.Controllers
         private readonly WarehouseDbContext _context;
         private readonly string _basePath;
 
-        public MenucategoriesController(WarehouseDbContext context, IWebHostEnvironment _hostEnvironment)
+        public MenucategoriesController(WarehouseDbContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
-            _basePath = Path.Combine(_hostEnvironment.WebRootPath, "img/", "menucategories/");
+            _basePath = Path.Combine(hostEnvironment.WebRootPath, "img/", "menucategories/");
         }
 
         // GET: Menucategories
@@ -127,17 +127,17 @@ namespace TheWarehouse.Controllers
                     //Save image to wwroot/img/menuCategories
                     if (menucategory.ImageFile != null)
                     {
-                        string path = Path.Combine(_basePath + menucategory.ImageName);
-                        FileInfo fi = new FileInfo(path);
+                        menucategory.ImagePath = _basePath + "/" + menucategory.ImageName;
+                        FileInfo fi = new FileInfo(menucategory.ImagePath);
                         if (fi.Exists)
                             fi.Delete();
 
                         string fileName = Path.GetFileNameWithoutExtension(menucategory.ImageFile.FileName);
                         string extension = Path.GetExtension(menucategory.ImageFile.FileName).ToLower();
                         menucategory.ImageName = fileName = fileName + DateTime.Now.ToString("yymmssffff") + extension;
-                        path = Path.Combine(_basePath + fileName);
+                        menucategory.ImagePath = Path.Combine(_basePath + fileName);
 
-                        using (var fileStream = new FileStream(path, FileMode.Create))
+                        using (var fileStream = new FileStream(menucategory.ImagePath, FileMode.Create))
                         {
                             await menucategory.ImageFile.CopyToAsync(fileStream);
                         }
@@ -148,6 +148,11 @@ namespace TheWarehouse.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
+                    menucategory.ImagePath = _basePath + "/" + menucategory.ImageName;
+                    FileInfo fi = new FileInfo(menucategory.ImagePath);
+                    if (fi.Exists)
+                        fi.Delete();
+
                     if (!MenucategoryExists(menucategory.MenucategoryId))
                     {
                         return NotFound();
@@ -188,8 +193,8 @@ namespace TheWarehouse.Controllers
             var menucategory = await _context.Menucategories.FindAsync(id);
             if (menucategory != null)
             {
-                string path = Path.Combine("~/img/menuitems/" + menucategory.ImageName);
-                FileInfo fi = new FileInfo(path);
+                menucategory.ImagePath = _basePath + "/" + menucategory.ImageName;
+                FileInfo fi = new FileInfo(menucategory.ImagePath);
                 if (fi.Exists)
                     fi.Delete();
                 _context.Menucategories.Remove(menucategory);

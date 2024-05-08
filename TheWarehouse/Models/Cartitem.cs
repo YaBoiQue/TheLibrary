@@ -16,6 +16,8 @@
             Menuitem = menuitem;
             Quantity = quantity;
         }
+
+        public int CartId { get; set; }
         public Menuitem Menuitem { get; set; }
         public int Quantity { get; set; }
         [DataType(DataType.Currency)]

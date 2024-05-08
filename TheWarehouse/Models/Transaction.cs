@@ -5,6 +5,7 @@ namespace TheWarehouse.Models;
 
 public partial class Transaction
 {
+
     public int TransactionId { get; set; }
 
     public string? Code { get; set; }
